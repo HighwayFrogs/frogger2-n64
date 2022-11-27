@@ -1,0 +1,27 @@
+#
+# for N64OS PC
+#
+
+# application name
+CC	=	gcc
+LD	=	ld
+MAKEROM	=	mild
+
+# library path
+LIB = $(ROOT)/usr/lib
+LPR = $(LIB)/PR
+
+# include path 
+INC = $(ROOT)/usr/include
+
+# gcc option
+GCCFLAG	=	-c -I$(INC) -D_MIPS_SZLONG=32 -D_MIPS_SZINT=32
+CFLAGS	=	$(LCDEFS) $(LCINCS) $(LCOPTS) $(GCCFLAG) $(OPTIMIZER)
+
+# common rules
+COMMONRULES	= $(ROOT)/usr/include/make/commonrules
+
+# for CELF
+CELFRULES	= $(ROOT)/usr/include/make/celfrules
+
+include $(ROOT)/usr/include/make/celfdefs

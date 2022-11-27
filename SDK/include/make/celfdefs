@@ -1,0 +1,7 @@
+#
+# for CELF
+#
+
+CELFINFOFILES = __elfcom.tbl __elfcom.elf
+
+CELFDIR = $(ROOT)\usr\src\PR\demos\

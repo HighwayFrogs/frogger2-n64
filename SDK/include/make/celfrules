@@ -1,0 +1,9 @@
+#
+# for CELF
+#
+
+$(CELFINFOFILES):	__elfcom.o
+	elftbl
+
+__elfcom.o:	$(CELFDIR)\__elfcom.c
+	$(CC) $(CFLAGS) -g -o $*.o $(CELFDIR)\__elfcom.c

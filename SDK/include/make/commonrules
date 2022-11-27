@@ -1,0 +1,28 @@
+#
+# for N64OS PC
+#
+
+.c.o:
+	$(CC) $(CFLAGS) $<
+
+clean:
+ifeq	($(GCC_CELF),ON)
+#	deltree /Y *.o $(LDIRT) __elfcom.tbl __elfcom.elf
+	command.com /c for %i in (*.o __elfcom.elf __elfcom.tbl) do if exist %i del %i
+	command.com /c for %i in ($(LDIRT)) do if exist %i del %i
+else
+#	deltree /Y *.o $(LDIRT)
+	command.com /c for %i in (*.o) do if exist %i del %i
+	command.com /c for %i in ($(LDIRT)) do if exist %i del %i
+endif
+
+clobber:
+ifeq	($(GCC_CELF),ON)
+#	deltree /Y *.o $(LDIRT) __elfcom.tbl __elfcom.elf
+	command.com /c for %i in (*.o *.n64 *.out __elfcom.elf __elfcom.tbl) do if exist %i del %i
+	command.com /c for %i in ($(LDIRT)) do if exist %i del %i
+else
+#	deltree /Y *.o $(LDIRT)
+	command.com /c for %i in (*.o *.n64 *.out) do if exist %i del %i
+	command.com /c for %i in ($(LDIRT)) do if exist %i del %i
+endif
