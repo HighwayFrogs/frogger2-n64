@@ -7,13 +7,13 @@ c_obj_files = $(patsubst %.c,%.obj,$(wildcard *.c)) $(patsubst %.c,%.obj,$(wildc
 compiler = ccn64
 assembler = asmn64
 
-;compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DNO_ENTITIES -I c:/n642/include
-;compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -I c:/n642/include
+;compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DNO_ENTITIES -I ../../SDK/include
+;compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -I ../../SDK/include
 
-;compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DUSE_AUDIO -DNO_SCRIPTS -DNO_ENTITIES -DUSE_MENUS -I c:/n642/include
-;compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DUSE_AUDIO -DNO_SCRIPTS -DUSE_MENUS -I c:/n642/include
-compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DUSE_AUDIO -DUSE_MENUS -DNO_ATTACHEDEFFECTS -I c:/n642/include
-;compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DUSE_AUDIO -DUSE_MENUS -I c:/n642/include
+;compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DUSE_AUDIO -DNO_SCRIPTS -DNO_ENTITIES -DUSE_MENUS -I ../../SDK/include
+;compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DUSE_AUDIO -DNO_SCRIPTS -DUSE_MENUS -I ../../SDK/include
+compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DUSE_AUDIO -DUSE_MENUS -DNO_ATTACHEDEFFECTS -I ../../SDK/include
+;compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DUSE_AUDIO -DUSE_MENUS -I ../../SDK/include
 assemble_opt = /l
 
 
@@ -47,7 +47,7 @@ snmain.obj: snmain.s
 
 %.nob: %.c2
 	copy $(patsubst objects/%,objects\\%,$<) $(patsubst objects/%.c2,objects\\%.c,$<)
-	ccn64 -c -O0 -I c:/n642/include $(patsubst objects/%.c2,objects/%.c,$<)
+	ccn64 -c -O0 -I ../../SDK/include $(patsubst objects/%.c2,objects/%.c,$<)
 	psylink /c /p $(patsubst objects/%.c2,objects/%.obj,$<),$(patsubst objects/%.c2,objects/%.bin,$<)
 	fpack objects\\$(patsubst objects/%.c2,%,$<).bin
 	copy $(patsubst objects/%.c2,objects\\%.fla,$<) $(patsubst objects/%.c2,objects\\%.nob,$<)
