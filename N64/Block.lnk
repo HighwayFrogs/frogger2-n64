@@ -1,0 +1,3167 @@
+
+        org     $b0000000
+
+header  group
+        section.64      code.header,header
+
+code    group   obj($80100000)
+codebss	group	obj(),bss
+
+_codeSegmentRomStart    alias   _code_org
+_codeSegmentRomEnd      alias   _code_orgend
+_codeSegmentStart       alias   _code_obj
+_codeSegmentEnd         alias   _code_objend
+
+        section.64      code.start,code
+        section.64      code.rdata,code
+        section.64      code.rodata,code
+        section.64      code.ctors,code
+        section.64      code.dtors,code
+        section.64      code.text,code
+        section.64      code.data,code
+        section.64      code.sdata,code
+        section.64      code.sbss,codebss
+        section.64      code.bss,codebss
+
+
+		inclib	"tonylib2.lib",code
+		inclib	"libsn.lib",code
+;		inclib	"lib211b.lib", code
+		inclib	"lib314.lib", code
+        include "c:/n64/PR/rspboot.obj",code
+
+        include "snmain.obj",code
+        include "c:/gnun64/lib/psyq.obj",code
+        include "c:/gnun64/lib/psyqdbg.obj",code
+
+        include "controll.obj",code
+        include "block.obj",code
+
+        include "font.obj",code
+        include "actor.obj",code
+
+        include "subcube.obj",code
+        include "maths.obj",code
+        include "objects.obj",code
+        include "jalloc.obj",code
+        include "decomp.obj",code
+        include "texture.obj",code
+        include "ptexture.obj",code
+        include "cam.obj",code
+        include "anim.obj",code
+        include "crc32.obj",code
+        include "game.obj",code
+		include "frogmove.obj",code
+		include "sprite.obj",code
+		include "nnsched.obj",code
+        include "levext.obj",code
+		include "collect.obj",code
+        include "map.obj",code
+		include "tongue.obj",code
+		include "enemies.obj",code
+		include "general.obj",code
+		include "platform.obj",code
+		include "layoutvisual.obj",code
+		include "path.obj",code
+		include "babyfrogs.obj",code
+		include "levelplaying.obj",code
+		include "frogger.obj",code
+		include "frontend.obj",code
+		include "hud.obj",code
+		include "overlays.obj",code
+		include "textoverlays.obj",code
+		include "printgfx.obj",code
+		include "3dtext.obj",code
+		include "sfx.obj",code
+		include "mbuffer.obj",code
+		include "audio.obj",code
+		include "music.obj",code
+		include "sndview.obj",code
+		include "water.obj",code
+		include "specfx.obj",code
+		include "savegame.obj",code
+		include "menus.obj",code
+		include "defaultdata.obj",code
+		include "levelprogression.obj",code
+		include "event.obj",code
+		include "eventfuncs.obj",code
+		include "script.obj",code
+		include "objview.obj",code
+		include "memload.obj",code
+		include "multi.obj",code
+
+		include "develop.obj",code
+		include	"rdp_out0.obj",code
+
+		include "graphic.obj",code
+		include "rumblepak.obj",code
+
+; REQUIRED FOR NEW MICROCODE --> START
+		include "c:/n64/PR/gspF3Dex2.fifo.obj",code
+		include "c:/n64/PR/gspS2Dex2.fifo.obj",code
+		include "c:/n64/PR/gspL3Dex2.fifo.obj",code
+; REQUIRED FOR NEW MICROCODE --> END
+
+		include "c:/n64/pr/aspmain.obj",code
+
+;--- new audio stuff ---
+
+		include "c:/gnun64/lib/n_aspMain.obj",code
+		inclib  "libn_gmus.lib",code
+		inclib	"libn_gaudio_sc.lib",code
+
+;-----------------------
+
+
+acostab         incbin  "incbins\acos.bin",code.data,16
+atantab         incbin  "incbins\atan.bin",code.data,16
+
+static          group   obj()
+staticbss       group   obj(),bss
+
+_staticSegmentRomStart  alias   _static_org
+_staticSegmentRomEnd    alias   _static_orgend
+_staticSegmentStart     alias   _static_obj
+_staticSegmentEnd       alias   _static_objend
+
+        section.64      static.rdata,static
+        section.64      static.rodata,static
+        section.64      static.ctors,static
+        section.64      static.dtors,static
+        section.64      static.text,static
+        section.64      static.data,static
+        section.64      static.sdata,static
+        section.64      static.sbss,staticbss
+        section.64      static.bss,staticbss
+        include "static.obj",static
+
+;--
+_zbuffer        group   obj($80000400)
+_zbufferbss	group	obj(),bss
+
+        section.64      _zbuffer.rdata,_zbuffer
+        section.64      _zbuffer.rodata,_zbuffer
+        section.64      _zbuffer.ctors,_zbuffer
+        section.64      _zbuffer.dtors,_zbuffer
+        section.64      _zbuffer.text,_zbuffer
+        section.64      _zbuffer.data,_zbuffer
+        section.64      _zbuffer.sdata,_zbuffer
+        section.64      _zbuffer.sbss,_zbufferbss
+        section.64      _zbuffer.bss,_zbufferbss
+		include "zbuffer.obj",_zbuffer
+
+;--
+rdpbuf        group   obj()
+rdpbufbss     group   obj(),bss
+
+_rdpbufSegmentRomStart alias _rdpbuf_org
+_rdpbufSegmentRomEnd   alias _rdpbuf_orgend
+_rdpbufSegmentStart    alias _rdpbuf_obj
+_rdpbufSegmentEnd      alias _rdpbufbss_objend
+
+        section.64       rdpbuf.rdata,rdpbuf
+        section.64       rdpbuf.rodata,rdpbuf
+        section.64       rdpbuf.ctors,rdpbuf
+        section.64       rdpbuf.dtors,rdpbuf
+        section.64       rdpbuf.text,rdpbuf
+        section.64       rdpbuf.data,rdpbuf
+        section.64       rdpbuf.sdata,rdpbuf
+        section.64       rdpbuf.sbss,rdpbufbss
+        section.64       rdpbuf.bss,rdpbufbss
+        include "rdp_outp.obj",rdpbuf
+
+;--
+
+musbuf        group   obj()
+musbufbss     group   obj(),bss
+
+_musbufSegmentRomStart alias _musbuf_org
+_musbufSegmentRomEnd   alias _musbuf_orgend
+_musbufSegmentStart    alias _musbuf_obj
+_musbufSegmentEnd      alias _musbufbss_objend
+
+        section.64       musbuf.rdata,musbuf
+        section.64       musbuf.rodata,musbuf
+        section.64       musbuf.ctors,musbuf
+        section.64       musbuf.dtors,musbuf
+        section.64       musbuf.text,musbuf
+        section.64       musbuf.data,musbuf
+        section.64       musbuf.sdata,musbuf
+        section.64       musbuf.sbss,musbufbss
+        section.64       musbuf.bss,musbufbss
+        include "mbuffer.obj",musbuf
+
+;--
+
+cfb             group   obj($80092000)
+cfbbss          group   obj(),bss
+
+_cfbSegmentRomStart     alias   _cfb_org
+_cfbSegmentRomEnd       alias   _cfb_orgend
+_cfbSegmentStart        alias   _cfb_obj
+_cfbSegmentEnd          alias   _cfb_objend
+
+        section.64      cfb.rdata,cfb
+        section.64      cfb.rodata,cfb
+        section.64      cfb.ctors,cfb
+        section.64      cfb.dtors,cfb
+        section.64      cfb.text,cfb
+        section.64      cfb.data,cfb
+        section.64      cfb.sdata,cfb
+        section.64      cfb.sbss,cfbbss
+        section.64      cfb.bss,cfbbss
+	include "cfb.obj",cfb
+
+
+
+;----- [ OBJECTS ] -------------------------------------------------------------------------------
+
+
+; [ GAME GENERIC OBJECTS ] -----------------------------------------------------------------------
+
+objBankg0       group   obj()
+objBankg0bss    group   obj(),bss
+
+_objBank_g_0_SegmentRomStart        alias   _objBankg0_org
+_objBank_g_0_SegmentRomEnd          alias   _objBankg0_orgend
+
+        section.64      objBankg0.data,objBankg0
+
+oBankg0  incbin  "objects/gamegeneric.nob",objBankg0.data,64
+
+
+; [ FRONTEND WORLD MASTER ] ----------------------------------------------------------------------
+
+objBank00       group   obj()
+objBank00bss    group   obj(),bss
+
+_objBank_0_0_SegmentRomStart        alias   _objBank00_org
+_objBank_0_0_SegmentRomEnd          alias   _objBank00_orgend
+
+        section.64      objBank00.data,objBank00
+
+oBank00  incbin  "objects/title.nob",objBank00.data,64
+
+; [ FRONTEND WORLD LEVEL 1 ] >>>>>
+
+objBank01        group   obj()
+objBank01bss     group   obj(),bss
+
+_objBank_0_1_SegmentRomStart        alias   _objBank01_org
+_objBank_0_1_SegmentRomEnd          alias   _objBank01_orgend
+
+        section.64      objBank01.data,objBank01
+
+oBank01  incbin  "objects/start.nob",objBank01.data,64
+
+; [ FRONTEND WORLD LEVEL 2 ] >>>>>
+
+objBank02        group   obj()
+objBank02bss     group   obj(),bss
+
+_objBank_0_2_SegmentRomStart        alias   _objBank02_org
+_objBank_0_2_SegmentRomEnd          alias   _objBank02_orgend
+
+        section.64      objBank02.data,objBank02
+
+oBank02  incbin  "objects/levela.nob",objBank02.data,64
+
+; [ FRONTEND WORLD LEVEL 3 ] >>>>>
+
+objBank03        group   obj()
+objBank03bss     group   obj(),bss
+
+_objBank_0_3_SegmentRomStart        alias   _objBank03_org
+_objBank_0_3_SegmentRomEnd          alias   _objBank03_orgend
+
+        section.64      objBank03.data,objBank03
+
+oBank03  incbin  "objects/dummy.nob",objBank03.data,64
+
+; [ FRONTEND WORLD LEVEL 4 ] >>>>>
+
+objBank04        group   obj()
+objBank04bss     group   obj(),bss
+
+_objBank_0_4_SegmentRomStart        alias   _objBank04_org
+_objBank_0_4_SegmentRomEnd          alias   _objBank04_orgend
+
+        section.64      objBank04.data,objBank04
+
+oBank04  incbin  "objects/dummy.nob",objBank04.data,64
+
+; [ FRONTEND WORLD LEVEL 5 ] >>>>>
+
+objBank05        group   obj()
+objBank05bss     group   obj(),bss
+
+_objBank_0_5_SegmentRomStart        alias   _objBank05_org
+_objBank_0_5_SegmentRomEnd          alias   _objBank05_orgend
+
+        section.64      objBank05.data,objBank05
+
+oBank05  incbin  "objects/language.nob",objBank05.data,64
+
+
+; [ GARDEN WORLD MASTER ] ------------------------------------------------------------------------
+
+objBank10       group   obj()
+objBank10bss    group   obj(),bss
+
+_objBank_1_0_SegmentRomStart        alias   _objBank10_org
+_objBank_1_0_SegmentRomEnd          alias   _objBank10_orgend
+
+        section.64      objBank10.data,objBank10
+
+oBank10  incbin  "objects/gardenmaster.nob",objBank10.data,64
+
+; [ GARDEN WORLD LEVEL 1 ] >>>>>
+
+objBank11        group   obj()
+objBank11bss     group   obj(),bss
+
+_objBank_1_1_SegmentRomStart        alias   _objBank11_org
+_objBank_1_1_SegmentRomEnd          alias   _objBank11_orgend
+
+        section.64      objBank11.data,objBank11
+
+oBank11  incbin  "objects/garden1.nob",objBank11.data,64
+
+; [ GARDEN WORLD LEVEL 2 ] >>>>>
+
+objBank12        group   obj()
+objBank12bss     group   obj(),bss
+
+_objBank_1_2_SegmentRomStart        alias   _objBank12_org
+_objBank_1_2_SegmentRomEnd          alias   _objBank12_orgend
+
+        section.64      objBank12.data,objBank12
+
+oBank12  incbin  "objects/garden2.nob",objBank12.data,64
+
+; [ GARDEN WORLD LEVEL 3 ] >>>>>
+
+objBank13        group   obj()
+objBank13bss     group   obj(),bss
+
+_objBank_1_3_SegmentRomStart        alias   _objBank13_org
+_objBank_1_3_SegmentRomEnd          alias   _objBank13_orgend
+
+        section.64      objBank13.data,objBank13
+
+oBank13  incbin  "objects/garden3.nob",objBank13.data,64
+
+; [ GARDEN WORLD BOSS ] >>>>>
+
+objBank14        group   obj()
+objBank14bss     group   obj(),bss
+
+_objBank_1_4_SegmentRomStart        alias   _objBank14_org
+_objBank_1_4_SegmentRomEnd          alias   _objBank14_orgend
+
+        section.64      objBank14.data,objBank14
+
+oBank14  incbin  "objects/gardenboss.nob",objBank14.data,64
+
+; [ GARDEN WORLD BOSS A ] >>>>>
+
+objBank15        group   obj()
+objBank15bss     group   obj(),bss
+
+_objBank_1_5_SegmentRomStart        alias   _objBank15_org
+_objBank_1_5_SegmentRomEnd          alias   _objBank15_orgend
+
+        section.64      objBank15.data,objBank15
+
+oBank15  incbin  "objects/gardenbossa.nob",objBank15.data,64
+
+; [ GARDEN WORLD BONUS ] >>>>>
+
+objBank16        group   obj()
+objBank16bss     group   obj(),bss
+
+_objBank_1_6_SegmentRomStart        alias   _objBank16_org
+_objBank_1_6_SegmentRomEnd          alias   _objBank16_orgend
+
+        section.64      objBank16.data,objBank16
+
+oBank16  incbin  "objects/gardenbonus.nob",objBank16.data,64
+
+; [ GARDEN WORLD MULTIPLAYER ] >>>>>
+
+objBank17        group   obj()
+objBank17bss     group   obj(),bss
+
+_objBank_1_7_SegmentRomStart        alias   _objBank17_org
+_objBank_1_7_SegmentRomEnd          alias   _objBank17_orgend
+
+        section.64      objBank17.data,objBank17
+
+oBank17  incbin  "objects/gardenmulti.nob",objBank17.data,64
+
+
+; [ ANCIENT WORLD MASTER ] -----------------------------------------------------------------------
+
+objBank20       group   obj()
+objBank20bss    group   obj(),bss
+
+_objBank_2_0_SegmentRomStart        alias   _objBank20_org
+_objBank_2_0_SegmentRomEnd          alias   _objBank20_orgend
+
+        section.64      objBank20.data,objBank20
+
+oBank20  incbin  "objects/ancientsmaster.nob",objBank20.data,64
+
+; [ ANCIENT LEVEL 1 ] >>>>>
+
+objBank21       group   obj()
+objBank21bss    group   obj(),bss
+
+_objBank_2_1_SegmentRomStart        alias   _objBank21_org
+_objBank_2_1_SegmentRomEnd          alias   _objBank21_orgend
+
+        section.64      objBank21.data,objBank21
+
+oBank21  incbin  "objects/ancients1.nob",objBank21.data,64
+
+; [ ANCIENT LEVEL 2 ] >>>>>
+
+objBank22       group   obj()
+objBank22bss    group   obj(),bss
+
+_objBank_2_2_SegmentRomStart        alias   _objBank22_org
+_objBank_2_2_SegmentRomEnd          alias   _objBank22_orgend
+
+        section.64      objBank22.data,objBank22
+
+oBank22  incbin  "objects/ancients2.nob",objBank22.data,64
+
+; [ ANCIENT LEVEL 3 ] >>>>>
+
+objBank23       group   obj()
+objBank23bss    group   obj(),bss
+
+_objBank_2_3_SegmentRomStart        alias   _objBank23_org
+_objBank_2_3_SegmentRomEnd          alias   _objBank23_orgend
+
+        section.64      objBank23.data,objBank23
+
+oBank23  incbin  "objects/ancients3.nob",objBank23.data,64
+
+; [ ANCIENT BOSS LEVEL ] >>>>>
+
+objBank24       group   obj()
+objBank24bss    group   obj(),bss
+
+_objBank_2_4_SegmentRomStart        alias   _objBank24_org
+_objBank_2_4_SegmentRomEnd          alias   _objBank24_orgend
+
+        section.64      objBank24.data,objBank24
+
+oBank24  incbin  "objects/ancientsboss.nob",objBank24.data,64
+
+; [ ANCIENT BOSSA LEVEL ] >>>>>
+
+objBank25       group   obj()
+objBank25bss    group   obj(),bss
+
+_objBank_2_5_SegmentRomStart        alias   _objBank25_org
+_objBank_2_5_SegmentRomEnd          alias   _objBank25_orgend
+
+        section.64      objBank25.data,objBank25
+
+oBank25  incbin  "objects/ancientsbossa.nob",objBank25.data,64
+
+; [ ANCIENT BOSSB LEVEL ] >>>>>
+
+objBank26       group   obj()
+objBank26bss    group   obj(),bss
+
+_objBank_2_6_SegmentRomStart        alias   _objBank26_org
+_objBank_2_6_SegmentRomEnd          alias   _objBank26_orgend
+
+        section.64      objBank26.data,objBank26
+
+oBank26  incbin  "objects/ancientsbossb.nob",objBank26.data,64
+
+; [ ANCIENT BOSSC LEVEL ] >>>>>
+
+objBank27       group   obj()
+objBank27bss    group   obj(),bss
+
+_objBank_2_7_SegmentRomStart        alias   _objBank27_org
+_objBank_2_7_SegmentRomEnd          alias   _objBank27_orgend
+
+        section.64      objBank27.data,objBank27
+
+oBank27  incbin  "objects/ancientsbossc.nob",objBank27.data,64
+
+; [ ANCIENT BONUS LEVEL ] >>>>>
+
+objBank28       group   obj()
+objBank28bss    group   obj(),bss
+
+_objBank_2_8_SegmentRomStart        alias   _objBank28_org
+_objBank_2_8_SegmentRomEnd          alias   _objBank28_orgend
+
+        section.64      objBank28.data,objBank28
+
+oBank28  incbin  "objects/dummy.nob",objBank28.data,64
+
+; [ ANCIENT MULITPLAYER LEVEL ] >>>>>
+
+objBank29       group   obj()
+objBank29bss    group   obj(),bss
+
+_objBank_2_9_SegmentRomStart        alias   _objBank29_org
+_objBank_2_9_SegmentRomEnd          alias   _objBank29_orgend
+
+        section.64      objBank29.data,objBank29
+
+oBank29  incbin  "objects/ancientsmulti.nob",objBank29.data,64
+
+
+; [ SPACE WORLD MASTER ] -------------------------------------------------------------------------
+
+objBank30       group   obj()
+objBank30bss    group   obj(),bss
+
+_objBank_3_0_SegmentRomStart        alias   _objBank30_org
+_objBank_3_0_SegmentRomEnd          alias   _objBank30_orgend
+
+        section.64      objBank30.data,objBank30
+
+oBank30  incbin  "objects/spacemaster.nob",objBank30.data,64
+
+; [ SPACE WORLD LEVEL 1 ] >>>>>
+
+objBank31        group   obj()
+objBank31bss     group   obj(),bss
+
+_objBank_3_1_SegmentRomStart        alias   _objBank31_org
+_objBank_3_1_SegmentRomEnd          alias   _objBank31_orgend
+
+        section.64      objBank31.data,objBank31
+
+oBank31  incbin  "objects/space1.nob",objBank31.data,64
+
+; [ SPACE WORLD LEVEL 2 ] >>>>>
+
+objBank32        group   obj()
+objBank32bss     group   obj(),bss
+
+_objBank_3_2_SegmentRomStart        alias   _objBank32_org
+_objBank_3_2_SegmentRomEnd          alias   _objBank32_orgend
+
+        section.64      objBank32.data,objBank32
+
+oBank32  incbin  "objects/space2.nob",objBank32.data,64
+
+; [ SPACE WORLD LEVEL 3 ] >>>>>
+
+objBank33        group   obj()
+objBank33bss     group   obj(),bss
+
+_objBank_3_3_SegmentRomStart        alias   _objBank33_org
+_objBank_3_3_SegmentRomEnd          alias   _objBank33_orgend
+
+        section.64      objBank33.data,objBank33
+
+oBank33  incbin  "objects/space3.nob",objBank33.data,64
+
+; [ SPACE WORLD BOSS ] >>>>>
+
+objBank34        group   obj()
+objBank34bss     group   obj(),bss
+
+_objBank_3_4_SegmentRomStart        alias   _objBank34_org
+_objBank_3_4_SegmentRomEnd          alias   _objBank34_orgend
+
+        section.64      objBank34.data,objBank34
+
+oBank34  incbin  "objects/spaceboss.nob",objBank34.data,64
+
+; [ SPACE WORLD BONUS ] >>>>>
+
+objBank35        group   obj()
+objBank35bss     group   obj(),bss
+
+_objBank_3_5_SegmentRomStart        alias   _objBank35_org
+_objBank_3_5_SegmentRomEnd          alias   _objBank35_orgend
+
+        section.64      objBank35.data,objBank35
+
+oBank35  incbin  "objects/dummy.nob",objBank35.data,64
+
+; [ SPACE WORLD MULTIPLAYER ] >>>>>
+
+objBank36        group   obj()
+objBank36bss     group   obj(),bss
+
+_objBank_3_6_SegmentRomStart        alias   _objBank36_org
+_objBank_3_6_SegmentRomEnd          alias   _objBank36_orgend
+
+        section.64      objBank36.data,objBank36
+
+oBank36  incbin  "objects/dummy.nob",objBank36.data,64
+
+
+; [ CITY WORLD MASTER ] --------------------------------------------------------------------------
+
+objBank40       group   obj()
+objBank40bss    group   obj(),bss
+
+_objBank_4_0_SegmentRomStart        alias   _objBank40_org
+_objBank_4_0_SegmentRomEnd          alias   _objBank40_orgend
+
+        section.64      objBank40.data,objBank40
+
+oBank40  incbin  "objects/citymaster.nob",objBank40.data,64
+
+; [ CITY WORLD LEVEL 1 ] >>>>>
+
+objBank41        group   obj()
+objBank41bss     group   obj(),bss
+
+_objBank_4_1_SegmentRomStart        alias   _objBank41_org
+_objBank_4_1_SegmentRomEnd          alias   _objBank41_orgend
+
+        section.64      objBank41.data,objBank41
+
+oBank41  incbin  "objects/city1.nob",objBank41.data,64
+
+; [ CITY WORLD LEVEL 2 ] >>>>>
+
+objBank42        group   obj()
+objBank42bss     group   obj(),bss
+
+_objBank_4_2_SegmentRomStart        alias   _objBank42_org
+_objBank_4_2_SegmentRomEnd          alias   _objBank42_orgend
+
+        section.64      objBank42.data,objBank42
+
+oBank42  incbin  "objects/city2.nob",objBank42.data,64
+
+; [ CITY WORLD LEVEL 3 ] >>>>>
+
+objBank43        group   obj()
+objBank43bss     group   obj(),bss
+
+_objBank_4_3_SegmentRomStart        alias   _objBank43_org
+_objBank_4_3_SegmentRomEnd          alias   _objBank43_orgend
+
+        section.64      objBank43.data,objBank43
+
+oBank43  incbin  "objects/city3.nob",objBank43.data,64
+
+; [ CITY WORLD BOSS ] >>>>>
+
+objBank44        group   obj()
+objBank44bss     group   obj(),bss
+
+_objBank_4_4_SegmentRomStart        alias   _objBank44_org
+_objBank_4_4_SegmentRomEnd          alias   _objBank44_orgend
+
+        section.64      objBank44.data,objBank44
+
+oBank44  incbin  "objects/cityboss.nob",objBank44.data,64
+
+; [ CITY WORLD BONUS ] >>>>>
+
+objBank45        group   obj()
+objBank45bss     group   obj(),bss
+
+_objBank_4_5_SegmentRomStart        alias   _objBank45_org
+_objBank_4_5_SegmentRomEnd          alias   _objBank45_orgend
+
+        section.64      objBank45.data,objBank45
+
+oBank45  incbin  "objects/citybonus.nob",objBank45.data,64
+
+; [ CITY WORLD MULTIPLAYER ] >>>>>
+
+objBank46        group   obj()
+objBank46bss     group   obj(),bss
+
+_objBank_4_6_SegmentRomStart        alias   _objBank46_org
+_objBank_4_6_SegmentRomEnd          alias   _objBank46_orgend
+
+        section.64      objBank46.data,objBank46
+
+oBank46  incbin  "objects/citymulti.nob",objBank46.data,64
+
+
+; [ SUBTER WORLD MASTER ] ------------------------------------------------------------------------
+
+objBank50       group   obj()
+objBank50bss    group   obj(),bss
+
+_objBank_5_0_SegmentRomStart        alias   _objBank50_org
+_objBank_5_0_SegmentRomEnd          alias   _objBank50_orgend
+
+        section.64      objBank50.data,objBank50
+
+oBank50  incbin  "objects/submaster.nob",objBank50.data,64
+
+; [ SUBTER WORLD LEVEL 1 ] >>>>>
+
+objBank51        group   obj()
+objBank51bss     group   obj(),bss
+
+_objBank_5_1_SegmentRomStart        alias   _objBank51_org
+_objBank_5_1_SegmentRomEnd          alias   _objBank51_orgend
+
+        section.64      objBank51.data,objBank51
+
+oBank51  incbin  "objects/sub1.nob",objBank51.data,64
+
+; [ SUBTER WORLD LEVEL 2 ] >>>>>
+
+objBank52        group   obj()
+objBank52bss     group   obj(),bss
+
+_objBank_5_2_SegmentRomStart        alias   _objBank52_org
+_objBank_5_2_SegmentRomEnd          alias   _objBank52_orgend
+
+        section.64      objBank52.data,objBank52
+
+oBank52  incbin  "objects/sub2.nob",objBank52.data,64
+
+; [ SUBTER WORLD LEVEL 3 ] >>>>>
+
+objBank53        group   obj()
+objBank53bss     group   obj(),bss
+
+_objBank_5_3_SegmentRomStart        alias   _objBank53_org
+_objBank_5_3_SegmentRomEnd          alias   _objBank53_orgend
+
+        section.64      objBank53.data,objBank53
+
+oBank53  incbin  "objects/sub3.nob",objBank53.data,64
+
+; [ SUBTER WORLD BOSS ] >>>>>
+
+objBank54        group   obj()
+objBank54bss     group   obj(),bss
+
+_objBank_5_4_SegmentRomStart        alias   _objBank54_org
+_objBank_5_4_SegmentRomEnd          alias   _objBank54_orgend
+
+        section.64      objBank54.data,objBank54
+
+oBank54  incbin  "objects/subboss.nob",objBank54.data,64
+
+; [ SUBTER WORLD BONUS ] >>>>>
+
+objBank55        group   obj()
+objBank55bss     group   obj(),bss
+
+_objBank_5_5_SegmentRomStart        alias   _objBank55_org
+_objBank_5_5_SegmentRomEnd          alias   _objBank55_orgend
+
+        section.64      objBank55.data,objBank55
+
+oBank55  incbin  "objects/dummy.nob",objBank55.data,64
+
+; [ SUBTER WORLD MULTIPLAYER ] >>>>>
+
+objBank56        group   obj()
+objBank56bss     group   obj(),bss
+
+_objBank_5_6_SegmentRomStart        alias   _objBank56_org
+_objBank_5_6_SegmentRomEnd          alias   _objBank56_orgend
+
+        section.64      objBank56.data,objBank56
+
+oBank56  incbin  "objects/dummy.nob",objBank56.data,64
+
+
+; [ LAB WORLD MASTER ] ---------------------------------------------------------------------------
+
+objBank60       group   obj()
+objBank60bss    group   obj(),bss
+
+_objBank_6_0_SegmentRomStart        alias   _objBank60_org
+_objBank_6_0_SegmentRomEnd          alias   _objBank60_orgend
+
+        section.64      objBank60.data,objBank60
+
+oBank60  incbin  "objects/labmaster.nob",objBank60.data,64
+
+; [ LAB WORLD LEVEL 1 ] >>>>>
+
+objBank61        group   obj()
+objBank61bss     group   obj(),bss
+
+_objBank_6_1_SegmentRomStart        alias   _objBank61_org
+_objBank_6_1_SegmentRomEnd          alias   _objBank61_orgend
+
+        section.64      objBank61.data,objBank61
+
+oBank61  incbin  "objects/lab1.nob",objBank61.data,64
+
+; [ LAB WORLD LEVEL 2 ] >>>>>
+
+objBank62        group   obj()
+objBank62bss     group   obj(),bss
+
+_objBank_6_2_SegmentRomStart        alias   _objBank62_org
+_objBank_6_2_SegmentRomEnd          alias   _objBank62_orgend
+
+        section.64      objBank62.data,objBank62
+
+oBank62  incbin  "objects/lab2.nob",objBank62.data,64
+
+; [ LAB WORLD LEVEL 3 ] >>>>>
+
+objBank63        group   obj()
+objBank63bss     group   obj(),bss
+
+_objBank_6_3_SegmentRomStart        alias   _objBank63_org
+_objBank_6_3_SegmentRomEnd          alias   _objBank63_orgend
+
+        section.64      objBank63.data,objBank63
+
+oBank63  incbin  "objects/lab3.nob",objBank63.data,64
+
+; [ LAB WORLD BOSS ] >>>>>
+
+objBank64        group   obj()
+objBank64bss     group   obj(),bss
+
+_objBank_6_4_SegmentRomStart        alias   _objBank64_org
+_objBank_6_4_SegmentRomEnd          alias   _objBank64_orgend
+
+        section.64      objBank64.data,objBank64
+
+oBank64  incbin  "objects/labboss.nob",objBank64.data,64
+
+; [ LAB WORLD BONUS ] >>>>>
+
+objBank65        group   obj()
+objBank65bss     group   obj(),bss
+
+_objBank_6_5_SegmentRomStart        alias   _objBank65_org
+_objBank_6_5_SegmentRomEnd          alias   _objBank65_orgend
+
+        section.64      objBank65.data,objBank65
+
+oBank65  incbin  "objects/dummy.nob",objBank65.data,64
+
+; [ LAB WORLD MULTIPLAYER ] >>>>>
+
+objBank66        group   obj()
+objBank66bss     group   obj(),bss
+
+_objBank_6_6_SegmentRomStart        alias   _objBank66_org
+_objBank_6_6_SegmentRomEnd          alias   _objBank66_orgend
+
+        section.64      objBank66.data,objBank66
+
+oBank66  incbin  "objects/dummy.nob",objBank66.data,64
+
+
+; [ TOYSHOP WORLD MASTER ] -----------------------------------------------------------------------
+
+objBank70       group   obj()
+objBank70bss    group   obj(),bss
+
+_objBank_7_0_SegmentRomStart        alias   _objBank70_org
+_objBank_7_0_SegmentRomEnd          alias   _objBank70_orgend
+
+        section.64      objBank70.data,objBank70
+
+oBank70  incbin  "objects/dummy.nob",objBank70.data,64
+
+; [ TOYSHOP WORLD LEVEL 1 ] >>>>>
+
+objBank71        group   obj()
+objBank71bss     group   obj(),bss
+
+_objBank_7_1_SegmentRomStart        alias   _objBank71_org
+_objBank_7_1_SegmentRomEnd          alias   _objBank71_orgend
+
+        section.64      objBank71.data,objBank71
+
+oBank71  incbin  "objects/toy1.nob",objBank71.data,64
+
+; [ TOYSHOP WORLD LEVEL 2 ] >>>>>
+
+objBank72        group   obj()
+objBank72bss     group   obj(),bss
+
+_objBank_7_2_SegmentRomStart        alias   _objBank72_org
+_objBank_7_2_SegmentRomEnd          alias   _objBank72_orgend
+
+        section.64      objBank72.data,objBank72
+
+oBank72  incbin  "objects/dummy.nob",objBank72.data,64
+
+; [ TOYSHOP WORLD LEVEL 3 ] >>>>>
+
+objBank73        group   obj()
+objBank73bss     group   obj(),bss
+
+_objBank_7_3_SegmentRomStart        alias   _objBank73_org
+_objBank_7_3_SegmentRomEnd          alias   _objBank73_orgend
+
+        section.64      objBank73.data,objBank73
+
+oBank73  incbin  "objects/dummy.nob",objBank73.data,64
+
+; [ TOYSHOP WORLD BOSS ] >>>>>
+
+objBank74        group   obj()
+objBank74bss     group   obj(),bss
+
+_objBank_7_4_SegmentRomStart        alias   _objBank74_org
+_objBank_7_4_SegmentRomEnd          alias   _objBank74_orgend
+
+        section.64      objBank74.data,objBank74
+
+oBank74  incbin  "objects/dummy.nob",objBank74.data,64
+
+; [ TOYSHOP WORLD BONUS ] >>>>>
+
+objBank75        group   obj()
+objBank75bss     group   obj(),bss
+
+_objBank_7_5_SegmentRomStart        alias   _objBank75_org
+_objBank_7_5_SegmentRomEnd          alias   _objBank75_orgend
+
+        section.64      objBank75.data,objBank75
+
+oBank75  incbin  "objects/dummy.nob",objBank75.data,64
+
+; [ TOYSHOP WORLD MULTIPLAYER ] >>>>>
+
+objBank76        group   obj()
+objBank76bss     group   obj(),bss
+
+_objBank_7_6_SegmentRomStart        alias   _objBank76_org
+_objBank_7_6_SegmentRomEnd          alias   _objBank76_orgend
+
+        section.64      objBank76.data,objBank76
+
+oBank76  incbin  "objects/dummy.nob",objBank76.data,64
+
+
+; [ HALLOWEEN WORLD MASTER ] ---------------------------------------------------------------------
+
+objBank80       group   obj()
+objBank80bss    group   obj(),bss
+
+_objBank_8_0_SegmentRomStart        alias   _objBank80_org
+_objBank_8_0_SegmentRomEnd          alias   _objBank80_orgend
+
+        section.64      objBank80.data,objBank80
+
+oBank80  incbin  "objects/haloweenmaster.nob",objBank80.data,64
+
+; [ HALLOWEEN WORLD LEVEL 1 ] >>>>>
+
+objBank81        group   obj()
+objBank81bss     group   obj(),bss
+
+_objBank_8_1_SegmentRomStart        alias   _objBank81_org
+_objBank_8_1_SegmentRomEnd          alias   _objBank81_orgend
+
+        section.64      objBank81.data,objBank81
+
+oBank81  incbin  "objects/haloween1.nob",objBank81.data,64
+
+; [ HALLOWEEN WORLD LEVEL 2 ] >>>>>
+
+objBank82        group   obj()
+objBank82bss     group   obj(),bss
+
+_objBank_8_2_SegmentRomStart        alias   _objBank82_org
+_objBank_8_2_SegmentRomEnd          alias   _objBank82_orgend
+
+        section.64      objBank82.data,objBank82
+
+oBank82  incbin  "objects/dummy.nob",objBank82.data,64
+
+; [ HALLOWEEN WORLD LEVEL 3 ] >>>>>
+
+objBank83        group   obj()
+objBank83bss     group   obj(),bss
+
+_objBank_8_3_SegmentRomStart        alias   _objBank83_org
+_objBank_8_3_SegmentRomEnd          alias   _objBank83_orgend
+
+        section.64      objBank83.data,objBank83
+
+oBank83  incbin  "objects/dummy.nob",objBank83.data,64
+
+; [ HALLOWEEN WORLD BOSS ] >>>>>
+
+objBank84        group   obj()
+objBank84bss     group   obj(),bss
+
+_objBank_8_4_SegmentRomStart        alias   _objBank84_org
+_objBank_8_4_SegmentRomEnd          alias   _objBank84_orgend
+
+        section.64      objBank84.data,objBank84
+
+oBank84  incbin  "objects/dummy.nob",objBank84.data,64
+
+; [ HALLOWEEN WORLD BONUS ] >>>>>
+
+objBank85        group   obj()
+objBank85bss     group   obj(),bss
+
+_objBank_8_5_SegmentRomStart        alias   _objBank85_org
+_objBank_8_5_SegmentRomEnd          alias   _objBank85_orgend
+
+        section.64      objBank85.data,objBank85
+
+oBank85  incbin  "objects/dummy.nob",objBank85.data,64
+
+; [ HALLOWEEN WORLD MULTIPLAYER ] >>>>>
+
+objBank86        group   obj()
+objBank86bss     group   obj(),bss
+
+_objBank_8_6_SegmentRomStart        alias   _objBank86_org
+_objBank_8_6_SegmentRomEnd          alias   _objBank86_orgend
+
+        section.64      objBank86.data,objBank86
+
+oBank86  incbin  "objects/dummy.nob",objBank86.data,64
+
+
+; [ SUPERRETRO WORLD MASTER ] --------------------------------------------------------------------
+
+objBank90       group   obj()
+objBank90bss    group   obj(),bss
+
+_objBank_9_0_SegmentRomStart        alias   _objBank90_org
+_objBank_9_0_SegmentRomEnd          alias   _objBank90_orgend
+
+        section.64      objBank90.data,objBank90
+
+oBank90  incbin  "objects/sretromaster.nob",objBank90.data,64
+
+; [ SUPPERRETRO WORLD LEVEL 1 ] >>>>>
+
+objBank91        group   obj()
+objBank91bss     group   obj(),bss
+
+_objBank_9_1_SegmentRomStart        alias   _objBank91_org
+_objBank_9_1_SegmentRomEnd          alias   _objBank91_orgend
+
+        section.64      objBank91.data,objBank91
+
+oBank91  incbin  "objects/sretro1.nob",objBank91.data,64
+
+; [ SUPERRETRO WORLD LEVEL 2 ] >>>>>
+
+objBank92        group   obj()
+objBank92bss     group   obj(),bss
+
+_objBank_9_2_SegmentRomStart        alias   _objBank92_org
+_objBank_9_2_SegmentRomEnd          alias   _objBank92_orgend
+
+        section.64      objBank92.data,objBank92
+
+oBank92  incbin  "objects/sretro2.nob",objBank92.data,64
+
+; [ SUPERRETRO WORLD LEVEL 3 ] >>>>>
+
+objBank93        group   obj()
+objBank93bss     group   obj(),bss
+
+_objBank_9_3_SegmentRomStart        alias   _objBank93_org
+_objBank_9_3_SegmentRomEnd          alias   _objBank93_orgend
+
+        section.64      objBank93.data,objBank93
+
+oBank93  incbin  "objects/sretro3.nob",objBank93.data,64
+
+; [ SUPERRETRO WORLD LEVEL 4 ] >>>>>
+
+objBank94        group   obj()
+objBank94bss     group   obj(),bss
+
+_objBank_9_4_SegmentRomStart        alias   _objBank94_org
+_objBank_9_4_SegmentRomEnd          alias   _objBank94_orgend
+
+        section.64      objBank94.data,objBank94
+
+oBank94  incbin  "objects/sretro4.nob",objBank94.data,64
+
+; [ SUPERRETRO WORLD LEVEL 5 ] >>>>>
+
+objBank95        group   obj()
+objBank95bss     group   obj(),bss
+
+_objBank_9_5_SegmentRomStart        alias   _objBank95_org
+_objBank_9_5_SegmentRomEnd          alias   _objBank95_orgend
+
+        section.64      objBank95.data,objBank95
+
+oBank95  incbin  "objects/sretro5.nob",objBank95.data,64
+
+; [ SUPERRETRO WORLD LEVEL 6 ] >>>>>
+
+objBank96        group   obj()
+objBank96bss     group   obj(),bss
+
+_objBank_9_6_SegmentRomStart        alias   _objBank96_org
+_objBank_9_6_SegmentRomEnd          alias   _objBank96_orgend
+
+        section.64      objBank96.data,objBank96
+
+oBank96  incbin  "objects/sretro6.nob",objBank96.data,64
+
+; [ SUPERRETRO WORLD LEVEL 7 ] >>>>>
+
+objBank97        group   obj()
+objBank97bss     group   obj(),bss
+
+_objBank_9_7_SegmentRomStart        alias   _objBank97_org
+_objBank_9_7_SegmentRomEnd          alias   _objBank97_orgend
+
+        section.64      objBank97.data,objBank97
+
+oBank97  incbin  "objects/sretro7.nob",objBank97.data,64
+
+; [ SUPERRETRO WORLD LEVEL 8 ] >>>>>
+
+objBank98        group   obj()
+objBank98bss     group   obj(),bss
+
+_objBank_9_8_SegmentRomStart        alias   _objBank98_org
+_objBank_9_8_SegmentRomEnd          alias   _objBank98_orgend
+
+        section.64      objBank98.data,objBank98
+
+oBank98  incbin  "objects/sretro8.nob",objBank98.data,64
+
+; [ SUPERRETRO WORLD LEVEL 9 ] >>>>>
+
+objBank99        group   obj()
+objBank99bss     group   obj(),bss
+
+_objBank_9_9_SegmentRomStart        alias   _objBank99_org
+_objBank_9_9_SegmentRomEnd          alias   _objBank99_orgend
+
+        section.64      objBank99.data,objBank99
+
+oBank99  incbin  "objects/sretro9.nob",objBank99.data,64
+
+; [ SUPERRETRO WORLD LEVEL 10 ] >>>>>
+
+objBank910        group   obj()
+objBank910bss     group   obj(),bss
+
+_objBank_9_10_SegmentRomStart        alias   _objBank910_org
+_objBank_9_10_SegmentRomEnd          alias   _objBank910_orgend
+
+        section.64      objBank910.data,objBank910
+
+oBank910  incbin  "objects/sretro10.nob",objBank910.data,64
+
+
+
+
+
+
+
+;-------------------------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------------------------
+;----- [ TEXTURES ] ------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------------------------
+
+
+; [ SYSTEM ] >>>>>
+
+texBank1        group   obj()
+texBank1bss     group   obj(),bss
+
+_texBank1SegmentRomStart        alias   _texBank1_org
+_texBank1SegmentRomEnd          alias   _texBank1_orgend
+
+        section.64      texBank1.data,texBank1
+
+tBank1  incbin  "textures/system.fla",texBank1.data,64
+
+; [ TITLES ] >>>>>
+
+texBank2        group   obj()
+texBank2bss     group   obj(),bss
+
+_texBank2SegmentRomStart        alias   _texBank2_org
+_texBank2SegmentRomEnd          alias   _texBank2_orgend
+
+        section.64      texBank2.data,texBank2
+
+tBank2  incbin  "textures/titlegeneric.fla",texBank2.data,64
+
+; [ IN GAME GENERIC ] >>>>>
+
+texBank3        group   obj()
+texBank3bss     group   obj(),bss
+
+_texBank3SegmentRomStart        alias   _texBank3_org
+_texBank3SegmentRomEnd          alias   _texBank3_orgend
+
+        section.64      texBank3.data,texBank3
+
+tBank3  incbin  "textures/gamegeneric.fla",texBank3.data,64
+
+
+
+; [ WORLD TEXTURE BANKS ] ------------------------------------------------------------------------
+
+texBank00        group   obj()
+texBank00bss     group   obj(),bss
+
+_texBankFrontendSegmentRomStart        alias   _texBank00_org
+_texBankFrontendSegmentRomEnd          alias   _texBank00_orgend
+
+        section.64      texBank00.data,texBank00
+
+tBank00  incbin  "textures/front.fla",texBank00.data,64
+
+;--
+
+texBank01        group   obj()
+texBank01bss     group   obj(),bss
+
+_texBankGardenSegmentRomStart        alias   _texBank01_org
+_texBankGardenSegmentRomEnd          alias   _texBank01_orgend
+        
+		section.64      texBank01.data,texBank01
+
+tBank01  incbin  "textures/garden.fla",texBank01.data,64
+
+;--
+
+texBank02        group   obj()
+texBank02bss     group   obj(),bss
+
+_texBankAncientSegmentRomStart        alias   _texBank02_org
+_texBankAncientSegmentRomEnd          alias   _texBank02_orgend
+        
+		section.64      texBank02.data,texBank02
+
+tBank02  incbin  "textures/ancient.fla",texBank02.data,64
+
+;--
+
+texBank03        group   obj()
+texBank03bss     group   obj(),bss
+
+_texBankSpaceSegmentRomStart        alias   _texBank03_org
+_texBankSpaceSegmentRomEnd          alias   _texBank03_orgend
+        
+		section.64      texBank03.data,texBank03
+
+tBank03  incbin  "textures/space.fla",texBank03.data,64
+
+;--
+
+texBank04        group   obj()
+texBank04bss     group   obj(),bss
+
+_texBankCitySegmentRomStart        alias   _texBank04_org
+_texBankCitySegmentRomEnd          alias   _texBank04_orgend
+        
+		section.64      texBank04.data,texBank04
+
+tBank04  incbin  "textures/city.fla",texBank04.data,64
+
+;--
+
+texBank05        group   obj()
+texBank05bss     group   obj(),bss
+
+_texBankLabSegmentRomStart        alias   _texBank05_org
+_texBankLabSegmentRomEnd          alias   _texBank05_orgend
+        
+		section.64      texBank05.data,texBank05
+
+tBank05  incbin  "textures/lab.fla",texBank05.data,64
+
+;--
+
+texBank06        group   obj()
+texBank06bss     group   obj(),bss
+
+_texBankSubSegmentRomStart        alias   _texBank06_org
+_texBankSubSegmentRomEnd          alias   _texBank06_orgend
+        
+		section.64      texBank06.data,texBank06
+
+tBank06  incbin  "textures/sub.fla",texBank06.data,64
+
+;--
+
+texBank07        group   obj()
+texBank07bss     group   obj(),bss
+
+_texBankToySegmentRomStart        alias   _texBank07_org
+_texBankToySegmentRomEnd          alias   _texBank07_orgend
+        
+		section.64      texBank07.data,texBank07
+
+tBank07  incbin  "textures/toy.fla",texBank07.data,64
+
+;--
+
+texBank08        group   obj()
+texBank08bss     group   obj(),bss
+
+_texBankHallowSegmentRomStart        alias   _texBank08_org
+_texBankHallowSegmentRomEnd          alias   _texBank08_orgend
+        
+		section.64      texBank08.data,texBank08
+
+tBank08  incbin  "textures/hallow.fla",texBank08.data,64
+
+;--
+
+texBank09        group   obj()
+texBank09bss     group   obj(),bss
+
+_texBankSRetroSegmentRomStart        alias   _texBank09_org
+_texBankSRetroSegmentRomEnd          alias   _texBank09_orgend
+        
+		section.64      texBank09.data,texBank09
+
+tBank09  incbin  "textures/sretro.fla",texBank09.data,64
+
+
+
+
+;---------------------------------------------------------------------------------------------------
+;---------------------------------------------------------------------------------------------------
+;----- [ LEVEL ENTITY DATA ] -----------------------------------------------------------------------
+;---------------------------------------------------------------------------------------------------
+;---------------------------------------------------------------------------------------------------
+
+; GARDEN LEVEL ENTITY DATA - BANKS 1+ ------------------------------------------------------------
+
+; [ GARDEN LEVEL 1 ] >>>>>
+
+levData11        group   obj()
+levData11bss     group   obj(),bss
+
+_levData_1_1_SegmentRomStart alias _levData11_org
+_levData_1_1_SegmentRomEnd   alias _levData11_orgend
+
+        section.64       levData11.data,levData11
+
+;levDat11  incbin "leveldata/entity-0-0.cef",levData11.data, 32
+levDat11  incbin "c:/levtemp/entity-0-0.dat",levData11.data, 32
+
+; [ GARDEN LEVEL 2 ] >>>>>
+
+levData12        group   obj()
+levData12bss     group   obj(),bss
+
+_levData_1_2_SegmentRomStart alias _levData12_org
+_levData_1_2_SegmentRomEnd   alias _levData12_orgend
+
+        section.64       levData12.data,levData12
+
+levDat12  incbin "leveldata/entity-0-1.cef",levData12.data, 32
+
+; [ GARDEN LEVEL 3 ] >>>>>
+
+levData13        group   obj()
+levData13bss     group   obj(),bss
+
+_levData_1_3_SegmentRomStart alias _levData13_org
+_levData_1_3_SegmentRomEnd   alias _levData13_orgend
+
+        section.64       levData13.data,levData13
+
+levDat13  incbin "leveldata/entity-0-2.cef",levData13.data, 32
+
+; [ GARDEN BOSS A ] >>>>>
+
+levData14        group   obj()
+levData14bss     group   obj(),bss
+
+_levData_1_4_SegmentRomStart alias _levData14_org
+_levData_1_4_SegmentRomEnd   alias _levData14_orgend
+
+        section.64       levData14.data,levData14
+
+levDat14  incbin "leveldata/entity-0-3.cef",levData14.data, 32
+
+; [ GARDEN BOSS B ] >>>>>
+
+levData15        group   obj()
+levData15bss     group   obj(),bss
+
+_levData_1_5_SegmentRomStart alias _levData15_org
+_levData_1_5_SegmentRomEnd   alias _levData15_orgend
+
+        section.64       levData15.data,levData15
+
+levDat15  incbin "leveldata/entity-0-4.cef",levData15.data, 32
+
+; [ GARDEN BONUS ] >>>>>
+
+levData16        group   obj()
+levData16bss     group   obj(),bss
+
+_levData_1_6_SegmentRomStart alias _levData16_org
+_levData_1_6_SegmentRomEnd   alias _levData16_orgend
+
+        section.64       levData16.data,levData16
+
+levDat16  incbin "leveldata/entity-0-5.cef",levData16.data, 32
+
+; [ GARDEN MULTI ] >>>>>
+
+levData17        group   obj()
+levData17bss     group   obj(),bss
+
+_levData_1_7_SegmentRomStart alias _levData17_org
+_levData_1_7_SegmentRomEnd   alias _levData17_orgend
+
+        section.64       levData17.data,levData17
+
+levDat17  incbin "leveldata/entity-0-6.cef",levData17.data, 32
+
+
+; ANCIENT LEVEL ENTITY DATA - BANKS 2+ -----------------------------------------------------------
+
+; [ ANCIENT LEVEL 1 ] >>>>>
+
+levData21        group   obj()
+levData21bss     group   obj(),bss
+
+_levData_2_1_SegmentRomStart alias _levData21_org
+_levData_2_1_SegmentRomEnd   alias _levData21_orgend
+
+        section.64       levData21.data,levData21
+
+levDat21  incbin "leveldata/entity-1-0.cef",levData21.data, 32
+
+; [ ANCIENT LEVEL 2 ] >>>>>
+
+levData22        group   obj()
+levData22bss     group   obj(),bss
+
+_levData_2_2_SegmentRomStart alias _levData22_org
+_levData_2_2_SegmentRomEnd   alias _levData22_orgend
+
+        section.64       levData22.data,levData22
+
+levDat22  incbin "leveldata/entity-1-1.cef",levData22.data, 32
+
+; [ ANCIENT LEVEL 3 ] >>>>>
+
+levData23        group   obj()
+levData23bss     group   obj(),bss
+
+_levData_2_3_SegmentRomStart alias _levData23_org
+_levData_2_3_SegmentRomEnd   alias _levData23_orgend
+
+        section.64       levData23.data,levData23
+
+levDat23  incbin "leveldata/entity-1-2.cef",levData23.data, 32
+
+; [ ANCIENT LEVEL BOSSA ] >>>>>
+
+levData24        group   obj()
+levData24bss     group   obj(),bss
+
+_levData_2_4_SegmentRomStart alias _levData24_org
+_levData_2_4_SegmentRomEnd   alias _levData24_orgend
+
+        section.64       levData24.data,levData24
+
+levDat24  incbin "leveldata/dummy.cef",levData24.data, 32
+
+; [ ANCIENT LEVEL BOSS B ] >>>>>
+
+levData25        group   obj()
+levData25bss     group   obj(),bss
+
+_levData_2_5_SegmentRomStart alias _levData25_org
+_levData_2_5_SegmentRomEnd   alias _levData25_orgend
+
+        section.64       levData25.data,levData25
+
+levDat25  incbin "leveldata/dummy.cef",levData25.data, 32
+
+; [ ANCIENT LEVEL BOSS C ] >>>>>
+
+levData26        group   obj()
+levData26bss     group   obj(),bss
+
+_levData_2_6_SegmentRomStart alias _levData26_org
+_levData_2_6_SegmentRomEnd   alias _levData26_orgend
+
+        section.64       levData26.data,levData26
+
+levDat26  incbin "leveldata/dummy.cef",levData26.data, 32
+
+; [ ANCIENT LEVEL BOSS D ] >>>>>
+
+levData27        group   obj()
+levData27bss     group   obj(),bss
+
+_levData_2_7_SegmentRomStart alias _levData27_org
+_levData_2_7_SegmentRomEnd   alias _levData27_orgend
+
+        section.64       levData27.data,levData27
+
+levDat27  incbin "leveldata/dummy.cef",levData27.data, 32
+
+; [ ANCIENT LEVEL BONUS ] >>>>>
+
+levData28        group   obj()
+levData28bss     group   obj(),bss
+
+_levData_2_8_SegmentRomStart alias _levData28_org
+_levData_2_8_SegmentRomEnd   alias _levData28_orgend
+
+        section.64       levData28.data,levData28
+
+levDat28  incbin "leveldata/dummy.cef",levData28.data, 32
+
+; [ ANCIENT LEVEL MULTI ] >>>>>
+
+levData29        group   obj()
+levData29bss     group   obj(),bss
+
+_levData_2_9_SegmentRomStart alias _levData29_org
+_levData_2_9_SegmentRomEnd   alias _levData29_orgend
+
+        section.64       levData29.data,levData29
+
+levDat29  incbin "leveldata/dummy.cef",levData29.data, 32
+
+
+; SPACE LEVEL ENTITY DATA - BANKS 3+ -------------------------------------------------------------
+
+; [ SPACE LEVEL 1 ] >>>>>
+
+levData31        group   obj()
+levData31bss     group   obj(),bss
+
+_levData_3_1_SegmentRomStart alias _levData31_org
+_levData_3_1_SegmentRomEnd   alias _levData31_orgend
+
+        section.64       levData31.data,levData31
+
+;levDat31  incbin "leveldata/entity-2-0.cef",levData31.data, 32
+levDat31  incbin "c:/levtemp/entity-2-0.dat",levData31.data, 32
+
+; [ SPACE LEVEL 2 ] >>>>>
+
+levData32        group   obj()
+levData32bss     group   obj(),bss
+
+_levData_3_2_SegmentRomStart alias _levData32_org
+_levData_3_2_SegmentRomEnd   alias _levData32_orgend
+
+        section.64       levData32.data,levData32
+
+;levDat32  incbin "leveldata/entity-2-1.cef",levData32.data, 32
+levDat32  incbin "c:/levtemp/entity-2-1.dat",levData32.data, 32
+
+; [ SPACE LEVEL 3 ] >>>>>
+
+levData33        group   obj()
+levData33bss     group   obj(),bss
+
+_levData_3_3_SegmentRomStart alias _levData33_org
+_levData_3_3_SegmentRomEnd   alias _levData33_orgend
+
+        section.64       levData33.data,levData33
+
+levDat33  incbin "leveldata/entity-2-2.cef",levData33.data, 32
+
+; [ SPACE BOSS ] >>>>>
+
+levData34        group   obj()
+levData34bss     group   obj(),bss
+
+_levData_3_4_SegmentRomStart alias _levData34_org
+_levData_3_4_SegmentRomEnd   alias _levData34_orgend
+
+        section.64       levData34.data,levData34
+
+;levDat34  incbin "leveldata/entity-2-3.cef",levData34.data, 32
+levDat34  incbin "c:/levtemp/entity-2-3.dat",levData34.data, 32
+
+; [ SPACE BONUS ] >>>>>
+
+levData35        group   obj()
+levData35bss     group   obj(),bss
+
+_levData_3_5_SegmentRomStart alias _levData35_org
+_levData_3_5_SegmentRomEnd   alias _levData35_orgend
+
+        section.64       levData35.data,levData35
+
+levDat35  incbin "leveldata/dummy.cef",levData35.data, 32
+
+; [ SPACE MULTI ] >>>>>
+
+levData36        group   obj()
+levData36bss     group   obj(),bss
+
+_levData_3_6_SegmentRomStart alias _levData36_org
+_levData_3_6_SegmentRomEnd   alias _levData36_orgend
+
+        section.64       levData36.data,levData36
+
+levDat36  incbin "leveldata/dummy.cef",levData36.data, 32
+
+
+; CITY LEVEL ENTITY DATA - BANKS 4+ --------------------------------------------------------------
+
+; [ CITY LEVEL 1 ] >>>>>
+
+levData41        group   obj()
+levData41bss     group   obj(),bss
+
+_levData_4_1_SegmentRomStart alias _levData41_org
+_levData_4_1_SegmentRomEnd   alias _levData41_orgend
+
+        section.64       levData41.data,levData41
+
+levDat41  incbin "leveldata/dummy.cef",levData41.data, 32
+
+; [ CITY LEVEL 2 ] >>>>>
+
+levData42        group   obj()
+levData42bss     group   obj(),bss
+
+_levData_4_2_SegmentRomStart alias _levData42_org
+_levData_4_2_SegmentRomEnd   alias _levData42_orgend
+
+        section.64       levData42.data,levData42
+
+levDat42  incbin "leveldata/dummy.cef",levData42.data, 32
+
+; [ CITY LEVEL 3 ] >>>>>
+
+levData43        group   obj()
+levData43bss     group   obj(),bss
+
+_levData_4_3_SegmentRomStart alias _levData43_org
+_levData_4_3_SegmentRomEnd   alias _levData43_orgend
+
+        section.64       levData43.data,levData43
+
+levDat43  incbin "leveldata/dummy.cef",levData43.data, 32
+
+; [ CITY BOSS ] >>>>>
+
+levData44        group   obj()
+levData44bss     group   obj(),bss
+
+_levData_4_4_SegmentRomStart alias _levData44_org
+_levData_4_4_SegmentRomEnd   alias _levData44_orgend
+
+        section.64       levData44.data,levData44
+
+levDat44  incbin "leveldata/dummy.cef",levData44.data, 32
+
+; [ CITY BONUS ] >>>>>
+
+levData45        group   obj()
+levData45bss     group   obj(),bss
+
+_levData_4_5_SegmentRomStart alias _levData45_org
+_levData_4_5_SegmentRomEnd   alias _levData45_orgend
+
+        section.64       levData45.data,levData45
+
+levDat45  incbin "leveldata/dummy.cef",levData45.data, 32
+
+; [ CITY MULTI ] >>>>>
+
+levData46        group   obj()
+levData46bss     group   obj(),bss
+
+_levData_4_6_SegmentRomStart alias _levData46_org
+_levData_4_6_SegmentRomEnd   alias _levData46_orgend
+
+        section.64       levData46.data,levData46
+
+levDat46  incbin "leveldata/dummy.cef",levData46.data, 32
+
+
+; SUBTERRANEAN LEVEL ENTITY DATA - BANKS 5+ ------------------------------------------------------
+
+; [ SUBTER LEVEL 1 ] >>>>>
+
+levData51        group   obj()
+levData51bss     group   obj(),bss
+
+_levData_5_1_SegmentRomStart alias _levData51_org
+_levData_5_1_SegmentRomEnd   alias _levData51_orgend
+
+        section.64       levData51.data,levData51
+
+levDat51  incbin "leveldata/entity-5-0.cef",levData51.data, 32
+
+; [ SUBTER LEVEL 2 ] >>>>>
+
+levData52        group   obj()
+levData52bss     group   obj(),bss
+
+_levData_5_2_SegmentRomStart alias _levData52_org
+_levData_5_2_SegmentRomEnd   alias _levData52_orgend
+
+        section.64       levData52.data,levData52
+
+levDat52  incbin "leveldata/entity-5-1.cef",levData52.data, 32
+
+; [ SUBTER LEVEL 3 ] >>>>>
+
+levData53        group   obj()
+levData53bss     group   obj(),bss
+
+_levData_5_3_SegmentRomStart alias _levData53_org
+_levData_5_3_SegmentRomEnd   alias _levData53_orgend
+
+        section.64       levData53.data,levData53
+
+levDat53  incbin "leveldata/entity-5-2.cef",levData53.data, 32
+
+; [ SUBTER BOSS ] >>>>>
+
+levData54        group   obj()
+levData54bss     group   obj(),bss
+
+_levData_5_4_SegmentRomStart alias _levData54_org
+_levData_5_4_SegmentRomEnd   alias _levData54_orgend
+
+        section.64       levData54.data,levData54
+
+levDat54  incbin "leveldata/entity-5-3.cef",levData54.data, 32
+
+; [ SUBTER BONUS ] >>>>>
+
+levData55        group   obj()
+levData55bss     group   obj(),bss
+
+_levData_5_5_SegmentRomStart alias _levData55_org
+_levData_5_5_SegmentRomEnd   alias _levData55_orgend
+
+        section.64       levData55.data,levData55
+
+levDat55  incbin "leveldata/dummy.cef",levData55.data, 32
+
+; [ SUBTER MULTI ] >>>>>
+
+levData56        group   obj()
+levData56bss     group   obj(),bss
+
+_levData_5_6_SegmentRomStart alias _levData56_org
+_levData_5_6_SegmentRomEnd   alias _levData56_orgend
+
+        section.64       levData56.data,levData56
+
+levDat56  incbin "leveldata/dummy.cef",levData56.data, 32
+
+
+; LABORATORY LEVEL ENTITY DATA - BANKS 6+ --------------------------------------------------------
+
+; [ LAB LEVEL 1 ] >>>>>
+
+levData61        group   obj()
+levData61bss     group   obj(),bss
+
+_levData_6_1_SegmentRomStart alias _levData61_org
+_levData_6_1_SegmentRomEnd   alias _levData61_orgend
+
+        section.64       levData61.data,levData61
+
+levDat61  incbin "leveldata/entity-5-0.cef",levData61.data, 32
+
+; [ LAB LEVEL 2 ] >>>>>
+
+levData62        group   obj()
+levData62bss     group   obj(),bss
+
+_levData_6_2_SegmentRomStart alias _levData62_org
+_levData_6_2_SegmentRomEnd   alias _levData62_orgend
+
+        section.64       levData62.data,levData62
+
+levDat62  incbin "leveldata/entity-5-1.cef",levData62.data, 32
+
+; [ LAB LEVEL 3 ] >>>>>
+
+levData63        group   obj()
+levData63bss     group   obj(),bss
+
+_levData_6_3_SegmentRomStart alias _levData63_org
+_levData_6_3_SegmentRomEnd   alias _levData63_orgend
+
+        section.64       levData63.data,levData63
+
+levDat63  incbin "leveldata/dummy.cef",levData63.data, 32
+
+; [ LAB BOSS ] >>>>>
+
+levData64        group   obj()
+levData64bss     group   obj(),bss
+
+_levData_6_4_SegmentRomStart alias _levData64_org
+_levData_6_4_SegmentRomEnd   alias _levData64_orgend
+
+        section.64       levData64.data,levData64
+
+levDat64  incbin "leveldata/entity-5-3.cef",levData64.data, 32
+
+; [ LAB BONUS ] >>>>>
+
+levData65        group   obj()
+levData65bss     group   obj(),bss
+
+_levData_6_5_SegmentRomStart alias _levData65_org
+_levData_6_5_SegmentRomEnd   alias _levData65_orgend
+
+        section.64       levData65.data,levData65
+
+levDat65  incbin "leveldata/dummy.cef",levData65.data, 32
+
+; [ LAB MULTI ] >>>>>
+
+levData66        group   obj()
+levData66bss     group   obj(),bss
+
+_levData_6_6_SegmentRomStart alias _levData66_org
+_levData_6_6_SegmentRomEnd   alias _levData66_orgend
+
+        section.64       levData66.data,levData66
+
+levDat66  incbin "leveldata/dummy.cef",levData66.data, 32
+
+
+; TOYSHOP LEVEL ENTITY DATA - BANKS 7+ -----------------------------------------------------------
+
+; [ TOYSHOP LEVEL 1 ] >>>>>
+
+levData71        group   obj()
+levData71bss     group   obj(),bss
+
+_levData_7_1_SegmentRomStart alias _levData71_org
+_levData_7_1_SegmentRomEnd   alias _levData71_orgend
+
+        section.64       levData71.data,levData71
+
+levDat71  incbin "leveldata/dummy.cef",levData71.data, 32
+
+; [ TOYSHOP LEVEL 2 ] >>>>>
+
+levData72        group   obj()
+levData72bss     group   obj(),bss
+
+_levData_7_2_SegmentRomStart alias _levData72_org
+_levData_7_2_SegmentRomEnd   alias _levData72_orgend
+
+        section.64       levData72.data,levData72
+
+levDat72  incbin "leveldata/dummy.cef",levData72.data, 32
+
+; [ TOYSHOP LEVEL 3 ] >>>>>
+
+levData73        group   obj()
+levData73bss     group   obj(),bss
+
+_levData_7_3_SegmentRomStart alias _levData73_org
+_levData_7_3_SegmentRomEnd   alias _levData73_orgend
+
+        section.64       levData73.data,levData73
+
+levDat73  incbin "leveldata/dummy.cef",levData73.data, 32
+
+; [ TOYSHOP BOSS ] >>>>>
+
+levData74        group   obj()
+levData74bss     group   obj(),bss
+
+_levData_7_4_SegmentRomStart alias _levData74_org
+_levData_7_4_SegmentRomEnd   alias _levData74_orgend
+
+        section.64       levData74.data,levData74
+
+levDat74  incbin "leveldata/dummy.cef",levData74.data, 32
+
+; [ TOYSHOP BONUS ] >>>>>
+
+levData75        group   obj()
+levData75bss     group   obj(),bss
+
+_levData_7_5_SegmentRomStart alias _levData75_org
+_levData_7_5_SegmentRomEnd   alias _levData75_orgend
+
+        section.64       levData75.data,levData75
+
+levDat75  incbin "leveldata/dummy.cef",levData75.data, 32
+
+; [ TOYSHOP MULTI ] >>>>>
+
+levData76        group   obj()
+levData76bss     group   obj(),bss
+
+_levData_7_6_SegmentRomStart alias _levData76_org
+_levData_7_6_SegmentRomEnd   alias _levData76_orgend
+
+        section.64       levData76.data,levData76
+
+levDat76  incbin "leveldata/dummy.cef",levData76.data, 32
+
+
+; HALLOWEEN LEVEL ENTITY DATA - BANKS 8+ ---------------------------------------------------------
+
+; [ HALLOWEEN LEVEL 1 ] >>>>>
+
+levData81        group   obj()
+levData81bss     group   obj(),bss
+
+_levData_8_1_SegmentRomStart alias _levData81_org
+_levData_8_1_SegmentRomEnd   alias _levData81_orgend
+
+        section.64       levData81.data,levData81
+
+levDat81  incbin "leveldata/dummy.cef",levData81.data, 32
+
+; [ HALLOWEEN LEVEL 2 ] >>>>>
+
+levData82        group   obj()
+levData82bss     group   obj(),bss
+
+_levData_8_2_SegmentRomStart alias _levData82_org
+_levData_8_2_SegmentRomEnd   alias _levData82_orgend
+
+        section.64       levData82.data,levData82
+
+levDat82  incbin "leveldata/dummy.cef",levData82.data, 32
+
+; [ HALLOWEEN LEVEL 3 ] >>>>>
+
+levData83        group   obj()
+levData83bss     group   obj(),bss
+
+_levData_8_3_SegmentRomStart alias _levData83_org
+_levData_8_3_SegmentRomEnd   alias _levData83_orgend
+
+        section.64       levData83.data,levData83
+
+levDat83  incbin "leveldata/dummy.cef",levData83.data, 32
+
+; [ HALLOWEEN BOSS ] >>>>>
+
+levData84        group   obj()
+levData84bss     group   obj(),bss
+
+_levData_8_4_SegmentRomStart alias _levData84_org
+_levData_8_4_SegmentRomEnd   alias _levData84_orgend
+
+        section.64       levData84.data,levData84
+
+levDat84  incbin "leveldata/dummy.cef",levData84.data, 32
+
+; [ HALLOWEEN BONUS ] >>>>>
+
+levData85        group   obj()
+levData85bss     group   obj(),bss
+
+_levData_8_5_SegmentRomStart alias _levData85_org
+_levData_8_5_SegmentRomEnd   alias _levData85_orgend
+
+        section.64       levData85.data,levData85
+
+levDat85  incbin "leveldata/dummy.cef",levData85.data, 32
+
+; [ HALLOWEEN MULTI ] >>>>>
+
+levData86        group   obj()
+levData86bss     group   obj(),bss
+
+_levData_8_6_SegmentRomStart alias _levData86_org
+_levData_8_6_SegmentRomEnd   alias _levData86_orgend
+
+        section.64       levData86.data,levData86
+
+levDat86  incbin "leveldata/dummy.cef",levData86.data, 32
+
+
+; SUPERRETRO LEVEL ENTITY DATA - BANKS 9+ --------------------------------------------------------
+
+; [ SUPERRETRO LEVEL 1 ] >>>>>
+
+levData91        group   obj()
+levData91bss     group   obj(),bss
+
+_levData_9_1_SegmentRomStart alias _levData91_org
+_levData_9_1_SegmentRomEnd   alias _levData91_orgend
+
+        section.64       levData91.data,levData91
+
+levDat91  incbin "leveldata/entity-8-0.cef",levData91.data, 32
+
+; [ SUPERRETRO LEVEL 2 ] >>>>>
+
+levData92        group   obj()
+levData92bss     group   obj(),bss
+
+_levData_9_2_SegmentRomStart alias _levData92_org
+_levData_9_2_SegmentRomEnd   alias _levData92_orgend
+
+        section.64       levData92.data,levData92
+
+levDat92  incbin "leveldata/entity-8-1.cef",levData92.data, 32
+
+; [ SUPERRETRO LEVEL 3 ] >>>>>
+
+levData93        group   obj()
+levData93bss     group   obj(),bss
+
+_levData_9_3_SegmentRomStart alias _levData93_org
+_levData_9_3_SegmentRomEnd   alias _levData93_orgend
+
+        section.64       levData93.data,levData93
+
+levDat93  incbin "leveldata/entity-8-2.cef",levData93.data, 32
+
+; [ SUPERRETRO LEVEL 4 ] >>>>>
+
+levData94        group   obj()
+levData94bss     group   obj(),bss
+
+_levData_9_4_SegmentRomStart alias _levData94_org
+_levData_9_4_SegmentRomEnd   alias _levData94_orgend
+
+        section.64       levData94.data,levData94
+
+levDat94  incbin "leveldata/entity-8-3.cef",levData94.data, 32
+
+; [ SUPERRETRO LEVEL 5 ] >>>>>
+
+levData95        group   obj()
+levData95bss     group   obj(),bss
+
+_levData_9_5_SegmentRomStart alias _levData95_org
+_levData_9_5_SegmentRomEnd   alias _levData95_orgend
+
+        section.64       levData95.data,levData95
+
+levDat95  incbin "leveldata/entity-8-4.cef",levData95.data, 32
+
+; [ SUPERRETRO LEVEL 6 ] >>>>>
+
+levData96        group   obj()
+levData96bss     group   obj(),bss
+
+_levData_9_6_SegmentRomStart alias _levData96_org
+_levData_9_6_SegmentRomEnd   alias _levData96_orgend
+
+        section.64       levData96.data,levData96
+
+levDat96  incbin "leveldata/entity-8-5.cef",levData96.data, 32
+
+
+; [ SUPERRETRO LEVEL 7 ] >>>>>
+
+levData97        group   obj()
+levData97bss     group   obj(),bss
+
+_levData_9_7_SegmentRomStart alias _levData97_org
+_levData_9_7_SegmentRomEnd   alias _levData97_orgend
+
+        section.64       levData97.data,levData97
+
+levDat97  incbin "leveldata/entity-8-6.cef",levData97.data, 32
+
+; [ SUPERRETRO LEVEL 8 ] >>>>>
+
+levData98        group   obj()
+levData98bss     group   obj(),bss
+
+_levData_9_8_SegmentRomStart alias _levData98_org
+_levData_9_8_SegmentRomEnd   alias _levData98_orgend
+
+        section.64       levData98.data,levData98
+
+levDat98  incbin "leveldata/entity-8-7.cef",levData98.data, 32
+
+; [ SUPERRETRO LEVEL 9 ] >>>>>
+
+levData99        group   obj()
+levData99bss     group   obj(),bss
+
+_levData_9_9_SegmentRomStart alias _levData99_org
+_levData_9_9_SegmentRomEnd   alias _levData99_orgend
+
+        section.64       levData99.data,levData99
+
+levDat99  incbin "leveldata/entity-8-8.cef",levData99.data, 32
+
+; [ SUPERRETRO LEVEL 10 ] >>>>>
+
+levData910        group   obj()
+levData910bss     group   obj(),bss
+
+_levData_9_10_SegmentRomStart alias _levData910_org
+_levData_9_10_SegmentRomEnd   alias _levData910_orgend
+
+        section.64       levData910.data,levData910
+
+levDat910  incbin "leveldata/entity-8-9.cef",levData910.data, 32
+
+
+; FRONTEND LEVEL ENTITY DATA - BANKS 10+ ---------------------------------------------------------
+
+; [ FRONTEND 1 ] >>>>>
+
+levData101        group   obj()
+levData101bss     group   obj(),bss
+
+_levData_10_1_SegmentRomStart alias _levData101_org
+_levData_10_1_SegmentRomEnd   alias _levData101_orgend
+
+        section.64       levData101.data,levData101
+
+levDat101  incbin "leveldata/entity-9-0.cef",levData101.data, 32
+;levDat101  incbin "c:/levtemp/entity-9-0.dat",levData101.data, 32
+
+; [ FRONTEND 2 ] >>>>>
+
+levData102        group   obj()
+levData102bss     group   obj(),bss
+
+_levData_10_2_SegmentRomStart alias _levData102_org
+_levData_10_2_SegmentRomEnd   alias _levData102_orgend
+
+        section.64       levData102.data,levData102
+
+levDat102  incbin "leveldata/entity-9-1.cef",levData102.data, 32
+
+; [ FRONTEND 3 ] >>>>>
+
+levData103        group   obj()
+levData103bss     group   obj(),bss
+
+_levData_10_3_SegmentRomStart alias _levData103_org
+_levData_10_3_SegmentRomEnd   alias _levData103_orgend
+
+        section.64       levData103.data,levData103
+
+levDat103  incbin "leveldata/dummy.cef",levData103.data, 32
+
+; [ FRONTEND 4 ] >>>>>
+
+levData104        group   obj()
+levData104bss     group   obj(),bss
+
+_levData_10_4_SegmentRomStart alias _levData104_org
+_levData_10_4_SegmentRomEnd   alias _levData104_orgend
+
+        section.64       levData104.data,levData104
+
+levDat104  incbin "leveldata/dummy.cef",levData104.data, 32
+
+; [ FRONTEND 5 ] >>>>>
+
+levData105        group   obj()
+levData105bss     group   obj(),bss
+
+_levData_10_5_SegmentRomStart alias _levData105_org
+_levData_10_5_SegmentRomEnd   alias _levData105_orgend
+
+        section.64       levData105.data,levData105
+
+levDat105  incbin "leveldata/entity-9-4.cef",levData105.data, 32
+
+
+
+
+;---------------------------------------------------------------------------------------------------
+;---------------------------------------------------------------------------------------------------
+;----- [ LEVEL SCRIPT DATA ] -----------------------------------------------------------------------
+;---------------------------------------------------------------------------------------------------
+;---------------------------------------------------------------------------------------------------
+
+; GARDEN LEVEL SCRIPT DATA - BANKS 1+ ------------------------------------------------------------
+
+; [ GARDEN LEVEL 1 ] >>>>>
+
+scrData11        group   obj()
+scrData11bss     group   obj(),bss
+
+_scrData_1_1_SegmentRomStart alias _scrData11_org
+_scrData_1_1_SegmentRomEnd   alias _scrData11_orgend
+
+        section.64       scrData11.data,scrData11
+
+scrDat11  incbin "leveldata/dummy.csf",scrData11.data, 32
+
+; [ GARDEN LEVEL 2 ] >>>>>
+
+scrData12        group   obj()
+scrData12bss     group   obj(),bss
+
+_scrData_1_2_SegmentRomStart alias _scrData12_org
+_scrData_1_2_SegmentRomEnd   alias _scrData12_orgend
+
+        section.64       scrData12.data,scrData12
+
+scrDat12  incbin "leveldata/dummy.csf",scrData12.data, 32
+
+; [ GARDEN LEVEL 3 ] >>>>>
+
+scrData13        group   obj()
+scrData13bss     group   obj(),bss
+
+_scrData_1_3_SegmentRomStart alias _scrData13_org
+_scrData_1_3_SegmentRomEnd   alias _scrData13_orgend
+
+        section.64       scrData13.data,scrData13
+
+scrDat13  incbin "leveldata/dummy.csf",scrData13.data, 32
+
+; [ GARDEN BOSS A ] >>>>>
+
+scrData14        group   obj()
+scrData14bss     group   obj(),bss
+
+_scrData_1_4_SegmentRomStart alias _scrData14_org
+_scrData_1_4_SegmentRomEnd   alias _scrData14_orgend
+
+        section.64       scrData14.data,scrData14
+
+scrDat14  incbin "leveldata/dummy.csf",scrData14.data, 32
+
+; [ GARDEN BOSS B ] >>>>>
+
+scrData15        group   obj()
+scrData15bss     group   obj(),bss
+
+_scrData_1_5_SegmentRomStart alias _scrData15_org
+_scrData_1_5_SegmentRomEnd   alias _scrData15_orgend
+
+        section.64       scrData15.data,scrData15
+
+scrDat15  incbin "leveldata/dummy.csf",scrData15.data, 32
+
+; [ GARDEN BONUS ] >>>>>
+
+scrData16        group   obj()
+scrData16bss     group   obj(),bss
+
+_scrData_1_6_SegmentRomStart alias _scrData16_org
+_scrData_1_6_SegmentRomEnd   alias _scrData16_orgend
+
+        section.64       scrData16.data,scrData16
+
+scrDat16  incbin "leveldata/dummy.csf",scrData16.data, 32
+
+; [ GARDEN MULTI ] >>>>>
+
+scrData17        group   obj()
+scrData17bss     group   obj(),bss
+
+_scrData_1_7_SegmentRomStart alias _scrData17_org
+_scrData_1_7_SegmentRomEnd   alias _scrData17_orgend
+
+        section.64       scrData17.data,scrData17
+
+scrDat17  incbin "leveldata/dummy.csf",scrData17.data, 32
+
+
+; ANCIENT LEVEL SCRIPT DATA - BANKS 2+ -----------------------------------------------------------
+
+; [ ANCIENT LEVEL 1 ] >>>>>
+
+scrData21        group   obj()
+scrData21bss     group   obj(),bss
+
+_scrData_2_1_SegmentRomStart alias _scrData21_org
+_scrData_2_1_SegmentRomEnd   alias _scrData21_orgend
+
+        section.64       scrData21.data,scrData21
+
+scrDat21  incbin "leveldata/dummy.csf",scrData21.data, 32
+
+; [ ANCIENT LEVEL 2 ] >>>>>
+
+scrData22        group   obj()
+scrData22bss     group   obj(),bss
+
+_scrData_2_2_SegmentRomStart alias _scrData22_org
+_scrData_2_2_SegmentRomEnd   alias _scrData22_orgend
+
+        section.64       scrData22.data,scrData22
+
+scrDat22  incbin "leveldata/dummy.csf",scrData22.data, 32
+
+; [ ANCIENT LEVEL 3 ] >>>>>
+
+scrData23        group   obj()
+scrData23bss     group   obj(),bss
+
+_scrData_2_3_SegmentRomStart alias _scrData23_org
+_scrData_2_3_SegmentRomEnd   alias _scrData23_orgend
+
+        section.64       scrData23.data,scrData23
+
+scrDat23  incbin "leveldata/dummy.csf",scrData23.data, 32
+
+; [ ANCIENT LEVEL BOSSA ] >>>>>
+
+scrData24        group   obj()
+scrData24bss     group   obj(),bss
+
+_scrData_2_4_SegmentRomStart alias _scrData24_org
+_scrData_2_4_SegmentRomEnd   alias _scrData24_orgend
+
+        section.64       scrData24.data,scrData24
+
+scrDat24  incbin "leveldata/dummy.csf",scrData24.data, 32
+
+; [ ANCIENT LEVEL BOSS B ] >>>>>
+
+scrData25        group   obj()
+scrData25bss     group   obj(),bss
+
+_scrData_2_5_SegmentRomStart alias _scrData25_org
+_scrData_2_5_SegmentRomEnd   alias _scrData25_orgend
+
+        section.64       scrData25.data,scrData25
+
+scrDat25  incbin "leveldata/dummy.csf",scrData25.data, 32
+
+; [ ANCIENT LEVEL BOSS C ] >>>>>
+
+scrData26        group   obj()
+scrData26bss     group   obj(),bss
+
+_scrData_2_6_SegmentRomStart alias _scrData26_org
+_scrData_2_6_SegmentRomEnd   alias _scrData26_orgend
+
+        section.64       scrData26.data,scrData26
+
+scrDat26  incbin "leveldata/dummy.csf",scrData26.data, 32
+
+; [ ANCIENT LEVEL BOSS D ] >>>>>
+
+scrData27        group   obj()
+scrData27bss     group   obj(),bss
+
+_scrData_2_7_SegmentRomStart alias _scrData27_org
+_scrData_2_7_SegmentRomEnd   alias _scrData27_orgend
+
+        section.64       scrData27.data,scrData27
+
+scrDat27  incbin "leveldata/dummy.csf",scrData27.data, 32
+
+; [ ANCIENT LEVEL BONUS ] >>>>>
+
+scrData28        group   obj()
+scrData28bss     group   obj(),bss
+
+_scrData_2_8_SegmentRomStart alias _scrData28_org
+_scrData_2_8_SegmentRomEnd   alias _scrData28_orgend
+
+        section.64       scrData28.data,scrData28
+
+scrDat28  incbin "leveldata/dummy.csf",scrData28.data, 32
+
+; [ ANCIENT LEVEL MULTI ] >>>>>
+
+scrData29        group   obj()
+scrData29bss     group   obj(),bss
+
+_scrData_2_9_SegmentRomStart alias _scrData29_org
+_scrData_2_9_SegmentRomEnd   alias _scrData29_orgend
+
+        section.64       scrData29.data,scrData29
+
+scrDat29  incbin "leveldata/dummy.csf",scrData29.data, 32
+
+
+; SPACE LEVEL SCRIPT DATA - BANKS 3+ -------------------------------------------------------------
+
+; [ SPACE LEVEL 1 ] >>>>>
+
+scrData31        group   obj()
+scrData31bss     group   obj(),bss
+
+_scrData_3_1_SegmentRomStart alias _scrData31_org
+_scrData_3_1_SegmentRomEnd   alias _scrData31_orgend
+
+        section.64       scrData31.data,scrData31
+
+scrDat31  incbin "leveldata/script-2-0.csf",scrData31.data, 32
+
+; [ SPACE LEVEL 2 ] >>>>>
+
+scrData32        group   obj()
+scrData32bss     group   obj(),bss
+
+_scrData_3_2_SegmentRomStart alias _scrData32_org
+_scrData_3_2_SegmentRomEnd   alias _scrData32_orgend
+
+        section.64       scrData32.data,scrData32
+
+scrDat32  incbin "leveldata/script-2-1.csf",scrData32.data, 32
+
+; [ SPACE LEVEL 3 ] >>>>>
+
+scrData33        group   obj()
+scrData33bss     group   obj(),bss
+
+_scrData_3_3_SegmentRomStart alias _scrData33_org
+_scrData_3_3_SegmentRomEnd   alias _scrData33_orgend
+
+        section.64       scrData33.data,scrData33
+
+scrDat33  incbin "leveldata/script-2-2.csf",scrData33.data, 32
+
+; [ SPACE BOSS ] >>>>>
+
+scrData34        group   obj()
+scrData34bss     group   obj(),bss
+
+_scrData_3_4_SegmentRomStart alias _scrData34_org
+_scrData_3_4_SegmentRomEnd   alias _scrData34_orgend
+
+        section.64       scrData34.data,scrData34
+
+scrDat34  incbin "leveldata/script-2-3.csf",scrData34.data, 32
+
+; [ SPACE BONUS ] >>>>>
+
+scrData35        group   obj()
+scrData35bss     group   obj(),bss
+
+_scrData_3_5_SegmentRomStart alias _scrData35_org
+_scrData_3_5_SegmentRomEnd   alias _scrData35_orgend
+
+        section.64       scrData35.data,scrData35
+
+scrDat35  incbin "leveldata/dummy.csf",scrData35.data, 32
+
+; [ SPACE MULTI ] >>>>>
+
+scrData36        group   obj()
+scrData36bss     group   obj(),bss
+
+_scrData_3_6_SegmentRomStart alias _scrData36_org
+_scrData_3_6_SegmentRomEnd   alias _scrData36_orgend
+
+        section.64       scrData36.data,scrData36
+
+scrDat36  incbin "leveldata/dummy.csf",scrData36.data, 32
+
+
+; CITY LEVEL SCRIPT DATA - BANKS 4+ --------------------------------------------------------------
+
+; [ CITY LEVEL 1 ] >>>>>
+
+scrData41        group   obj()
+scrData41bss     group   obj(),bss
+
+_scrData_4_1_SegmentRomStart alias _scrData41_org
+_scrData_4_1_SegmentRomEnd   alias _scrData41_orgend
+
+        section.64       scrData41.data,scrData41
+
+scrDat41  incbin "leveldata/dummy.csf",scrData41.data, 32
+
+; [ CITY LEVEL 2 ] >>>>>
+
+scrData42        group   obj()
+scrData42bss     group   obj(),bss
+
+_scrData_4_2_SegmentRomStart alias _scrData42_org
+_scrData_4_2_SegmentRomEnd   alias _scrData42_orgend
+
+        section.64       scrData42.data,scrData42
+
+scrDat42  incbin "leveldata/dummy.csf",scrData42.data, 32
+
+; [ CITY LEVEL 3 ] >>>>>
+
+scrData43        group   obj()
+scrData43bss     group   obj(),bss
+
+_scrData_4_3_SegmentRomStart alias _scrData43_org
+_scrData_4_3_SegmentRomEnd   alias _scrData43_orgend
+
+        section.64       scrData43.data,scrData43
+
+scrDat43  incbin "leveldata/dummy.csf",scrData43.data, 32
+
+; [ CITY BOSS ] >>>>>
+
+scrData44        group   obj()
+scrData44bss     group   obj(),bss
+
+_scrData_4_4_SegmentRomStart alias _scrData44_org
+_scrData_4_4_SegmentRomEnd   alias _scrData44_orgend
+
+        section.64       scrData44.data,scrData44
+
+scrDat44  incbin "leveldata/dummy.csf",scrData44.data, 32
+
+; [ CITY BONUS ] >>>>>
+
+scrData45        group   obj()
+scrData45bss     group   obj(),bss
+
+_scrData_4_5_SegmentRomStart alias _scrData45_org
+_scrData_4_5_SegmentRomEnd   alias _scrData45_orgend
+
+        section.64       scrData45.data,scrData45
+
+scrDat45  incbin "leveldata/dummy.csf",scrData45.data, 32
+
+; [ CITY MULTI ] >>>>>
+
+scrData46        group   obj()
+scrData46bss     group   obj(),bss
+
+_scrData_4_6_SegmentRomStart alias _scrData46_org
+_scrData_4_6_SegmentRomEnd   alias _scrData46_orgend
+
+        section.64       scrData46.data,scrData46
+
+scrDat46  incbin "leveldata/dummy.csf",scrData46.data, 32
+
+
+; SUBTERRANEAN SCRIPT DATA - BANKS 5+ ------------------------------------------------------------
+
+; [ SUBTER LEVEL 1 ] >>>>>
+
+scrData51        group   obj()
+scrData51bss     group   obj(),bss
+
+_scrData_5_1_SegmentRomStart alias _scrData51_org
+_scrData_5_1_SegmentRomEnd   alias _scrData51_orgend
+
+        section.64       scrData51.data,scrData51
+
+scrDat51  incbin "leveldata/script-5-0.csf",scrData51.data, 32
+
+; [ SUBTER LEVEL 2 ] >>>>>
+
+scrData52        group   obj()
+scrData52bss     group   obj(),bss
+
+_scrData_5_2_SegmentRomStart alias _scrData52_org
+_scrData_5_2_SegmentRomEnd   alias _scrData52_orgend
+
+        section.64       scrData52.data,scrData52
+
+scrDat52  incbin "leveldata/dummy.csf",scrData52.data, 32
+
+; [ SUBTER LEVEL 3 ] >>>>>
+
+scrData53        group   obj()
+scrData53bss     group   obj(),bss
+
+_scrData_5_3_SegmentRomStart alias _scrData53_org
+_scrData_5_3_SegmentRomEnd   alias _scrData53_orgend
+
+        section.64       scrData53.data,scrData53
+
+scrDat53  incbin "leveldata/script-5-2.csf",scrData53.data, 32
+
+; [ SUBTER BOSS ] >>>>>
+
+scrData54        group   obj()
+scrData54bss     group   obj(),bss
+
+_scrData_5_4_SegmentRomStart alias _scrData54_org
+_scrData_5_4_SegmentRomEnd   alias _scrData54_orgend
+
+        section.64       scrData54.data,scrData54
+
+scrDat54  incbin "leveldata/dummy.csf",scrData54.data, 32
+
+; [ SUBTER BONUS ] >>>>>
+
+scrData55        group   obj()
+scrData55bss     group   obj(),bss
+
+_scrData_5_5_SegmentRomStart alias _scrData55_org
+_scrData_5_5_SegmentRomEnd   alias _scrData55_orgend
+
+        section.64       scrData55.data,scrData55
+
+scrDat55  incbin "leveldata/dummy.csf",scrData55.data, 32
+
+; [ SUBTER MULTI ] >>>>>
+
+scrData56        group   obj()
+scrData56bss     group   obj(),bss
+
+_scrData_5_6_SegmentRomStart alias _scrData56_org
+_scrData_5_6_SegmentRomEnd   alias _scrData56_orgend
+
+        section.64       scrData56.data,scrData56
+
+scrDat56  incbin "leveldata/dummy.csf",scrData56.data, 32
+
+
+; LABORATORY LEVEL SCRIPT DATA - BANKS 6+ --------------------------------------------------------
+
+; [ LAB LEVEL 1 ] >>>>>
+
+scrData61        group   obj()
+scrData61bss     group   obj(),bss
+
+_scrData_6_1_SegmentRomStart alias _scrData61_org
+_scrData_6_1_SegmentRomEnd   alias _scrData61_orgend
+
+        section.64       scrData61.data,scrData61
+
+scrDat61  incbin "leveldata/dummy.csf",scrData61.data, 32
+
+; [ LAB LEVEL 2 ] >>>>>
+
+scrData62        group   obj()
+scrData62bss     group   obj(),bss
+
+_scrData_6_2_SegmentRomStart alias _scrData62_org
+_scrData_6_2_SegmentRomEnd   alias _scrData62_orgend
+
+        section.64       scrData62.data,scrData62
+
+scrDat62  incbin "leveldata/dummy.csf",scrData62.data, 32
+
+; [ LAB LEVEL 3 ] >>>>>
+
+scrData63        group   obj()
+scrData63bss     group   obj(),bss
+
+_scrData_6_3_SegmentRomStart alias _scrData63_org
+_scrData_6_3_SegmentRomEnd   alias _scrData63_orgend
+
+        section.64       scrData63.data,scrData63
+
+scrDat63  incbin "leveldata/dummy.csf",scrData63.data, 32
+
+; [ LAB BOSS ] >>>>>
+
+scrData64        group   obj()
+scrData64bss     group   obj(),bss
+
+_scrData_6_4_SegmentRomStart alias _scrData64_org
+_scrData_6_4_SegmentRomEnd   alias _scrData64_orgend
+
+        section.64       scrData64.data,scrData64
+
+scrDat64  incbin "leveldata/dummy.csf",scrData64.data, 32
+
+; [ LAB BONUS ] >>>>>
+
+scrData65        group   obj()
+scrData65bss     group   obj(),bss
+
+_scrData_6_5_SegmentRomStart alias _scrData65_org
+_scrData_6_5_SegmentRomEnd   alias _scrData65_orgend
+
+        section.64       scrData65.data,scrData65
+
+scrDat65  incbin "leveldata/dummy.csf",scrData65.data, 32
+
+; [ LAB MULTI ] >>>>>
+
+scrData66        group   obj()
+scrData66bss     group   obj(),bss
+
+_scrData_6_6_SegmentRomStart alias _scrData66_org
+_scrData_6_6_SegmentRomEnd   alias _scrData66_orgend
+
+        section.64       scrData66.data,scrData66
+
+scrDat66  incbin "leveldata/dummy.csf",scrData66.data, 32
+
+
+; TOYSHOP LEVEL SCRIPT DATA - BANKS 7+ -----------------------------------------------------------
+
+; [ TOYSHOP LEVEL 1 ] >>>>>
+
+scrData71        group   obj()
+scrData71bss     group   obj(),bss
+
+_scrData_7_1_SegmentRomStart alias _scrData71_org
+_scrData_7_1_SegmentRomEnd   alias _scrData71_orgend
+
+        section.64       scrData71.data,scrData71
+
+scrDat71  incbin "leveldata/dummy.csf",scrData71.data, 32
+
+; [ TOYSHOP LEVEL 2 ] >>>>>
+
+scrData72        group   obj()
+scrData72bss     group   obj(),bss
+
+_scrData_7_2_SegmentRomStart alias _scrData72_org
+_scrData_7_2_SegmentRomEnd   alias _scrData72_orgend
+
+        section.64       scrData72.data,scrData72
+
+scrDat72  incbin "leveldata/dummy.csf",scrData72.data, 32
+
+; [ TOYSHOP LEVEL 3 ] >>>>>
+
+scrData73        group   obj()
+scrData73bss     group   obj(),bss
+
+_scrData_7_3_SegmentRomStart alias _scrData73_org
+_scrData_7_3_SegmentRomEnd   alias _scrData73_orgend
+
+        section.64       scrData73.data,scrData73
+
+scrDat73  incbin "leveldata/dummy.csf",scrData73.data, 32
+
+; [ TOYSHOP BOSS ] >>>>>
+
+scrData74        group   obj()
+scrData74bss     group   obj(),bss
+
+_scrData_7_4_SegmentRomStart alias _scrData74_org
+_scrData_7_4_SegmentRomEnd   alias _scrData74_orgend
+
+        section.64       scrData74.data,scrData74
+
+scrDat74  incbin "leveldata/dummy.csf",scrData74.data, 32
+
+; [ TOYSHOP BONUS ] >>>>>
+
+scrData75        group   obj()
+scrData75bss     group   obj(),bss
+
+_scrData_7_5_SegmentRomStart alias _scrData75_org
+_scrData_7_5_SegmentRomEnd   alias _scrData75_orgend
+
+        section.64       scrData75.data,scrData75
+
+scrDat75  incbin "leveldata/dummy.csf",scrData75.data, 32
+
+; [ TOYSHOP MULTI ] >>>>>
+
+scrData76        group   obj()
+scrData76bss     group   obj(),bss
+
+_scrData_7_6_SegmentRomStart alias _scrData76_org
+_scrData_7_6_SegmentRomEnd   alias _scrData76_orgend
+
+        section.64       scrData76.data,scrData76
+
+scrDat76  incbin "leveldata/dummy.csf",scrData76.data, 32
+
+
+; HALLOWEEN LEVEL SCRIPT DATA - BANKS 8+ ---------------------------------------------------------
+
+; [ HALLOWEEN LEVEL 1 ] >>>>>
+
+scrData81        group   obj()
+scrData81bss     group   obj(),bss
+
+_scrData_8_1_SegmentRomStart alias _scrData81_org
+_scrData_8_1_SegmentRomEnd   alias _scrData81_orgend
+
+        section.64       scrData81.data,scrData81
+
+scrDat81  incbin "leveldata/dummy.csf",scrData81.data, 32
+
+; [ HALLOWEEN LEVEL 2 ] >>>>>
+
+scrData82        group   obj()
+scrData82bss     group   obj(),bss
+
+_scrData_8_2_SegmentRomStart alias _scrData82_org
+_scrData_8_2_SegmentRomEnd   alias _scrData82_orgend
+
+        section.64       scrData82.data,scrData82
+
+scrDat82  incbin "leveldata/dummy.csf",scrData82.data, 32
+
+; [ HALLOWEEN LEVEL 3 ] >>>>>
+
+scrData83        group   obj()
+scrData83bss     group   obj(),bss
+
+_scrData_8_3_SegmentRomStart alias _scrData83_org
+_scrData_8_3_SegmentRomEnd   alias _scrData83_orgend
+
+        section.64       scrData83.data,scrData83
+
+scrDat83  incbin "leveldata/dummy.csf",scrData83.data, 32
+
+; [ HALLOWEEN BOSS ] >>>>>
+
+scrData84        group   obj()
+scrData84bss     group   obj(),bss
+
+_scrData_8_4_SegmentRomStart alias _scrData84_org
+_scrData_8_4_SegmentRomEnd   alias _scrData84_orgend
+
+        section.64       scrData84.data,scrData84
+
+scrDat84  incbin "leveldata/dummy.csf",scrData84.data, 32
+
+; [ HALLOWEEN BONUS ] >>>>>
+
+scrData85        group   obj()
+scrData85bss     group   obj(),bss
+
+_scrData_8_5_SegmentRomStart alias _scrData85_org
+_scrData_8_5_SegmentRomEnd   alias _scrData85_orgend
+
+        section.64       scrData85.data,scrData85
+
+scrDat85  incbin "leveldata/dummy.csf",scrData85.data, 32
+
+; [ HALLOWEEN MULTI ] >>>>>
+
+scrData86        group   obj()
+scrData86bss     group   obj(),bss
+
+_scrData_8_6_SegmentRomStart alias _scrData86_org
+_scrData_8_6_SegmentRomEnd   alias _scrData86_orgend
+
+        section.64       scrData86.data,scrData86
+
+scrDat86  incbin "leveldata/dummy.csf",scrData86.data, 32
+
+
+; SUPERRETRO LEVEL SCRIPT DATA - BANKS 9+ --------------------------------------------------------
+
+; [ SUPERRETRO LEVEL 1 ] >>>>>
+
+scrData91        group   obj()
+scrData91bss     group   obj(),bss
+
+_scrData_9_1_SegmentRomStart alias _scrData91_org
+_scrData_9_1_SegmentRomEnd   alias _scrData91_orgend
+
+        section.64       scrData91.data,scrData91
+
+scrDat91  incbin "leveldata/script-8-0.csf",scrData91.data, 32
+
+; [ SUPERRETRO LEVEL 2 ] >>>>>
+
+scrData92        group   obj()
+scrData92bss     group   obj(),bss
+
+_scrData_9_2_SegmentRomStart alias _scrData92_org
+_scrData_9_2_SegmentRomEnd   alias _scrData92_orgend
+
+        section.64       scrData92.data,scrData92
+
+scrDat92  incbin "leveldata/script-8-1.csf",scrData92.data, 32
+
+; [ SUPERRETRO LEVEL 3 ] >>>>>
+
+scrData93        group   obj()
+scrData93bss     group   obj(),bss
+
+_scrData_9_3_SegmentRomStart alias _scrData93_org
+_scrData_9_3_SegmentRomEnd   alias _scrData93_orgend
+
+        section.64       scrData93.data,scrData93
+
+scrDat93  incbin "leveldata/script-8-2.csf",scrData93.data, 32
+
+; [ SUPERRETRO LEVEL 4 ] >>>>>
+
+scrData94        group   obj()
+scrData94bss     group   obj(),bss
+
+_scrData_9_4_SegmentRomStart alias _scrData94_org
+_scrData_9_4_SegmentRomEnd   alias _scrData94_orgend
+
+        section.64       scrData94.data,scrData94
+
+scrDat94  incbin "leveldata/script-8-3.csf",scrData94.data, 32
+
+; [ SUPERRETRO LEVEL 5 ] >>>>>
+
+scrData95        group   obj()
+scrData95bss     group   obj(),bss
+
+_scrData_9_5_SegmentRomStart alias _scrData95_org
+_scrData_9_5_SegmentRomEnd   alias _scrData95_orgend
+
+        section.64       scrData95.data,scrData95
+
+scrDat95  incbin "leveldata/script-8-4.csf",scrData95.data, 32
+
+; [ SUPERRETRO LEVEL 6 ] >>>>>
+
+scrData96        group   obj()
+scrData96bss     group   obj(),bss
+
+_scrData_9_6_SegmentRomStart alias _scrData96_org
+_scrData_9_6_SegmentRomEnd   alias _scrData96_orgend
+
+        section.64       scrData96.data,scrData96
+
+scrDat96  incbin "leveldata/script-8-5.csf",scrData96.data, 32
+
+; [ SUPERRETRO LEVEL 7 ] >>>>>
+
+scrData97        group   obj()
+scrData97bss     group   obj(),bss
+
+_scrData_9_7_SegmentRomStart alias _scrData97_org
+_scrData_9_7_SegmentRomEnd   alias _scrData97_orgend
+
+        section.64       scrData97.data,scrData97
+
+scrDat97  incbin "leveldata/script-8-6.csf",scrData97.data, 32
+
+; [ SUPERRETRO LEVEL 8 ] >>>>>
+
+scrData98        group   obj()
+scrData98bss     group   obj(),bss
+
+_scrData_9_8_SegmentRomStart alias _scrData98_org
+_scrData_9_8_SegmentRomEnd   alias _scrData98_orgend
+
+        section.64       scrData98.data,scrData98
+
+scrDat98  incbin "leveldata/script-8-7.csf",scrData98.data, 32
+
+; [ SUPERRETRO LEVEL 9 ] >>>>>
+
+scrData99        group   obj()
+scrData99bss     group   obj(),bss
+
+_scrData_9_9_SegmentRomStart alias _scrData99_org
+_scrData_9_9_SegmentRomEnd   alias _scrData99_orgend
+
+        section.64       scrData99.data,scrData99
+
+scrDat99  incbin "leveldata/script-8-8.csf",scrData99.data, 32
+
+; [ SUPERRETRO LEVEL 10 ] >>>>>
+
+scrData910        group   obj()
+scrData910bss     group   obj(),bss
+
+_scrData_9_10_SegmentRomStart alias _scrData910_org
+_scrData_9_10_SegmentRomEnd   alias _scrData910_orgend
+
+        section.64       scrData910.data,scrData910
+
+scrDat910  incbin "leveldata/dummy.csf",scrData910.data, 32
+
+
+
+; FRONTEND LEVEL SCRIPT DATA - BANKS 10+ ---------------------------------------------------------
+
+; [ FRONTEND 1 ] >>>>>
+
+scrData101        group   obj()
+scrData101bss     group   obj(),bss
+
+_scrData_10_1_SegmentRomStart alias _scrData101_org
+_scrData_10_1_SegmentRomEnd   alias _scrData101_orgend
+
+        section.64       scrData101.data,scrData101
+
+scrDat101  incbin "leveldata/script-9-0.csf",scrData101.data, 32
+
+; [ FRONTEND 2 ] >>>>>
+
+scrData102        group   obj()
+scrData102bss     group   obj(),bss
+
+_scrData_10_2_SegmentRomStart alias _scrData102_org
+_scrData_10_2_SegmentRomEnd   alias _scrData102_orgend
+
+        section.64       scrData102.data,scrData102
+
+scrDat102  incbin "leveldata/dummy.csf",scrData102.data, 32
+
+; [ FRONTEND 3 ] >>>>>
+
+scrData103        group   obj()
+scrData103bss     group   obj(),bss
+
+_scrData_10_3_SegmentRomStart alias _scrData103_org
+_scrData_10_3_SegmentRomEnd   alias _scrData103_orgend
+
+        section.64       scrData103.data,scrData103
+
+scrDat103  incbin "leveldata/dummy.csf",scrData103.data, 32
+
+; [ FRONTEND 4 ] >>>>>
+
+scrData104        group   obj()
+scrData104bss     group   obj(),bss
+
+_scrData_10_4_SegmentRomStart alias _scrData104_org
+_scrData_10_4_SegmentRomEnd   alias _scrData104_orgend
+
+        section.64       scrData104.data,scrData104
+
+scrDat104  incbin "leveldata/dummy.csf",scrData104.data, 32
+
+; [ FRONTEND 5 ] >>>>>
+
+scrData105        group   obj()
+scrData105bss     group   obj(),bss
+
+_scrData_10_5_SegmentRomStart alias _scrData105_org
+_scrData_10_5_SegmentRomEnd   alias _scrData105_orgend
+
+        section.64       scrData105.data,scrData105
+
+scrDat105  incbin "leveldata/dummy.csf",scrData105.data, 32
+
+
+
+
+
+
+
+
+
+
+;---------------------------------------------------------------------------------------------------
+;---------------------------------------------------------------------------------------------------
+;----- [ MUSIC ] ------------------------------------------------------------------------------
+;---------------------------------------------------------------------------------------------------
+;---------------------------------------------------------------------------------------------------
+
+;--
+pbank1        group   obj()
+pbank1bss     group   obj(),bss
+
+_pbank1SegmentRomStart alias _pbank1_org
+_pbank1SegmentRomEnd   alias _pbank1_orgend
+
+        section.64       pbank1.data,pbank1
+pbnk1	incbin "music/new/frogger2.ptr",pbank1.data, 32
+
+;--
+pbank2        group   obj()
+pbank2bss     group   obj(),bss
+
+_pbank2SegmentRomStart alias _pbank2_org
+_pbank2SegmentRomEnd   alias _pbank2_orgend
+
+        section.64       pbank2.data,pbank2
+;pbnk2	incbin "sfx/sfx.ptr",pbank2.data, 32
+pbnk2	incbin "sfx/n64st1.ptr",pbank2.data, 32
+
+
+
+
+;--
+wbank1        group   obj()
+wbank1bss     group   obj(),bss
+
+_wbank1SegmentRomStart alias _wbank1_org
+_wbank1SegmentRomEnd   alias _wbank1_orgend
+
+        section.64       wbank1.data,wbank1
+wbnk1   incbin "music/new/frogger2.wbk",wbank1.data, 32
+
+;--
+wbank2        group   obj()
+wbank2bss     group   obj(),bss
+
+_wbank2SegmentRomStart alias _wbank2_org
+_wbank2SegmentRomEnd   alias _wbank2_orgend
+
+        section.64       wbank2.data,wbank2
+;wbnk2   incbin "sfx/sfx.wbk",wbank2.data, 32
+wbnk2   incbin "sfx/n64st1.wbk",wbank2.data, 32
+
+;--
+sbank1        group   obj()
+sbank1bss     group   obj(),bss
+
+_sbank1SegmentRomStart alias _sbank1_org
+_sbank1SegmentRomEnd   alias _sbank1_orgend
+        section.64       sbank1.data,sbank1
+sbnk1   incbin "sfx/sfx.bfx",sbank1.data, 32
+
+
+
+; [ TRACK_GARDEN ] >>>>>
+
+mBank1        group   obj()
+mBank1bss     group   obj(),bss
+
+_mBank1SegmentRomStart alias _mBank1_org
+_mBank1SegmentRomEnd   alias _mBank1_orgend
+        section.64       mBank1.data,mBank1
+mbnk1  incbin "music/new/garden/garden.bin",mBank1.data, 32
+
+; [ TRACK_HUB ] >>>>>
+
+mBank2        group   obj()
+mBank2bss     group   obj(),bss
+
+_mBank2SegmentRomStart alias _mBank2_org
+_mBank2SegmentRomEnd   alias _mBank2_orgend
+        section.64       mBank2.data,mBank2
+mbnk2  incbin "music/new/hub/hub.bin",mBank2.data, 32
+
+; [ TRACK_LAB ] >>>>>
+
+mBank3        group   obj()
+mBank3bss     group   obj(),bss
+
+_mBank3SegmentRomStart alias _mBank3_org
+_mBank3SegmentRomEnd   alias _mBank3_orgend
+        section.64       mBank3.data,mBank3
+mbnk3  incbin "music/new/labs/labs.bin",mBank3.data, 32
+
+; [ TRACK_TOYSHOP ] >>>>>
+
+mBank4        group   obj()
+mBank4bss     group   obj(),bss
+
+_mBank4SegmentRomStart alias _mBank4_org
+_mBank4SegmentRomEnd   alias _mBank4_orgend
+        section.64       mBank4.data,mBank4
+mbnk4  incbin "music/new/toyshop/toyshop.bin",mBank4.data, 32
+
+; [ TRACK_CITY ] >>>>>
+
+mBank5        group   obj()
+mBank5bss     group   obj(),bss
+
+_mBank5SegmentRomStart alias _mBank5_org
+_mBank5SegmentRomEnd   alias _mBank5_orgend
+        section.64       mBank5.data,mBank5
+mbnk5  incbin "music/new/city/city.bin",mBank5.data, 32
+
+; [ TRACK_HALLOWEEN ] >>>>>
+
+mBank6        group   obj()
+mBank6bss     group   obj(),bss
+
+_mBank6SegmentRomStart alias _mBank6_org
+_mBank6SegmentRomEnd   alias _mBank6_orgend
+        section.64       mBank6.data,mBank6
+mbnk6  incbin "music/new/halloween/halloween.bin",mBank6.data, 32
+
+; [ TRACK_SPACE ] >>>>>
+
+mBank7        group   obj()
+mBank7bss     group   obj(),bss
+
+_mBank7SegmentRomStart alias _mBank7_org
+_mBank7SegmentRomEnd   alias _mBank7_orgend
+        section.64       mBank7.data,mBank7
+mbnk7  incbin "music/new/space/space.bin",mBank7.data, 32
