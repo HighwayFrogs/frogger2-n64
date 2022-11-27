@@ -1,0 +1,48 @@
+;--
+
+collBank000      group   obj()
+collBank000bss   group   obj(),bss
+
+_collBank000SegmentRomStart    alias   _collBank000_org
+_collBank000SegmentRomEnd      alias   _collBank000_orgend
+
+section.16	collBank000.data,collBank000
+
+cBank000  incbin  "levbanks/bin/retro1.bin",collBank000.data,64
+
+;--
+
+collBank001      group   obj()
+collBank001bss   group   obj(),bss
+
+_collBank001SegmentRomStart    alias   _collBank001_org
+_collBank001SegmentRomEnd      alias   _collBank001_orgend
+
+section.16	collBank001.data,collBank001
+
+cBank001  incbin  "levbanks/bin/retro2.bin",collBank001.data,64
+
+;--
+
+collBank002      group   obj()
+collBank002bss   group   obj(),bss
+
+_collBank002SegmentRomStart    alias   _collBank002_org
+_collBank002SegmentRomEnd      alias   _collBank002_orgend
+
+section.16	collBank002.data,collBank002
+
+cBank002  incbin  "levbanks/bin/retro3.bin",collBank002.data,64
+
+;--
+
+collBank003      group   obj()
+collBank003bss   group   obj(),bss
+
+_collBank003SegmentRomStart    alias   _collBank003_org
+_collBank003SegmentRomEnd      alias   _collBank003_orgend
+
+section.16	collBank003.data,collBank003
+
+cBank003  incbin  "levbanks/bin/venice1.bin",collBank003.data,64
+

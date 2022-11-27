@@ -1,0 +1,2 @@
+@del makefile
+@del *.exe
