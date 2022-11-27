@@ -266,7 +266,7 @@ void FindTexture(TEXTURE **texPtr, int texID, BOOL report)
 	Returns 	: void
 	Info 		:
 */
-void AnimateTexture(TEXTURE_ANIMATION *anim,Gfx *dl)
+/*void AnimateTexture(TEXTURE_ANIMATION *anim,Gfx *dl)
 {
 	int lastFrame;
 	float speed;
@@ -320,5 +320,5 @@ void AnimateTexture(TEXTURE_ANIMATION *anim,Gfx *dl)
 
 	}
 */
-}
+//}
 
