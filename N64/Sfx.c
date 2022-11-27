@@ -2,7 +2,7 @@
 
 /* Sound Effects For SOUNDFX.SNG */
 
-#include <libmus_data.h>
+#include "libmus_data.h"
 
 static char fx0[1] = 
 {
