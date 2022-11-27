@@ -26,6 +26,7 @@ extern TEXTOVERLAY *restartText;
 extern TEXTOVERLAY *quitText;
 extern TEXTOVERLAY *garibCount, *creditCount;
 extern TEXTOVERLAY *time;
+extern TEXTOVERLAY *wholeKeyText;
 
 extern void UpDateOnScreenInfo		( void );
 extern void UpdateScore				( ACTOR2 *act, long scoreUpdate);
