@@ -808,7 +808,7 @@ SPRITE *PrintSpritesOpaque()
 	SPRITE *cur,*next;
 	Mtx temp;
 
-	spriteList.lastTexture = NULL;
+//	sprList.lastTexture = NULL;
 
 	gSPDisplayList(glistp++,rspInitForSprites_dl);
 	gSPDisplayList(glistp++,rdpInitForSprites_dl);
@@ -823,7 +823,6 @@ SPRITE *PrintSpritesOpaque()
 	guMtxCatL(&(dynamicp->viewing[0]),&(dynamicp->projection[0]),&temp);
 	guMtxL2F(printSpritesProj[0],&temp);
 
-	spriteList.xluMode = NO;
 
 	if(fog.mode)
 	{
@@ -838,7 +837,7 @@ SPRITE *PrintSpritesOpaque()
 
 	if(!pauseMode)
 	{
-		for(cur = spriteList.head.next; (cur != &spriteList.head) && ((cur->flags & SPRITE_TRANSLUCENT) == 0); cur = next)
+		for(cur = sprList.head.next; (cur != &sprList.head) && ((cur->flags & SPRITE_TRANSLUCENT) == 0); cur = next)
 		{
 			next = cur->next;
 
@@ -860,7 +859,7 @@ void PrintSpritesTranslucent(SPRITE *sprite)
 {
 	Mtx temp;
 
-	spriteList.lastTexture = NULL;
+//	spriteList.lastTexture = NULL;
 
 	gSPDisplayList(glistp++,rspInitForSprites_dl);
 	gSPDisplayList(glistp++,rdpInitForSprites_dl);
@@ -889,7 +888,7 @@ void PrintSpritesTranslucent(SPRITE *sprite)
 	if(!pauseMode)
 	{
 		// print sprite listed sprites
-		for(; sprite != &spriteList.head; sprite = sprite->next)
+		for(; sprite != &sprList.head; sprite = sprite->next)
 		{
 			PrintSprite(sprite);
 		}
@@ -930,7 +929,7 @@ void TileRectangle(Gfx **glistp,SPRITE *sprite,f32 x0,f32 y0,int z,int scaleX,in
 	t = (scaleX < 512 ? -16 : -16 - (((int)y0) & 3) * 8);
 	s = -16;
 	
-	if(sprite->texture != spriteList.lastTexture)
+	if(sprite->texture != NULL)
 	{
 		switch(sprite->texture->pixSize)
 		{
@@ -1015,7 +1014,7 @@ void PrintSprite(SPRITE *sprite)
 	if((!sprite->texture) || (sprite->scaleX == 0) || (sprite->scaleY == 0))
 		return;
 
-	dist = DistanceBetweenPointsSquared(&actualCamSource[draw_buffer],&sprite->pos);
+	dist = DistanceBetweenPointsSquared(&currCamSource,&sprite->pos);
 	if((dist > farPlaneDist * farPlaneDist) || (dist < nearPlaneDist * nearPlaneDist))
 		return;
 
@@ -1170,8 +1169,6 @@ void PrintSprite(SPRITE *sprite)
 
 	TileRectangle(&glistp,sprite,x,y,z,scaleX,scaleY);
 	gDPPipeSync(glistp++);
-
-	spriteList.lastTexture = sprite->texture;
 }
 
 

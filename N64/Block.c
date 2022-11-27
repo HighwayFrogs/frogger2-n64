@@ -312,8 +312,8 @@ void SetupViewing()
 /*
 	{
 		guLookAtHilite(&(dynamicp->viewing[0]),&(dynamicp->lookat[0]),&(dynamicp->hilite[0]),
-			actualCamSource[draw_buffer].v[X],actualCamSource[draw_buffer].v[Y],actualCamSource[draw_buffer].v[Z],
-			actualCamTarget[draw_buffer].v[X],actualCamTarget[draw_buffer].v[Y],actualCamTarget[draw_buffer].v[Z],
+			currCamSource.v[X],currCamSource.v[Y],currCamSource.v[Z],
+			currCamTarget.v[X],currCamTarget.v[Y],currCamTarget.v[Z],
 			camVect.v[X],camVect.v[Y],camVect.v[Z],
 			0.0, 0.0, 127.0, 
 			0.0, 0.0, 127.0,
@@ -324,8 +324,8 @@ void SetupViewing()
 
 	{
 		guLookAt(&dynamicp->viewing[0], 
-			actualCamSource[draw_buffer].v[X],actualCamSource[draw_buffer].v[Y],actualCamSource[draw_buffer].v[Z],
-			actualCamTarget[draw_buffer].v[X],actualCamTarget[draw_buffer].v[Y],actualCamTarget[draw_buffer].v[Z],
+			currCamSource.v[X],currCamSource.v[Y],currCamSource.v[Z],
+			currCamTarget.v[X],currCamTarget.v[Y],currCamTarget.v[Z],
 			camVect.v[X],camVect.v[Y],camVect.v[Z]);
     }
 
@@ -1113,9 +1113,6 @@ void DrawGraphics(void *arg)
 				if(gfxIsDrawing == FALSE)
 					goto cleanup;
 
-				SetVector(&actualCamSource[draw_buffer],&currCamSource[0]);
-				SetVector(&actualCamTarget[draw_buffer],&currCamTarget[0]);
-
 				SetupViewing();
 //				PrintBackdrops();
 //				CleanupAndSendDisplayList(UCODE_POLY,0);
@@ -1140,7 +1137,7 @@ void DrawGraphics(void *arg)
 				XformActorList();
 				TIMER_EndTimer(3);
 
-				if(spriteList.numEntries)
+				if(sprList.count)
 				{
 					sprite = PrintSpritesOpaque();
 					gDPPipeSync(glistp++);
@@ -1151,7 +1148,7 @@ void DrawGraphics(void *arg)
 
 				DrawActorList();
 
-				if(spriteList.numEntries)
+				if(sprList.count)
 					PrintSpritesTranslucent(sprite);
 
 				if(prcTexList)
@@ -1601,7 +1598,7 @@ static void RunIntro()
 		LoadObjectBank(INGAMEGENERIC_OBJ_BANK);
 
 		// add the deformable mesh actor
-		watActor = CreateAndAddActor("wavemesh.obe",-15,25,150,0,0,0);
+		watActor = CreateAndAddActor("wavemesh.obe",-15,25,150,0);
 		watActor->flags = ACTOR_WATER;
 		AddN64WaterObjectResource(watActor->actor);
 		watActor->actor->qRot.x = -0.5F;
@@ -1611,7 +1608,7 @@ static void RunIntro()
 		watActor->actor->objectController->object->flags = 11;
 
 		// add the lilly pad
-		lilly = CreateAndAddActor("pltlilly.obe",-40,-40,50,0,0,0);
+		lilly = CreateAndAddActor("pltlilly.obe",-40,-40,50,0);
 		lilly->actor->qRot.x = 0.0F;
 		lilly->actor->qRot.y = 0.0F;
 		lilly->actor->qRot.z = 0.0F;
@@ -1621,7 +1618,7 @@ static void RunIntro()
 		lilly->actor->scale.v[Z] = 0.75F;
 
 		// add the frog
-		fAct = CreateAndAddActor("frogger.obe",40,-50,50,INIT_ANIMATION,0,0);
+		fAct = CreateAndAddActor("frogger.obe",40,-50,50,INIT_ANIMATION);
 		AnimateActor(fAct->actor,29,YES,NO,0.3,0,0);
 		fAct->actor->qRot.x = 0.0F;
 		fAct->actor->qRot.y = 1.0F;
