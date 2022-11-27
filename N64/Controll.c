@@ -115,11 +115,8 @@ void ResetParameters()
 	UseUCode            = 4;
 	OutLen              = RDP_OUTPUT_BUF_LEN;
   
-	for (i=0; i<4; i++)
-	{
-		currCamSource[i].v[0] = 0;	currCamSource[i].v[1] = 0;	currCamSource[i].v[2] = -100;
-		currCamTarget[i].v[0] = 0;	currCamTarget[i].v[1] = 0;	currCamTarget[i].v[2] = 0;
-	}
+	currCamSource.v[0] = 0;	currCamSource.v[1] = 0;	currCamSource.v[2] = -100;
+	currCamTarget.v[0] = 0;	currCamTarget.v[1] = 0;	currCamTarget.v[2] = 0;
 
 	SetVector(&camVect,&cameraUpVect);
 //	camera.rot.v[0]		= 0;	
@@ -311,14 +308,6 @@ void ReadDebugPad()
 
 	if((button & CONT_A) && !(lastbutton & CONT_A))
     {
-	}
-
-	if((button & CONT_B) && !(lastbutton & CONT_B))
-    {
-		if(autoHop)
-			autoHop = 0;
-		else
-			autoHop = 10000;
 	}
 
 	if((button & CONT_L) && !(lastbutton & CONT_L))
