@@ -1,8 +1,6 @@
 @echo OFF
 
-REM Calling PSPATHS.BAT will replace your %PATH% with one which has access to the SDK executables for this session only.
-REM Unfortunately, we can't keep the existing path, we must delete it. This is because Borland make doesn't handle paths above a certain size, and will give the error "Command arguments too long".
-CALL PATH=%~dp0SDK\bin
+SET PATH=%~dp0SDK\bin
 
 REM Setup temp directory with copied code.
 if not exist BUILD md BUILD
