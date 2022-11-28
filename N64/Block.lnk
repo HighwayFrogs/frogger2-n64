@@ -701,7 +701,7 @@ _objBank_5_0_SegmentRomEnd          alias   _objBank50_orgend
 
         section.64      objBank50.data,objBank50
 
-oBank50  incbin  "objects/submaster.nob",objBank50.data,64
+oBank50  incbin  "objects/dummy.nob",objBank50.data,64
 
 ; [ SUBTER WORLD LEVEL 1 ] >>>>>
 
@@ -713,7 +713,7 @@ _objBank_5_1_SegmentRomEnd          alias   _objBank51_orgend
 
         section.64      objBank51.data,objBank51
 
-oBank51  incbin  "objects/sub1.nob",objBank51.data,64
+oBank51  incbin  "objects/dummy.nob",objBank51.data,64
 
 ; [ SUBTER WORLD LEVEL 2 ] >>>>>
 
@@ -725,7 +725,7 @@ _objBank_5_2_SegmentRomEnd          alias   _objBank52_orgend
 
         section.64      objBank52.data,objBank52
 
-oBank52  incbin  "objects/sub2.nob",objBank52.data,64
+oBank52  incbin  "objects/dummy.nob",objBank52.data,64
 
 ; [ SUBTER WORLD LEVEL 3 ] >>>>>
 
@@ -737,7 +737,7 @@ _objBank_5_3_SegmentRomEnd          alias   _objBank53_orgend
 
         section.64      objBank53.data,objBank53
 
-oBank53  incbin  "objects/sub3.nob",objBank53.data,64
+oBank53  incbin  "objects/dummy.nob",objBank53.data,64
 
 ; [ SUBTER WORLD BOSS ] >>>>>
 
@@ -749,7 +749,7 @@ _objBank_5_4_SegmentRomEnd          alias   _objBank54_orgend
 
         section.64      objBank54.data,objBank54
 
-oBank54  incbin  "objects/subboss.nob",objBank54.data,64
+oBank54  incbin  "objects/dummy.nob",objBank54.data,64
 
 ; [ SUBTER WORLD BONUS ] >>>>>
 
@@ -822,7 +822,7 @@ _objBank_6_3_SegmentRomEnd          alias   _objBank63_orgend
 
         section.64      objBank63.data,objBank63
 
-oBank63  incbin  "objects/lab3.nob",objBank63.data,64
+oBank63  incbin  "objects/dummy.nob",objBank63.data,64
 
 ; [ LAB WORLD BOSS ] >>>>>
 
@@ -834,7 +834,7 @@ _objBank_6_4_SegmentRomEnd          alias   _objBank64_orgend
 
         section.64      objBank64.data,objBank64
 
-oBank64  incbin  "objects/labboss.nob",objBank64.data,64
+oBank64  incbin  "objects/dummy.nob",objBank64.data,64
 
 ; [ LAB WORLD BONUS ] >>>>>
 
@@ -956,7 +956,7 @@ _objBank_8_0_SegmentRomEnd          alias   _objBank80_orgend
 
         section.64      objBank80.data,objBank80
 
-oBank80  incbin  "objects/haloweenmaster.nob",objBank80.data,64
+oBank80  incbin  "objects/dummy.nob",objBank80.data,64
 
 ; [ HALLOWEEN WORLD LEVEL 1 ] >>>>>
 
@@ -968,7 +968,7 @@ _objBank_8_1_SegmentRomEnd          alias   _objBank81_orgend
 
         section.64      objBank81.data,objBank81
 
-oBank81  incbin  "objects/haloween1.nob",objBank81.data,64
+oBank81  incbin  "objects/dummy.nob",objBank81.data,64
 
 ; [ HALLOWEEN WORLD LEVEL 2 ] >>>>>
 
@@ -1115,53 +1115,6 @@ _objBank_9_6_SegmentRomEnd          alias   _objBank96_orgend
 
 oBank96  incbin  "objects/sretro6.nob",objBank96.data,64
 
-; [ SUPERRETRO WORLD LEVEL 7 ] >>>>>
-
-objBank97        group   obj()
-objBank97bss     group   obj(),bss
-
-_objBank_9_7_SegmentRomStart        alias   _objBank97_org
-_objBank_9_7_SegmentRomEnd          alias   _objBank97_orgend
-
-        section.64      objBank97.data,objBank97
-
-oBank97  incbin  "objects/sretro7.nob",objBank97.data,64
-
-; [ SUPERRETRO WORLD LEVEL 8 ] >>>>>
-
-objBank98        group   obj()
-objBank98bss     group   obj(),bss
-
-_objBank_9_8_SegmentRomStart        alias   _objBank98_org
-_objBank_9_8_SegmentRomEnd          alias   _objBank98_orgend
-
-        section.64      objBank98.data,objBank98
-
-oBank98  incbin  "objects/sretro8.nob",objBank98.data,64
-
-; [ SUPERRETRO WORLD LEVEL 9 ] >>>>>
-
-objBank99        group   obj()
-objBank99bss     group   obj(),bss
-
-_objBank_9_9_SegmentRomStart        alias   _objBank99_org
-_objBank_9_9_SegmentRomEnd          alias   _objBank99_orgend
-
-        section.64      objBank99.data,objBank99
-
-oBank99  incbin  "objects/sretro9.nob",objBank99.data,64
-
-; [ SUPERRETRO WORLD LEVEL 10 ] >>>>>
-
-objBank910        group   obj()
-objBank910bss     group   obj(),bss
-
-_objBank_9_10_SegmentRomStart        alias   _objBank910_org
-_objBank_9_10_SegmentRomEnd          alias   _objBank910_orgend
-
-        section.64      objBank910.data,objBank910
-
-oBank910  incbin  "objects/sretro10.nob",objBank910.data,64
 
 
 
@@ -1355,8 +1308,7 @@ _levData_1_1_SegmentRomEnd   alias _levData11_orgend
 
         section.64       levData11.data,levData11
 
-;levDat11  incbin "leveldata/entity-0-0.cef",levData11.data, 32
-levDat11  incbin "c:/levtemp/entity-0-0.dat",levData11.data, 32
+levDat11  incbin "leveldata/entity-0-0.cef",levData11.data, 32
 
 ; [ GARDEN LEVEL 2 ] >>>>>
 
@@ -1554,8 +1506,7 @@ _levData_3_1_SegmentRomEnd   alias _levData31_orgend
 
         section.64       levData31.data,levData31
 
-;levDat31  incbin "leveldata/entity-2-0.cef",levData31.data, 32
-levDat31  incbin "c:/levtemp/entity-2-0.dat",levData31.data, 32
+levDat31  incbin "leveldata/entity-2-0.cef",levData31.data, 32
 
 ; [ SPACE LEVEL 2 ] >>>>>
 
@@ -1567,8 +1518,7 @@ _levData_3_2_SegmentRomEnd   alias _levData32_orgend
 
         section.64       levData32.data,levData32
 
-;levDat32  incbin "leveldata/entity-2-1.cef",levData32.data, 32
-levDat32  incbin "c:/levtemp/entity-2-1.dat",levData32.data, 32
+levDat32  incbin "leveldata/entity-2-1.cef",levData32.data, 32
 
 ; [ SPACE LEVEL 3 ] >>>>>
 
@@ -1592,8 +1542,7 @@ _levData_3_4_SegmentRomEnd   alias _levData34_orgend
 
         section.64       levData34.data,levData34
 
-;levDat34  incbin "leveldata/entity-2-3.cef",levData34.data, 32
-levDat34  incbin "c:/levtemp/entity-2-3.dat",levData34.data, 32
+levDat34  incbin "leveldata/entity-2-3.cef",levData34.data, 32
 
 ; [ SPACE BONUS ] >>>>>
 
@@ -1707,7 +1656,7 @@ _levData_5_1_SegmentRomEnd   alias _levData51_orgend
 
         section.64       levData51.data,levData51
 
-levDat51  incbin "leveldata/entity-5-0.cef",levData51.data, 32
+levDat51  incbin "leveldata/dummy.cef",levData51.data, 32
 
 ; [ SUBTER LEVEL 2 ] >>>>>
 
@@ -1719,7 +1668,7 @@ _levData_5_2_SegmentRomEnd   alias _levData52_orgend
 
         section.64       levData52.data,levData52
 
-levDat52  incbin "leveldata/entity-5-1.cef",levData52.data, 32
+levDat52  incbin "leveldata/dummy.cef",levData52.data, 32
 
 ; [ SUBTER LEVEL 3 ] >>>>>
 
@@ -1731,7 +1680,7 @@ _levData_5_3_SegmentRomEnd   alias _levData53_orgend
 
         section.64       levData53.data,levData53
 
-levDat53  incbin "leveldata/entity-5-2.cef",levData53.data, 32
+levDat53  incbin "leveldata/dummy.cef",levData53.data, 32
 
 ; [ SUBTER BOSS ] >>>>>
 
@@ -1743,7 +1692,7 @@ _levData_5_4_SegmentRomEnd   alias _levData54_orgend
 
         section.64       levData54.data,levData54
 
-levDat54  incbin "leveldata/entity-5-3.cef",levData54.data, 32
+levDat54  incbin "leveldata/dummy.cef",levData54.data, 32
 
 ; [ SUBTER BONUS ] >>>>>
 
@@ -1818,7 +1767,7 @@ _levData_6_4_SegmentRomEnd   alias _levData64_orgend
 
         section.64       levData64.data,levData64
 
-levDat64  incbin "leveldata/entity-5-3.cef",levData64.data, 32
+levDat64  incbin "leveldata/dummy.cef",levData64.data, 32
 
 ; [ LAB BONUS ] >>>>>
 
@@ -2068,55 +2017,6 @@ _levData_9_6_SegmentRomEnd   alias _levData96_orgend
         section.64       levData96.data,levData96
 
 levDat96  incbin "leveldata/entity-8-5.cef",levData96.data, 32
-
-
-; [ SUPERRETRO LEVEL 7 ] >>>>>
-
-levData97        group   obj()
-levData97bss     group   obj(),bss
-
-_levData_9_7_SegmentRomStart alias _levData97_org
-_levData_9_7_SegmentRomEnd   alias _levData97_orgend
-
-        section.64       levData97.data,levData97
-
-levDat97  incbin "leveldata/entity-8-6.cef",levData97.data, 32
-
-; [ SUPERRETRO LEVEL 8 ] >>>>>
-
-levData98        group   obj()
-levData98bss     group   obj(),bss
-
-_levData_9_8_SegmentRomStart alias _levData98_org
-_levData_9_8_SegmentRomEnd   alias _levData98_orgend
-
-        section.64       levData98.data,levData98
-
-levDat98  incbin "leveldata/entity-8-7.cef",levData98.data, 32
-
-; [ SUPERRETRO LEVEL 9 ] >>>>>
-
-levData99        group   obj()
-levData99bss     group   obj(),bss
-
-_levData_9_9_SegmentRomStart alias _levData99_org
-_levData_9_9_SegmentRomEnd   alias _levData99_orgend
-
-        section.64       levData99.data,levData99
-
-levDat99  incbin "leveldata/entity-8-8.cef",levData99.data, 32
-
-; [ SUPERRETRO LEVEL 10 ] >>>>>
-
-levData910        group   obj()
-levData910bss     group   obj(),bss
-
-_levData_9_10_SegmentRomStart alias _levData910_org
-_levData_9_10_SegmentRomEnd   alias _levData910_orgend
-
-        section.64       levData910.data,levData910
-
-levDat910  incbin "leveldata/entity-8-9.cef",levData910.data, 32
 
 
 ; FRONTEND LEVEL ENTITY DATA - BANKS 10+ ---------------------------------------------------------
@@ -2551,7 +2451,7 @@ _scrData_5_1_SegmentRomEnd   alias _scrData51_orgend
 
         section.64       scrData51.data,scrData51
 
-scrDat51  incbin "leveldata/script-5-0.csf",scrData51.data, 32
+scrDat51  incbin "leveldata/dummy.csf",scrData51.data, 32
 
 ; [ SUBTER LEVEL 2 ] >>>>>
 
@@ -2575,7 +2475,7 @@ _scrData_5_3_SegmentRomEnd   alias _scrData53_orgend
 
         section.64       scrData53.data,scrData53
 
-scrDat53  incbin "leveldata/script-5-2.csf",scrData53.data, 32
+scrDat53  incbin "leveldata/dummy.csf",scrData53.data, 32
 
 ; [ SUBTER BOSS ] >>>>>
 
@@ -2911,55 +2811,7 @@ _scrData_9_6_SegmentRomEnd   alias _scrData96_orgend
 
         section.64       scrData96.data,scrData96
 
-scrDat96  incbin "leveldata/script-8-5.csf",scrData96.data, 32
-
-; [ SUPERRETRO LEVEL 7 ] >>>>>
-
-scrData97        group   obj()
-scrData97bss     group   obj(),bss
-
-_scrData_9_7_SegmentRomStart alias _scrData97_org
-_scrData_9_7_SegmentRomEnd   alias _scrData97_orgend
-
-        section.64       scrData97.data,scrData97
-
-scrDat97  incbin "leveldata/script-8-6.csf",scrData97.data, 32
-
-; [ SUPERRETRO LEVEL 8 ] >>>>>
-
-scrData98        group   obj()
-scrData98bss     group   obj(),bss
-
-_scrData_9_8_SegmentRomStart alias _scrData98_org
-_scrData_9_8_SegmentRomEnd   alias _scrData98_orgend
-
-        section.64       scrData98.data,scrData98
-
-scrDat98  incbin "leveldata/script-8-7.csf",scrData98.data, 32
-
-; [ SUPERRETRO LEVEL 9 ] >>>>>
-
-scrData99        group   obj()
-scrData99bss     group   obj(),bss
-
-_scrData_9_9_SegmentRomStart alias _scrData99_org
-_scrData_9_9_SegmentRomEnd   alias _scrData99_orgend
-
-        section.64       scrData99.data,scrData99
-
-scrDat99  incbin "leveldata/script-8-8.csf",scrData99.data, 32
-
-; [ SUPERRETRO LEVEL 10 ] >>>>>
-
-scrData910        group   obj()
-scrData910bss     group   obj(),bss
-
-_scrData_9_10_SegmentRomStart alias _scrData910_org
-_scrData_9_10_SegmentRomEnd   alias _scrData910_orgend
-
-        section.64       scrData910.data,scrData910
-
-scrDat910  incbin "leveldata/dummy.csf",scrData910.data, 32
+scrDat96  incbin "leveldata/dummy.csf",scrData96.data, 32
 
 
 

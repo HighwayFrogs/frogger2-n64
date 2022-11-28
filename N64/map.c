@@ -356,22 +356,6 @@ void LoadCollision(short cNum)
 			tnum = SRETRO6_COLL_BANK;
 			sprintf(message,"SUPERRETRO 6");
 			break;
-		case RETROLEV7_COL:
-			tnum = SRETRO7_COLL_BANK;
-			sprintf(message,"SUPERRETRO 7");
-			break;
-		case RETROLEV8_COL:
-			tnum = SRETRO8_COLL_BANK;
-			sprintf(message,"SUPERRETRO 8");
-			break;
-		case RETROLEV9_COL:
-			tnum = SRETRO9_COLL_BANK;
-			sprintf(message,"SUPERRETRO 9");
-			break;
-		case RETROLEV10_COL:
-			tnum = SRETRO10_COLL_BANK;
-			sprintf(message,"SUPERRETRO 10");
-			break;
 
 		default:
 			tnum = -1;
@@ -763,22 +747,6 @@ void LoadScenics(short sNum)
 			tnum = SRETRO6_COLL_BANK;
 			sprintf(message,"SUPERRETRO 6");
 			break;
-		case RETROLEV7_COL:
-			tnum = SRETRO7_COLL_BANK;
-			sprintf(message,"SUPERRETRO 7");
-			break;
-		case RETROLEV8_COL:
-			tnum = SRETRO8_COLL_BANK;
-			sprintf(message,"SUPERRETRO 8");
-			break;
-		case RETROLEV9_COL:
-			tnum = SRETRO9_COLL_BANK;
-			sprintf(message,"SUPERRETRO 9");
-			break;
-		case RETROLEV10_COL:
-			tnum = SRETRO10_COLL_BANK;
-			sprintf(message,"SUPERRETRO 10");
-			break;
 
 		default:
 			tnum = -1;
@@ -1120,27 +1088,7 @@ void LoadLevelEntities(short worldID,short levelID)
 			case LEVELID_SUPERRETRO6:
 					bankRomStart	= (u32)&_levData_9_6_SegmentRomStart;
 					bankRomEnd		= (u32)&_levData_9_6_SegmentRomEnd;
-					sprintf(message, "SUP_ENT6");				
-				break;
-			case LEVELID_SUPERRETRO7:
-					bankRomStart	= (u32)&_levData_9_7_SegmentRomStart;
-					bankRomEnd		= (u32)&_levData_9_7_SegmentRomEnd;
-					sprintf(message, "SUP_ENT7");				
-				break;
-			case LEVELID_SUPERRETRO8:
-					bankRomStart	= (u32)&_levData_9_8_SegmentRomStart;
-					bankRomEnd		= (u32)&_levData_9_8_SegmentRomEnd;
-					sprintf(message, "SUP_ENT8");				
-				break;
-			case LEVELID_SUPERRETRO9:
-					bankRomStart	= (u32)&_levData_9_9_SegmentRomStart;
-					bankRomEnd		= (u32)&_levData_9_9_SegmentRomEnd;
-					sprintf(message, "SUP_ENT9");				
-				break;
-			case LEVELID_SUPERRETRO10:
-					bankRomStart	= (u32)&_levData_9_10_SegmentRomStart;
-					bankRomEnd		= (u32)&_levData_9_10_SegmentRomEnd;
-					sprintf(message, "SUP_ENT10");				
+					sprintf(message, "SUP_ENT6");								
 				break;
 
 			default:

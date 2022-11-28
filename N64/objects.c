@@ -795,27 +795,6 @@ void LoadObjectBank(int num)
 			bankRomEnd		= (u32)&_objBank_9_6_SegmentRomEnd;
 			dprintf"RETRO LEVEL 6 OBJECT BANK - "));
 			break;
-		case LEVEL7_RETRO_OBJ_BANK:
-			bankRomStart	= (u32)&_objBank_9_7_SegmentRomStart;
-			bankRomEnd		= (u32)&_objBank_9_7_SegmentRomEnd;
-			dprintf"RETRO LEVEL 7 OBJECT BANK - "));
-			break;
-		case LEVEL8_RETRO_OBJ_BANK:
-			bankRomStart	= (u32)&_objBank_9_8_SegmentRomStart;
-			bankRomEnd		= (u32)&_objBank_9_8_SegmentRomEnd;
-			dprintf"RETRO LEVEL 8 OBJECT BANK - "));
-			break;
-		case LEVEL9_RETRO_OBJ_BANK:
-			bankRomStart	= (u32)&_objBank_9_9_SegmentRomStart;
-			bankRomEnd		= (u32)&_objBank_9_9_SegmentRomEnd;
-			dprintf"RETRO LEVEL 9 OBJECT BANK - "));
-			break;
-		case LEVEL10_RETRO_OBJ_BANK:
-			bankRomStart	= (u32)&_objBank_9_10_SegmentRomStart;
-			bankRomEnd		= (u32)&_objBank_9_10_SegmentRomEnd;
-			dprintf"RETRO LEVEL 10 OBJECT BANK - "));
-			break;
-
 		default:
 			dprintf"ERROR: no object bank specified....\n"));
 			for(;;);
