@@ -12,7 +12,6 @@ for i in range(0, 52):
 
 from java.io import File
 from java.nio.file import Files
-# TODO: There's data before this. Seems to start at 0xb0000000
 symbol = getSymbolAt(toAddr(0xb00ab740))
 while symbol != None:
   nextSymbol = getSymbolAfter(symbol)
