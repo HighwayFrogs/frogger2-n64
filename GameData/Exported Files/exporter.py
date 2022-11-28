@@ -1,3 +1,5 @@
+# Here are some snippets I used in Ghidra to setup some stuff, and to export files from the N64 prototype.
+
 for i in range(0, 52):
   addr = toAddr(0x801a0cc4 + (4 * i))
   println("2 Debug: " + str(toAddr(getInt(addr))) + ", " + ("_collBank%03dSegmentRomStart" % (i)))
