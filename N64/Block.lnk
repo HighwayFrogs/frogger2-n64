@@ -2016,7 +2016,7 @@ _levData_9_6_SegmentRomEnd   alias _levData96_orgend
 
         section.64       levData96.data,levData96
 
-levDat96  incbin "leveldata/entity-8-5.cef",levData96.data, 32
+levDat96  incbin "leveldata/dummy.cef",levData96.data, 32
 
 
 ; FRONTEND LEVEL ENTITY DATA - BANKS 10+ ---------------------------------------------------------
