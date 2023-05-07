@@ -15,20 +15,15 @@
 
 #define NUM_BABIES 5
 
-#define BABY_ACTIVE_RADIUS	200000
-#define BABY_IDLE_TIME		150
-
-extern float BABY_SCALE;
 extern GAMETILE **bTStart;
 
 enum
 {
-	BABY_ANIM_SNOOZE,
 	BABY_ANIM_HOP,
-	BABY_ANIM_WAVE,
-	BABY_ANIM_WAGGLE,
+	BABY_ANIM_CARTWHEEL,
 	BABY_ANIM_FLIP,
-	BABY_ANIM_WHEEL,
+	BABY_ANIM_WAGGLE,
+	BABY_ANIM_WAVE
 };
 
 // baby stuff
@@ -36,8 +31,6 @@ typedef struct TAGBABY
 {
 	unsigned long isSaved;
 	unsigned char fxColour[4];
-	long idle, collect;
-
 	ACTOR2 *baby;
 
 } BABY;
@@ -52,9 +45,7 @@ extern unsigned long numBabies;
 
 void InitBabyList(unsigned char createOverlays);
 void ResetBabies( );
-int PickupBabyFrog( ACTOR2 *baby, GAMETILE *tile );
+int PickupBabyFrog( ACTOR2 *baby );
 int GetNearestBabyFrog();
-
-void UpdateBabies( );
 
 #endif

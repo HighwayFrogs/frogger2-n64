@@ -22,6 +22,10 @@
 #define PM_ENDLEVEL	2
 #define PM_GAMEOVER	3
 
+#ifndef DEFINITELY_NOT_MBR_DEMO
+//#define MBR_DEMO 1
+#endif
+
 // -----------------
 
 enum
@@ -31,19 +35,16 @@ enum
 	FOUR_PMODE = 2
 };
 
+extern long carryOnBabies;
+
 extern struct gameStateStruct gameState;
 
 extern unsigned long INPUT_POLLPAUSE;
 
-extern unsigned long creditsActive;
-extern unsigned long fadingLogos;
-
 extern VECTOR *pointOfInterest;
 extern float	pOIDistance;
 
-extern TIMER scoreTimer;
-extern TIMER modeTimer;
-
+extern TIMER gameIsOver, levelIsOver, scoreTimer;
 extern short showEndLevelScreen;
 
 extern unsigned short screenNum;
@@ -64,6 +65,7 @@ extern char	scoreText[32];
 extern char	timeText[32];
 extern long hopAmt;
 
+extern long babySaved;
 extern long award;
 
 extern long numHops_TOTAL;
@@ -71,14 +73,9 @@ extern long speedHops_TOTAL;
 extern long numHealth_TOTAL;
 
 extern void RunGameLoop (void);
-extern void RunFrontendGameLoop (void);
+extern void Orientate(QUATERNION *me, VECTOR *fd, VECTOR *mfd, VECTOR *up);
+extern void RunLevelCompleteSequence();
 
 extern unsigned char swingCam;
-extern char playDemos;
-
-extern unsigned long currTileNum;
-extern TEXTOVERLAY *tileNum;
-extern char tileString[];
-extern long displayingTile;
 
 #endif

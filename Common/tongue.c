@@ -16,6 +16,20 @@
 #include "incs.h"
 
 
+#define	MAX_TONGUENODES				12
+#define TONGUE_FRACTION				(1/(float)MAX_TONGUENODES)
+
+#define TONGUE_RADIUSNORMAL			125.0F
+#define TONGUE_RADIUSLONG			225.0F
+
+#define TONGUE_STICKYRADIUS			5.0
+
+#define TONGUE_OFFSET_UP			-15.0
+#define TONGUE_OFFSET_FORWARD		5.0
+
+#define TONGUE_WRAPAROUNDTHRESHOLD	-0.2
+
+
 TONGUE tongue[MAX_FROGS];
 
 void StartTongue( unsigned char type, VECTOR *dest, int pl );
@@ -38,7 +52,7 @@ void InitTongues( )
 		tongue[i].flags = TONGUE_NONE | TONGUE_IDLE;
 		tongue[i].thing = NULL;
 		tongue[i].radius = TONGUE_RADIUSNORMAL;
-		tongue[i].segment = NULL;
+		tongue[i].sprite = NULL;
 		tongue[i].tex = NULL;
 		tongue[i].type = 0;
 		tongue[i].canTongue = 1;
@@ -63,8 +77,8 @@ void FreeTongues( )
 		tongue[i].thing = NULL;
 		tongue[i].radius = TONGUE_RADIUSNORMAL;
 
-		if( tongue[i].segment ) JallocFree( (UBYTE **)&tongue[i].segment );
-		tongue[i].segment = NULL;
+		if( tongue[i].sprite ) JallocFree( (UBYTE **)&tongue[i].sprite );
+		tongue[i].sprite = NULL;
 		tongue[i].tex = NULL;
 		tongue[i].type = 0;
 		tongue[i].canTongue = 1;
@@ -86,8 +100,6 @@ void StartTongue( unsigned char type, VECTOR *dest, int pl )
 	int i, no=0;
 
 	if( !tongue[pl].canTongue || !player[pl].canJump ) return;
-
-	PlaySample(genSfx[GEN_FROG_TONGUE],&frog[pl]->actor->pos,0,SAMPLE_VOLUME,-1/*64*/);
 
 	// Determine frog's forward vector
 	RotateVectorByQuaternion( &tongue[pl].fwd, &inVec, &frog[pl]->actor->qRot );
@@ -112,7 +124,7 @@ void StartTongue( unsigned char type, VECTOR *dest, int pl )
 		int i;
 		for(i=0; i<MAX_FROGS; i++) if( frog[i] == (ACTOR2 *)tongue[pl].thing ) break;
 
-		if( i!=MAX_FROGS && ((player[i].frogunder != (char)-1) || (player[i].frogon != (char)-1) || (tongue[i].flags & TONGUE_BEINGUSED)) ) no=1;
+		if( i!=MAX_FROGS && ((frog[i]->action.frogunder != (char)-1) || (frog[i]->action.frogon != (char)-1) || (tongue[i].flags & TONGUE_BEINGUSED)) ) no=1;
 	}
 
 	// Calculate angle through which the tongue needs to rotate
@@ -125,14 +137,44 @@ void StartTongue( unsigned char type, VECTOR *dest, int pl )
 	}
 
 	tongue[pl].type = type;
-	tongue[pl].tex = txtrBlank;
 
-	if( !tongue[pl].segment )
-		tongue[pl].segment = (VECTOR *)JallocAlloc( sizeof(VECTOR)*MAX_TONGUENODES, YES, "TSegments" );
+	FindTexture( &tongue[pl].tex,UpdateCRC("tongue1.bmp"),YES);
 
-	for( i=0; i<MAX_TONGUENODES; i++ )
+	if( !tongue[pl].sprite )
 	{
-		SetVector( &tongue[pl].segment[i], &tongue[pl].pos );
+		tongue[pl].sprite = (SPRITE *)JallocAlloc( sizeof(SPRITE)*MAX_TONGUENODES, YES, "TSprite" );
+
+		for( i=0; i<MAX_TONGUENODES; i++ )
+		{
+			tongue[pl].sprite[i].texture = tongue[pl].tex;
+
+			tongue[pl].sprite[i].anim.type	= SPRITE_ANIM_NONE;
+			
+			tongue[pl].sprite[i].scaleX		= 32;	//48 - (pl << 2);
+			tongue[pl].sprite[i].scaleY		= 32;
+			tongue[pl].sprite[i].r			= 255;
+			tongue[pl].sprite[i].g			= 70;
+			tongue[pl].sprite[i].b			= 70;
+			tongue[pl].sprite[i].a			= 0;
+
+#ifndef PC_VERSION
+			tongue[pl].sprite[i].offsetX		= -tongue[pl].tex->sx / 2;
+			tongue[pl].sprite[i].offsetY		= -tongue[pl].tex->sy / 2;
+#else
+			tongue[pl].sprite[i].offsetX		= -16;
+			tongue[pl].sprite[i].offsetY		= -16;
+#endif
+			AddSprite( &tongue[pl].sprite[i], NULL );
+		}
+
+	}
+	else
+	{
+		for( i=0; i<MAX_TONGUENODES; i++ )
+		{
+			AddSprite( &tongue[pl].sprite[i], NULL );
+			tongue[pl].sprite[i].a = 0;
+		}
 	}
 
 	// Set frog mouth open animation, and the speed
@@ -148,7 +190,7 @@ void StartTongue( unsigned char type, VECTOR *dest, int pl )
 		player[i].canJump = 0;
 	}
 
-	PlaySample(genSfx[GEN_FROG_TONGUE],&frog[pl]->actor->pos,0,100-Random(15),100-Random(15));
+	PlaySample(GEN_FROG_TONGUE,&frog[pl]->actor->pos,0,100-Random(15),100-Random(15));
 }
 
 
@@ -184,10 +226,9 @@ void UpdateFrogTongue( int pl )
 		switch( tongue[pl].type )
 		{
 		case TONGUE_GET_BABY: SetVector( &tongue[pl].target, &((ENEMY *)tongue[pl].thing)->nmeActor->actor->pos ); break;
+		case TONGUE_GET_GARIB: SetVector( &tongue[pl].target, &((GARIB *)tongue[pl].thing)->sprite.pos ); break;
 		case TONGUE_GET_SCENIC: SetVector( &tongue[pl].target, &((ACTOR2 *)tongue[pl].thing)->actor->pos ); break;
 		case TONGUE_GET_FROG: SetVector( &tongue[pl].target, &((ACTOR2 *)tongue[pl].thing)->actor->pos ); break;
-		case TONGUE_GET_GARIB: SetVector( &tongue[pl].target, &((GARIB *)tongue[pl].thing)->pos ); break;
-		case TONGUE_GET_HEALTH: SetVector( &tongue[pl].target, &((GARIB *)tongue[pl].thing)->fx->act[0]->actor->pos ); break;
 		}
 
 		if( tongue[pl].flags & TONGUE_OUTGOING )
@@ -222,13 +263,8 @@ void UpdateFrogTongue( int pl )
 				if(tongue[pl].type == TONGUE_GET_GARIB)
 				{
 					GARIB *g = (GARIB *)tongue[pl].thing;
-					SetVector( &g->pos, &tongue[pl].pos );
+					SetVector( &g->sprite.pos, &tongue[pl].pos );
 					g->scale *= 0.9;
-				}
-				else if(tongue[pl].type == TONGUE_GET_HEALTH)
-				{
-					GARIB *g = (GARIB *)tongue[pl].thing;
-					SetVector( &g->fx->act[0]->actor->pos, &tongue[pl].pos );
 				}
 				else if( tongue[pl].type == TONGUE_GET_BABY )
 				{
@@ -262,10 +298,15 @@ void UpdateFrogTongue( int pl )
 			{
 				if( tongue[pl].flags & TONGUE_HASITEMONIT )
 				{
-					if( tongue[pl].type == TONGUE_GET_GARIB || tongue[pl].type == TONGUE_GET_HEALTH )
+					if( tongue[pl].type == TONGUE_GET_GARIB )
 						PickupCollectable( (GARIB *)tongue[pl].thing, pl );
-//					else if( tongue[pl].type == TONGUE_GET_BABY )
-//						PickupBabyFrogMulti( (ENEMY *)tongue[pl].thing, pl );
+					else if( tongue[pl].type == TONGUE_GET_BABY )
+					{
+						if( gameState.multi == SINGLEPLAYER )
+							PickupBabyFrog( ((ENEMY *)tongue[pl].thing)->nmeActor );
+						else
+							PickupBabyFrogMulti( (ENEMY *)tongue[pl].thing, pl );
+					}
 					else if( tongue[pl].type == TONGUE_GET_FROG ) // Throw frog as far as he will go
 					{
 						int dir;
@@ -278,7 +319,6 @@ void UpdateFrogTongue( int pl )
 						else if( controllerdata[pl].button & CONT_LEFT ) dir = MOVE_LEFT;
 						else
 						{
-							player[i].canJump = 0;
 							if( !(controllerdata[pl].button & CONT_B) ) RemoveFrogTongue(pl);
 							return;
 						}
@@ -286,7 +326,7 @@ void UpdateFrogTongue( int pl )
 						// Throw the frog - no longer a frog on our tongue, so don't try to remove it later
 						if( i != MAX_FROGS )
 						{
-							ThrowFrogDirection( pl, i, (dir+camFacing[pl]) &3 );
+							ThrowFrogDirection( pl, i, (dir+camFacing) &3 );
 							tongue[pl].flags &= ~TONGUE_HASITEMONIT;
 							tongue[i].canTongue = 1;
 						}
@@ -307,17 +347,12 @@ void UpdateFrogTongue( int pl )
 	if( tongue[pl].flags & TONGUE_SEARCHING )
 	{
 		// first priority - check if baby frog is in range
-//		if( tongue[pl].thing = (void *)FrogIsInRange(tongue[pl].radius,pl) )
-//			StartTongue( TONGUE_GET_FROG, &((ACTOR2 *)tongue[pl].thing)->actor->pos, pl );
-//		else if( gameState.multi != SINGLEPLAYER && (tongue[pl].thing = (void *)BabyFrogIsInRange(tongue[pl].radius,pl)) )
-//			StartTongue( TONGUE_GET_BABY, &((ENEMY *)tongue[pl].thing)->nmeActor->actor->pos, pl );
-		if( tongue[pl].thing = (void *)GaribIsInRange(tongue[pl].radius,pl) )
-		{
-			if( ((GARIB *)tongue[pl].thing)->type == EXTRAHEALTH_GARIB )
-				StartTongue( TONGUE_GET_HEALTH, &((GARIB *)tongue[pl].thing)->fx->act[0]->actor->pos, pl );
-			else
-				StartTongue( TONGUE_GET_GARIB, &((GARIB *)tongue[pl].thing)->pos, pl );
-		}
+		if( tongue[pl].thing = (void *)FrogIsInRange(tongue[pl].radius,pl) )
+			StartTongue( TONGUE_GET_FROG, &((ACTOR2 *)tongue[pl].thing)->actor->pos, pl );
+		else if( tongue[pl].thing = (void *)BabyFrogIsInRange(tongue[pl].radius,pl) )
+			StartTongue( TONGUE_GET_BABY, &((ENEMY *)tongue[pl].thing)->nmeActor->actor->pos, pl );
+		else if( tongue[pl].thing = (void *)GaribIsInRange(tongue[pl].radius,pl) )
+			StartTongue( TONGUE_GET_GARIB, &((GARIB *)tongue[pl].thing)->sprite.pos, pl );
 		else if( tongue[pl].thing = (void *)ScenicIsInRange(tongue[pl].radius,pl) )
 			StartTongue( TONGUE_GET_SCENIC, &((ACTOR2 *)tongue[pl].thing)->actor->pos, pl );
 		else
@@ -365,12 +400,15 @@ void CalculateTongue( int pl )
 		t2 = t*t;
 		t3 = t2*t;
 
-		tongue[pl].segment[i].v[X] = ((2*t3 - 3*t2 + 1)*gx[0]) + ((-2*t3 + 3*t2)*gx[1]) + ((t3 - 2*t2 + t)*gx[2]) + ((t2-t2)*gx[3]);
-		tongue[pl].segment[i].v[Y] = ((2*t3 - 3*t2 + 1)*gy[0]) + ((-2*t3 + 3*t2)*gy[1]) + ((t3 - 2*t2 + t)*gy[2]) + ((t2-t2)*gy[3]);
-		tongue[pl].segment[i].v[Z] = ((2*t3 - 3*t2 + 1)*gz[0]) + ((-2*t3 + 3*t2)*gz[1]) + ((t3 - 2*t2 + t)*gz[2]) + ((t2-t2)*gz[3]);
+		tongue[pl].sprite[i].pos.v[X] = ((2*t3 - 3*t2 + 1)*gx[0]) + ((-2*t3 + 3*t2)*gx[1]) + ((t3 - 2*t2 + t)*gx[2]) + ((t2-t2)*gx[3]);
+		tongue[pl].sprite[i].pos.v[Y] = ((2*t3 - 3*t2 + 1)*gy[0]) + ((-2*t3 + 3*t2)*gy[1]) + ((t3 - 2*t2 + t)*gy[2]) + ((t2-t2)*gy[3]);
+		tongue[pl].sprite[i].pos.v[Z] = ((2*t3 - 3*t2 + 1)*gz[0]) + ((-2*t3 + 3*t2)*gz[1]) + ((t3 - 2*t2 + t)*gz[2]) + ((t2-t2)*gz[3]);
+		tongue[pl].sprite[i].a = 255;
 	}
-
-	SetVector( &tongue[pl].pos, &tongue[pl].segment[index] );
+	for( ; i<n; i++ )
+		tongue[pl].sprite[i].a = 0;
+	
+	SetVector( &tongue[pl].pos, &tongue[pl].sprite[index].pos );
 }
 
 
@@ -403,7 +441,6 @@ void RemoveFrogTongue( int pl )
 			if( i != MAX_FROGS )
 			{
 				tongue[i].canTongue = 1;
-				player[i].canJump = 1;
 				TeleportActorToTile( frog[i], FindNearestJoinedTile(currTile[pl],&frog[i]->actor->pos), i );
 			}
 		}
@@ -415,6 +452,9 @@ void RemoveFrogTongue( int pl )
 	tongue[pl].type = 0;
 	tongue[pl].progress = 0;
 	tongue[pl].canTongue = 1;
+
+	for( i=0; i<MAX_TONGUENODES; i++ )
+		SubSprite( &tongue[pl].sprite[i] );
 
 	player[pl].frogState &= ~FROGSTATUS_ISTONGUEING;
 }
@@ -489,16 +529,13 @@ GARIB *GaribIsInRange( float radius, int pl )
 {
 	GARIB *garib,*nearest;
 	GARIB *inRange[8];
-	VECTOR pos;
 	float dist,mags[8];
 	int i = 0,numInRange = 0;
 		
-	for(garib = garibList.head.next; garib != &garibList.head; garib = garib->next)
+	for(garib = garibCollectableList.head.next; garib != &garibCollectableList.head; garib = garib->next)
 	{
 		// only check for garibs in visual range
-		SetVector( &pos, ((garib->type == EXTRAHEALTH_GARIB && garib->fx)?(&garib->fx->act[0]->actor->pos):(&garib->pos)) );
-		dist = DistanceBetweenPointsSquared(&frog[pl]->actor->pos,&pos);
-
+		dist = DistanceBetweenPointsSquared(&frog[pl]->actor->pos,&garib->sprite.pos);
 		if( dist > (radius * radius) )
 			continue;
 

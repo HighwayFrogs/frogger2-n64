@@ -13,19 +13,6 @@
 #define TONGUE_H_INCLUDED
 
 
-#define	MAX_TONGUENODES				12
-#define TONGUE_FRACTION				(1/(float)MAX_TONGUENODES)
-
-#define TONGUE_RADIUSNORMAL			125.0F
-#define TONGUE_RADIUSLONG			225.0F
-
-#define TONGUE_STICKYRADIUS			10.0
-
-#define TONGUE_OFFSET_UP			-15.0
-#define TONGUE_OFFSET_FORWARD		0
-
-#define TONGUE_WRAPAROUNDTHRESHOLD	-0.2
-
 
 enum
 {
@@ -33,7 +20,6 @@ enum
 	TONGUE_GET_GARIB,
 	TONGUE_GET_FROG,
 	TONGUE_GET_SCENIC,
-	TONGUE_GET_HEALTH,
 };
 
 
@@ -45,8 +31,8 @@ typedef struct
 	float radius, progress;
 	unsigned char type, canTongue;
 
+	SPRITE *sprite;
 	TEXTURE *tex;
-	VECTOR *segment;
 
 	void *thing;	// What we're trying to collect
 

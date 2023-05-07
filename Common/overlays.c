@@ -16,6 +16,11 @@
 
 SPRITEOVERLAYLIST spriteOverlayList;		// the sprite overlay list
 
+// sprite overlays used for bronze, silver and gold cups
+SPRITEOVERLAY *bronzeCup[8];
+SPRITEOVERLAY *silverCup[8];
+SPRITEOVERLAY *goldCup[8];
+
 /*	--------------------------------------------------------------------------------
 	Function		: CreateAndAddSpriteOverlay
 	Purpose			: creates and adds a sprite overlay to the list
@@ -39,7 +44,6 @@ SPRITEOVERLAY *CreateAndAddSpriteOverlay(float x,float y,char *txtrName,short wi
 	newItem->height		= height;
 	newItem->draw		= 1;
 	newItem->flags		= flags;
-	newItem->num		= 0;
 
 	newItem->r			= 255;
 	newItem->g			= 255;

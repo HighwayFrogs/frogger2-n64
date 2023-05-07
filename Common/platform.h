@@ -58,15 +58,10 @@ typedef struct TAGPLATFORM
 	float					currSpeed;				// platform current speed
 	short					isWaiting;				// platform node pause time
 
-	QUATERNION				srcOrientation;			// orientations to turn between while following a path?
-	QUATERNION				destOrientation;		
-													
-/*
 	VECTOR					currNormal;				// platform current normal
 	VECTOR					deltaNormal;			// platform delta normal (for linear interp)
-*/
+
 	float					countdown;				// countdown for disappear/regenerate
-	unsigned char			facing;					// For face forward platforms, which tilevector it is aligned to
 
 	GAMETILE				*inTile[2];				// tile(s) platform is(are) currently 'in'
 	PATH					*path;					// ptr to platform path data
@@ -117,7 +112,7 @@ void FrogLeavePlatform(long pl);
 
 //------------------------------------------------------------------------------------------------
 
-PLATFORM *CreateAndAddPlatform(char *pActorName,int flags,long ID,PATH *path,float animSpeed,unsigned char facing);
+PLATFORM *CreateAndAddPlatform(char *pActorName,int flags,long ID,PATH *path,float animSpeed);
 void AssignPathToPlatform(PLATFORM *pform,PATH *path,unsigned long pathFlags);
 
 BOOL PlatformHasArrivedAtNode(PLATFORM *pform);
@@ -132,11 +127,6 @@ PLATFORM *GetNearestPlatformBelowFrog(GAMETILE *tile,long pl);
 PLATFORM *GetPlatformFromUID(long uid);
 
 PLATFORM *CheckDestForPlatform(GAMETILE *dest,long pl);
-
-int EnumPlatforms(long id, int (*func)(PLATFORM*, int), int param);
-int MovePlatformToNode(PLATFORM *, int node);
-void SetPlatformVisible(PLATFORM *plt, int visible);
-void SetPlatformMoving(PLATFORM *plt, int moving);
 
 //------------------------------------------------------------------------------------------------
 

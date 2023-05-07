@@ -40,26 +40,6 @@ typedef struct TAGTRANSCAMERA
 
 } TRANSCAMERA;
 
-// ------------- Camera boxes ----------------
-
-typedef struct
-{
-	VECTOR	normal;
-	float	k;
-	unsigned long status;
-} CAM_PLANE;
-
-typedef struct
-{
-	int numPlanes;
-	CAM_PLANE *planes;
-} CAM_BOX;
-
-typedef struct
-{
-	int numBoxes;
-	CAM_BOX *boxes;
-} CAM_BOX_LIST;
 
 //----- [ GLOBALS ] ----------------------------------------------------------------------------//
 
@@ -69,20 +49,19 @@ extern VECTOR	camDist;
 
 extern float	camSpeed;
 extern float	camLookOfs;
-extern int		camFacing[];
-extern long		prevCamFacing[];
-extern short	startCamFacing, startFrogFacing;
+extern int		camFacing;
+extern int		nextCamFacing;
 
-extern VECTOR	camSource;
-extern VECTOR	camTarget;
-extern VECTOR	currCamSource;
-extern VECTOR	currCamTarget;
+extern VECTOR	camSource[4];
+extern VECTOR	camTarget[4];
+extern VECTOR	currCamSource[4];
+extern VECTOR	currCamTarget[4];
 
 extern VECTOR	currCamDist;
-/*
+
 extern VECTOR	actualCamSource[2];
 extern VECTOR	actualCamTarget[2];
-*/
+
 extern float	xFOV;				// actually the SCREEN RATIO, i.e. 4/3
 extern float	yFOV;				// THIS is the field of view
 extern float	precScaleFactor;
@@ -95,25 +74,14 @@ extern char		fixedPos;
 extern char		fixedUp;
 extern char		firstPerson;
 
-extern float cam_shakiness;
-extern float cam_shake_falloff;
-
-extern char playerFocus;
-extern VECTOR currCamOffset, camOffset;
-extern GAMETILE *lastTile[];
-
-extern CAM_BOX_LIST cameraBoxes;
-
 //----- [ FUNCTION PROTOTYPES ] ----------------------------------------------------------------//
 
 TRANSCAMERA *CreateAndAddTransCamera(GAMETILE *tile,unsigned long dirCamMustFace, VECTOR *v, unsigned long flags);
-void CheckForDynamicCameraChange(GAMETILE *tile, int pl);
+void CheckForDynamicCameraChange(GAMETILE *tile);
 void FreeTransCameraList();
 
 void CameraLookAtFrog();
-void UpdateCameraPosition( );
-
-void InitCamera(void);
-
+void SlurpCameraPosition( long cam );
+void UpdateCameraPosition( long cam );
 
 #endif

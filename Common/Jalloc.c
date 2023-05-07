@@ -72,10 +72,11 @@ void JallocInit(ULONG base, ULONG size)
 	Info :
 */
 /***********************************************************************************/
-UBYTE *JallocAlloc(LONG size, int clear, char *name)
+UBYTE *
+JallocAlloc(LONG size, int clear, char *name)
 {		  
 	UBYTE *dest;
-
+	
 #ifdef CHECKJALLOC
 	if(jallocAllocLocked)
 	{

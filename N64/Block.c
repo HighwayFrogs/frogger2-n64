@@ -144,7 +144,7 @@ u64				dram_stack[SP_DRAM_STACK_SIZE64+2];	// For RSP tasks - used for matrix st
 
 static void idle(void *arg);
 static void main_(void *arg);
-static void RunIntro();
+
 
 /*	--------------------------------------------------------------------------------
 	Function		: debugPrintf(int num)
@@ -312,8 +312,8 @@ void SetupViewing()
 /*
 	{
 		guLookAtHilite(&(dynamicp->viewing[0]),&(dynamicp->lookat[0]),&(dynamicp->hilite[0]),
-			currCamSource.v[X],currCamSource.v[Y],currCamSource.v[Z],
-			currCamTarget.v[X],currCamTarget.v[Y],currCamTarget.v[Z],
+			actualCamSource[draw_buffer].v[X],actualCamSource[draw_buffer].v[Y],actualCamSource[draw_buffer].v[Z],
+			actualCamTarget[draw_buffer].v[X],actualCamTarget[draw_buffer].v[Y],actualCamTarget[draw_buffer].v[Z],
 			camVect.v[X],camVect.v[Y],camVect.v[Z],
 			0.0, 0.0, 127.0, 
 			0.0, 0.0, 127.0,
@@ -324,8 +324,8 @@ void SetupViewing()
 
 	{
 		guLookAt(&dynamicp->viewing[0], 
-			currCamSource.v[X],currCamSource.v[Y],currCamSource.v[Z],
-			currCamTarget.v[X],currCamTarget.v[Y],currCamTarget.v[Z],
+			actualCamSource[draw_buffer].v[X],actualCamSource[draw_buffer].v[Y],actualCamSource[draw_buffer].v[Z],
+			actualCamTarget[draw_buffer].v[X],actualCamTarget[draw_buffer].v[Y],actualCamTarget[draw_buffer].v[Z],
 			camVect.v[X],camVect.v[Y],camVect.v[Z]);
     }
 
@@ -1113,6 +1113,9 @@ void DrawGraphics(void *arg)
 				if(gfxIsDrawing == FALSE)
 					goto cleanup;
 
+				SetVector(&actualCamSource[draw_buffer],&currCamSource[0]);
+				SetVector(&actualCamTarget[draw_buffer],&currCamTarget[0]);
+
 				SetupViewing();
 //				PrintBackdrops();
 //				CleanupAndSendDisplayList(UCODE_POLY,0);
@@ -1137,7 +1140,7 @@ void DrawGraphics(void *arg)
 				XformActorList();
 				TIMER_EndTimer(3);
 
-				if(sprList.count)
+				if(spriteList.numEntries)
 				{
 					sprite = PrintSpritesOpaque();
 					gDPPipeSync(glistp++);
@@ -1148,11 +1151,8 @@ void DrawGraphics(void *arg)
 
 				DrawActorList();
 
-				if(sprList.count)
+				if(spriteList.numEntries)
 					PrintSpritesTranslucent(sprite);
-
-				if(prcTexList)
-					ProcessProcTextures();
 
 				DrawSpecialFX();
 
@@ -1206,8 +1206,6 @@ cleanup:
 	Returns		: void 
 */
 
-char runningIntro = 1;
-
 void doPoly(void *arg)
 {	
 	short tmp;
@@ -1257,10 +1255,13 @@ void doPoly(void *arg)
 	// start the game from the start options level
 	FreeAllLists();
 
-//	gameState.mode		= MENU_MODE;
-//	gameState.menuMode	= TITLE_MODE;
-
-	runningIntro = 1;
+#ifndef USE_MENUS
+	gameState.mode = INGAME_MODE;
+	InitLevel(WORLDID_FRONTEND,LEVELID_FRONTEND1);
+#else
+	gameState.mode		= MENU_MODE;
+	gameState.menuMode	= TITLE_MODE;
+#endif
 
 	while(1) 
 	{
@@ -1274,16 +1275,7 @@ void doPoly(void *arg)
 
 			// Actually handle the game loop
 			TIMER_StartTimer(0,"GAMELOOP");
-			if(runningIntro)
-			{
-				// run (temporary) intro screens
-				RunIntro();
-			}
-			else
-			{
-				// run main game loop
-				GameLoop();
-			}
+			GameLoop();
 			TIMER_EndTimer(0);
 
 			DoubleBufferSkinVtx();
@@ -1569,236 +1561,6 @@ void ControllerProc(void *arg)
 	}
 }
 
-
-/*	--------------------------------------------------------------------------------
-	Function 	: RunIntro
-	Purpose 	: runs the intro screens
-	Parameters 	: 
-	Returns 	: 
-	Info 		:
-*/
-static void RunIntro()
-{
-	static ACTOR2 *fAct = NULL,*lilly = NULL;
-	static TEXTOVERLAY *introTxt1 = NULL,*introTxt2 = NULL;
-	static SPRITE *fireSprite = NULL,*sOv,*sOv2,*fly;
-	static u16 button,lastbutton;
-	static float lillyRot = 0.0F,introSeed = 0.0F,fVal;
-	static GAMETILE dummyTile;
-	static VECTOR lookAtMe = { 0,0,0 },flyVel;
-	float rotMtxY[4][4];
-	int i;
-			
-	if(frameCount == 1)
-	{
-		// load relevant texture and object banks
-		LoadTextureBank(SYSTEM_TEX_BANK);
-		LoadTextureBank(INGAMEGENERIC_TEX_BANK);
-		LoadTextureBank(TITLESGENERIC_TEX_BANK);
-		LoadObjectBank(INGAMEGENERIC_OBJ_BANK);
-
-		// add the deformable mesh actor
-		watActor = CreateAndAddActor("wavemesh.obe",-15,25,150,0);
-		watActor->flags = ACTOR_WATER;
-		AddN64WaterObjectResource(watActor->actor);
-		watActor->actor->qRot.x = -0.5F;
-		watActor->actor->qRot.y = 0.25F;
-		watActor->actor->qRot.z = 0.0F;
-		watActor->actor->qRot.w = 1.0F;
-		watActor->actor->objectController->object->flags = 11;
-
-		// add the lilly pad
-		lilly = CreateAndAddActor("pltlilly.obe",-40,-40,50,0);
-		lilly->actor->qRot.x = 0.0F;
-		lilly->actor->qRot.y = 0.0F;
-		lilly->actor->qRot.z = 0.0F;
-		lilly->actor->qRot.w = 1.0F;
-		lilly->actor->scale.v[X] = 0.75F;
-		lilly->actor->scale.v[Y] = 0.75F;
-		lilly->actor->scale.v[Z] = 0.75F;
-
-		// add the frog
-		fAct = CreateAndAddActor("frogger.obe",40,-50,50,INIT_ANIMATION);
-		AnimateActor(fAct->actor,29,YES,NO,0.3,0,0);
-		fAct->actor->qRot.x = 0.0F;
-		fAct->actor->qRot.y = 1.0F;
-		fAct->actor->qRot.z = 0.0F;
-		fAct->actor->qRot.w = -0.25F;
-		frog[0] = fAct;
-
-		// prepare text overlays
-		introTxt1 = CreateAndAddTextOverlay(25,25,"welcome to frogger2",NO,255,smallFont,TEXTOVERLAY_WAVECHARS,6);
-		introTxt2 = CreateAndAddTextOverlay(25,25,"interactive studios",NO,255,smallFont,TEXTOVERLAY_WAVECHARS,6);
-
-		// prepare sprite overlays
-		konami = CreateAndAddSpriteOverlay(260,20,"konami.bmp",32,32,0,0);
-		atari = CreateAndAddSpriteOverlay(260,20,"atari.bmp",32,32,255,0);
-
-		// prepare sprites
-		fireSprite = AddNewSpriteToList(-40,-10,50,32,"prc_fire1.bmp",SPRITE_TRANSLUCENT);
-		fireSprite->scaleX = 64;
-		fireSprite->scaleY = 256;
-		fireSprite->a = 160;
-		CreateAndAddProceduralTexture(fireSprite->texture,"prc_fire1");
-
-		sOv = AddNewSpriteToList(0,0,256,1280,"prc_watrd.bmp",SPRITE_TRANSLUCENT);
-		sOv->a = 64;
-		CreateAndAddProceduralTexture(sOv->texture,"prc_watrd");
-
-		sOv2 = AddNewSpriteToList(0,0,256,1280,"prc_watrt.bmp",SPRITE_TRANSLUCENT);
-		sOv2->a = 64;
-		CreateAndAddProceduralTexture(sOv2->texture,"prc_watrt");
-
-		fly = AddNewSpriteToList(0,0,20,24,"fly1.bmp",0);
-		fly->a = 255;
-		flyVel.v[X] = - 10 + Random(20);
-		flyVel.v[Y] = - 10 + Random(20);
-		flyVel.v[Z] = 0;
-		
-		// set the dummy tile
-		SetVector(&dummyTile.centre,&fAct->actor->pos);
-		SetVector(&dummyTile.normal,&upVec);
-		dummyTile.state			= TILESTATE_SAFE;
-		dummyTile.next			= NULL;
-		dummyTile.dirVector[0].v[X]	= 1;	dummyTile.dirVector[0].v[Y]	= 0;	dummyTile.dirVector[0].v[Z]	= 0;
-		dummyTile.dirVector[1].v[X]	= 0;	dummyTile.dirVector[1].v[Y]	= 0;	dummyTile.dirVector[1].v[Z]	= 1;
-		dummyTile.dirVector[2].v[X]	= -1;	dummyTile.dirVector[2].v[Y]	= 0;	dummyTile.dirVector[2].v[Z]	= 0;
-		dummyTile.dirVector[3].v[X]	= 0;	dummyTile.dirVector[3].v[Y]	= 0;	dummyTile.dirVector[3].v[Z]	= -1;
-		
-		dummyTile.tilePtrs[0]	= NULL;
-		dummyTile.tilePtrs[1]	= NULL;
-		dummyTile.tilePtrs[2]	= NULL;
-		dummyTile.tilePtrs[3]	= NULL;
-		frogFacing[0]			= 3;
-		player[0].canJump		= 1;
-
-		currTile[0]				= &dummyTile;
-		pointOfInterest			= &lookAtMe;
-		hedSpeed				= 1;
-
-		// prepare music
-		PrepareSong(TRACK_LAB,0);
-		PlaySample(136,NULL,0,255,128);
-		
-		player[0].idleTime = MAX_IDLE_TIME;
-		myAA = 2;
-
-		StartDrawing("intro");
-	}
-
-	player[0].idleTime -= gameSpeed;
-	if(player[0].idleTime < 1)
-	{
-		unsigned long iAnim = Random(6);
-		switch (iAnim)
-		{
-			case 0:
-				AnimateActor(fAct->actor,FROG_ANIM_SCRATCHHEAD,NO,NO,0.4F,0,0);
-				if (Random(10) > 6)
-					AnimateActor(fAct->actor,FROG_ANIM_SCRATCHHEAD,NO,YES,0.4F,0,0);
-				AnimateActor(fAct->actor,FROG_ANIM_BREATHE,YES,YES,0.4F,0,0);
-				break;
-			case 1:
-				AnimateActor(fAct->actor,FROG_ANIM_DANCE1,YES,NO,0.3F,0,0);
-				break;
-			case 2:
-				AnimateActor(fAct->actor,FROG_ANIM_DANCE2,YES,NO,0.3F,0,0);
-				break;
-			case 3:
-				AnimateActor(fAct->actor,FROG_ANIM_DANCE3,NO,NO,0.3F,0,0);
-				if (Random(10) > 6)
-					AnimateActor(fAct->actor,FROG_ANIM_DANCE1,YES,YES,0.3F,0,0);
-				else
-					AnimateActor(fAct->actor,FROG_ANIM_BREATHE,YES,YES,0.4F,0,0);
-				break;
-			case 4:
-				AnimateActor(fAct->actor,FROG_ANIM_DANCE4,YES,NO,0.3F,0,0);
-				break;
-			case 5:
-				AnimateActor(fAct->actor,FROG_ANIM_DANCE5,YES,NO,0.3F,0,0);
-				break;
-			case 6:
-				AnimateActor(fAct->actor,FROG_ANIM_BREATHE,YES,YES,0.4F,0,0);
-				break;
-		}
-
-		player[0].idleTime = 400 + Random(300);
-	}
-
-	if(Random(1000) > 997)
-		PlaySample(136,NULL,0,192,128);
-
-	// read controller
-	button = controllerdata[ActiveController].button;
-
-	if(	(button & CONT_A) && !(lastbutton & CONT_A) ||
-		(button & CONT_B) && !(lastbutton & CONT_B) ||
-		(button & CONT_START) && !(lastbutton & CONT_START) )
-	{
-		MusHandleStop(audioCtrl.musicHandle[0],0);
-		audioCtrl.currentTrack[0] = 0;
-
-		FreeAllLists();
-		gameState.mode		= MENU_MODE;
-		gameState.menuMode	= TITLE_MODE;
-
-		myAA			= 0;
-		currTile[0]		= NULL;
-		hedSpeed		= 0.2;
-		frameCount		= 1;
-		lastbutton		= 0;
-		runningIntro	= 0;
-		return;
-	}
-
-	// update frog look-at position
-	AddToVector(&fly->pos,&flyVel);
-	if(fly->pos.v[X] > 0)
-		flyVel.v[X]--;
-	else if(fly->pos.v[X] < 0)
-		flyVel.v[X]++;
-
-	if(fly->pos.v[Y] > 0)
-		flyVel.v[Y]--;
-	else if(fly->pos.v[Y] < 0)
-		flyVel.v[Y]++;
-
-	pointOfInterest->v[X] = fly->pos.v[X] + fAct->actor->pos.v[X];
-	pointOfInterest->v[Y] = -fly->pos.v[Y] + fAct->actor->pos.v[Y];
-	pointOfInterest->v[Z] = fly->pos.v[Z];
-
-	lastbutton = button;
-
-	// animate lilly pad
-	lillyRot += 2;
-	guRotateF(rotMtxY,lillyRot,0,1,0);
-	MatrixToQuaternion((MATRIX *)rotMtxY,&lilly->actor->qRot);
-
-	// update sprite overlays
-	introSeed += 0.1F;
-	fVal = sinf(introSeed) * 127;
-	atari->a = 128 + fVal;
-	konami->a = 128 - fVal;
-
-	// update text overlays
-	introTxt1->a = 128 + fVal;
-	introTxt2->a = 128 - fVal;
-
-	frameCount++;
-}
-
-
-int strncmp(const char *a,char *b,int len)
-{
-	int i;
-	char tmp[16];
-
-	for(i=0; i<len; i++)
-		tmp[i] = b[i];
-	tmp[len] = '\0';
-	
-	return gstrcmp(tmp,a);
-}
 
 
 // -----------------------------------------------------------------------------------------------

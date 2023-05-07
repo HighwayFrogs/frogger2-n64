@@ -35,7 +35,7 @@ typedef unsigned long	ulong;
 #else
 
 #ifndef PC_VERSION
-#define MAXJALLOCS	3328
+#define MAXJALLOCS	2048
 #else
 #define MAXJALLOCS	4096
 #endif

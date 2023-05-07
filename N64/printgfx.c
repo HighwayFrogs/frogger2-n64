@@ -16,7 +16,6 @@
 
 //----- [ GLOBALS ] ----------------------------------------------------------------------------//
 
-// STATIC VERTICES FOR VARIOUS SPECIAL EFFECTS
 Vtx shadowVtx[4] =
 {
 	{ 1,0,1,0,		0,0,63,63,63,255 },
@@ -24,23 +23,6 @@ Vtx shadowVtx[4] =
 	{ -1,0,-1,0,	1024,1024,63,63,63,255 },
 	{ -1,0,1,0,		1024,0,63,63,63,255 }
 };
-
-Vtx rippleVtx[4] =
-{
-	{ 1,0,1,0,		0,0,255,255,255,255 },
-	{ 1,0,-1,0,		0,1024,255,255,255,255 },
-	{ -1,0,-1,0,	1024,1024,255,255,255,255 },
-	{ -1,0,1,0,		1024,0,255,255,255,255 }
-};
-
-Vtx ringVtx[4] =
-{
-	{ 1,0,1,0,		0,0,255,255,255,255 },
-	{ 1,0,-1,0,		0,1024,255,255,255,255 },
-	{ -1,0,-1,0,	1024,1024,255,255,255,255 },
-	{ -1,0,1,0,		1024,0,255,255,255,255 }
-};
-
 
 static Bitmap template_bm[NUM_template_BMS];
 static Gfx template_dl[NUM_DL(NUM_template_BMS)];
@@ -213,7 +195,6 @@ Gfx setrend_light_fog2[] =
 Vtx *vPtr = NULL;
 
 float rotMtx[4][4],scaleMtx[4][4],transMtx[4][4],tempMtx[4][4];
-
 
 
 /*	--------------------------------------------------------------------------------
@@ -461,7 +442,7 @@ void PrintSpriteOverlays()
 			tScaleY = (1024.0 * 1024.0) / tScaleY;
 
 			gDPSetPrimColor(glistp++,0,0,cur->r,cur->g,cur->b,cur->a);
-/*
+
 			gDPLoadTLUT_pal256(glistp++,texture->palette);
 			gDPLoadTextureBlock(glistp++,texture->data,G_IM_FMT_RGBA,G_IM_SIZ_8b,
 								  texture->sx,texture->sy,0,
@@ -469,8 +450,6 @@ void PrintSpriteOverlays()
 								  G_TX_CLAMP|G_TX_NOMIRROR,
 								  0,0,
 								  G_TX_NOLOD,G_TX_NOLOD);
-*/
-			LoadTexture(texture);
 
 			gSPScisTextureRectangle(glistp++,
 								(unsigned long)cur->xPos << 2,
@@ -504,28 +483,15 @@ void DrawSpecialFX()
 		{
 			SPECFX *fx;
 			for(fx=specFXList.head.next; fx!=&specFXList.head; fx=fx->next)
-			{
 				if(fx->Draw)
-				{
-					// perform RSP / RDP processing here to minimise texture loading, etc.
-
-					// set primitive colour
-					gDPSetPrimColor(glistp++,0,0,fx->r,fx->g,fx->b,fx->a);
-
-					// load texture - perhaps move this elsewhere to minimise texture loads ??? ANDYE
-					gDPSetTextureLUT(glistp++,G_TT_NONE);
-					gDPLoadTextureBlock(glistp++,fx->tex->data,G_IM_FMT_IA,G_IM_SIZ_16b,fx->tex->sx,fx->tex->sy,0,
-										G_TX_CLAMP,G_TX_CLAMP,fx->tex->TCScaleX,fx->tex->TCScaleY,G_TX_NOLOD,G_TX_NOLOD);
 					fx->Draw(fx);
-				}
-			}
 		}
 	}
 }
 
 
 /*	--------------------------------------------------------------------------------
-	Function		: DrawFXRipple
+	Function		: DrawFXRipples
 	Purpose			: draws the ripple based FX
 	Parameters		: SPECFX *
 	Returns			: void
@@ -533,56 +499,6 @@ void DrawSpecialFX()
 */
 void DrawFXRipple(SPECFX *ripple)
 {
-	QUATERNION q3,q2,q1,cross;
-	float t;
-
-	if(ripple->deadCount)
-		return;
-
-	// create the translation matrix
-	guTranslateF(transMtx,ripple->origin.v[X],ripple->origin.v[Y],ripple->origin.v[Z]);
-
-	// create the scaling matrix
-	guScaleF(scaleMtx,ripple->scale.v[X],1,ripple->scale.v[Z]);
-
-	// create the rotation matrix
-	CrossProduct((VECTOR *)&q1,&ripple->normal,&upVec);
-	MakeUnit((VECTOR *)&q1);
-	t = DotProduct(&ripple->normal,&upVec);
-	q1.w = -acos(t);
-	GetQuaternionFromRotation(&q2,&q1);
-
-	// determine ripple type
-	if(ripple->type == FXTYPE_GARIBCOLLECT)
-	{
-		// rotate around axis
-		SetVector((VECTOR *)&q1,&ripple->normal);
-		q1.w = ripple->angle;
-		GetQuaternionFromRotation(&q3,&q1);
-		QuaternionMultiply(&q1,&q2,&q3);
-	}
-	else
-	{
-		SetQuaternion(&q1,&q2);
-	}
-
-	QuaternionToMatrix(&q1,(MATRIX *)rotMtx);
-
-	// combine matrices into a single transformation matrix
-	guMtxCatF(rotMtx,transMtx,tempMtx);
-	guMtxCatF(scaleMtx,tempMtx,tempMtx);
-	guMtxF2L(tempMtx,&dynamicp->modeling4[objectMatrix]);
-
-	// push onto matrix stack
-	gSPMatrix(glistp++,OS_K0_TO_PHYSICAL(&(dynamicp->modeling4[objectMatrix++])),
-				G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_PUSH);
-
-	// load vertices into vertex cache
-	gSPVertex(glistp++,rippleVtx,4,0);
-	gSP2Triangles(glistp++,0,1,2,0,0,2,3,0);
-
-	// pop modelview matrix stack
-	gSPPopMatrix(glistp++,G_MTX_MODELVIEW);
 }
 
 
@@ -595,48 +511,6 @@ void DrawFXRipple(SPECFX *ripple)
 */
 void DrawFXRing(SPECFX *ring)
 {
-	QUATERNION q3,q2,q1,cross;
-	float t;
-	TEXTURE *tx1 = NULL;
-
-	if(ring->deadCount)
-		return;
-
-	// create the translation matrix
-	guTranslateF(transMtx,ring->origin.v[X],ring->origin.v[Y],ring->origin.v[Z]);
-
-	// create the scaling matrix
-	guScaleF(scaleMtx,ring->scale.v[X],1,ring->scale.v[Z]);
-
-	// create the rotation matrix
-	SetVector((VECTOR *)&q1,&ring->normal);
-	q1.w = ring->angle;
-	GetQuaternionFromRotation(&q2,&q1);
-
-	CrossProduct((VECTOR *)&cross,(VECTOR *)&q1,&upVec);
-	MakeUnit((VECTOR *)&cross);
-	t = DotProduct( (VECTOR *)&q1,&upVec);
-	cross.w = -acos(t);
-	GetQuaternionFromRotation(&q3,&cross);
-
-	QuaternionMultiply(&q1,&q2,&q3);
-	QuaternionToMatrix(&q1,(MATRIX *)rotMtx);
-
-	// combine matrices into a single transformation matrix
-	guMtxCatF(rotMtx,transMtx,tempMtx);
-	guMtxCatF(scaleMtx,tempMtx,tempMtx);
-	guMtxF2L(tempMtx,&dynamicp->modeling4[objectMatrix]);
-
-	// push onto matrix stack
-	gSPMatrix(glistp++,OS_K0_TO_PHYSICAL(&(dynamicp->modeling4[objectMatrix++])),
-				G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_PUSH);
-
-	// load vertices into vertex cache
-	gSPVertex(glistp++,ringVtx,4,0);
-	gSP2Triangles(glistp++,0,1,2,0,0,2,3,0);
-
-	// pop modelview matrix stack
-	gSPPopMatrix(glistp++,G_MTX_MODELVIEW);
 }
 
 
@@ -808,7 +682,7 @@ SPRITE *PrintSpritesOpaque()
 	SPRITE *cur,*next;
 	Mtx temp;
 
-//	sprList.lastTexture = NULL;
+	spriteList.lastTexture = NULL;
 
 	gSPDisplayList(glistp++,rspInitForSprites_dl);
 	gSPDisplayList(glistp++,rdpInitForSprites_dl);
@@ -823,6 +697,7 @@ SPRITE *PrintSpritesOpaque()
 	guMtxCatL(&(dynamicp->viewing[0]),&(dynamicp->projection[0]),&temp);
 	guMtxL2F(printSpritesProj[0],&temp);
 
+	spriteList.xluMode = NO;
 
 	if(fog.mode)
 	{
@@ -837,7 +712,7 @@ SPRITE *PrintSpritesOpaque()
 
 	if(!pauseMode)
 	{
-		for(cur = sprList.head.next; (cur != &sprList.head) && ((cur->flags & SPRITE_TRANSLUCENT) == 0); cur = next)
+		for(cur = spriteList.head.next; (cur != &spriteList.head) && ((cur->flags & SPRITE_TRANSLUCENT) == 0); cur = next)
 		{
 			next = cur->next;
 
@@ -859,7 +734,7 @@ void PrintSpritesTranslucent(SPRITE *sprite)
 {
 	Mtx temp;
 
-//	spriteList.lastTexture = NULL;
+	spriteList.lastTexture = NULL;
 
 	gSPDisplayList(glistp++,rspInitForSprites_dl);
 	gSPDisplayList(glistp++,rdpInitForSprites_dl);
@@ -887,8 +762,7 @@ void PrintSpritesTranslucent(SPRITE *sprite)
 
 	if(!pauseMode)
 	{
-		// print sprite listed sprites
-		for(; sprite != &sprList.head; sprite = sprite->next)
+		for(; sprite != &spriteList.head; sprite = sprite->next)
 		{
 			PrintSprite(sprite);
 		}
@@ -929,7 +803,7 @@ void TileRectangle(Gfx **glistp,SPRITE *sprite,f32 x0,f32 y0,int z,int scaleX,in
 	t = (scaleX < 512 ? -16 : -16 - (((int)y0) & 3) * 8);
 	s = -16;
 	
-	if(sprite->texture != NULL)
+	if(sprite->texture != spriteList.lastTexture)
 	{
 		switch(sprite->texture->pixSize)
 		{
@@ -1014,7 +888,7 @@ void PrintSprite(SPRITE *sprite)
 	if((!sprite->texture) || (sprite->scaleX == 0) || (sprite->scaleY == 0))
 		return;
 
-	dist = DistanceBetweenPointsSquared(&currCamSource,&sprite->pos);
+	dist = DistanceBetweenPointsSquared(&actualCamSource[draw_buffer],&sprite->pos);
 	if((dist > farPlaneDist * farPlaneDist) || (dist < nearPlaneDist * nearPlaneDist))
 		return;
 
@@ -1049,6 +923,7 @@ void PrintSprite(SPRITE *sprite)
 	x = ((x * dynamicp->vp[screenNum].vp.vscale[0] / w) + dynamicp->vp[screenNum].vp.vtrans[0]);
 	y = ((-y * dynamicp->vp[screenNum].vp.vscale[1] / w) + dynamicp->vp[screenNum].vp.vtrans[1]);
 	z = 32 * ((z * dynamicp->vp[screenNum].vp.vscale[2] / w) + dynamicp->vp[screenNum].vp.vtrans[2]);
+
 
 	sprScaleX = 33 * sprite->scaleX * ((float)dynamicp->vp[screenNum].vp.vscale[0] / (float)(SCREEN_WD * 2));
 	x = (f32)x + (f32)(sprite->offsetX * sprScaleX << 4) / (dist * yFOV);
@@ -1169,6 +1044,8 @@ void PrintSprite(SPRITE *sprite)
 
 	TileRectangle(&glistp,sprite,x,y,z,scaleX,scaleY);
 	gDPPipeSync(glistp++);
+
+	spriteList.lastTexture = sprite->texture;
 }
 
 
@@ -1285,23 +1162,3 @@ void ScreenShot()
 //help	disableGraphics = FALSE;
 
 }
-
-
-
-/*	--------------------------------------------------------------------------------
-	Function		: N64SurfaceBlit
-	Purpose			: performs N64 surface blit for procedural texturing
-	Parameters		: 
-	Returns			: 
-	Info			: 
-*/
-void N64SurfaceBlit(unsigned char *to,unsigned char *buf,unsigned short *pal)
-{
-	long i = 928;
-
-	while(i--)
-	{
-		((unsigned short *)to)[i] = (unsigned short)pal[(unsigned char)buf[i]];
-	}
-}
-

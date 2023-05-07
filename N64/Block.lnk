@@ -46,7 +46,6 @@ _codeSegmentEnd         alias   _code_objend
         include "jalloc.obj",code
         include "decomp.obj",code
         include "texture.obj",code
-        include "ptexture.obj",code
         include "cam.obj",code
         include "anim.obj",code
         include "crc32.obj",code
@@ -1308,7 +1307,8 @@ _levData_1_1_SegmentRomEnd   alias _levData11_orgend
 
         section.64       levData11.data,levData11
 
-levDat11  incbin "leveldata/entity-0-0.cef",levData11.data, 32
+;levDat11  incbin "leveldata/entity-0-0.cef",levData11.data, 32
+levDat11  incbin "c:/levtemp/entity-0-0.dat",levData11.data, 32
 
 ; [ GARDEN LEVEL 2 ] >>>>>
 
@@ -1506,7 +1506,8 @@ _levData_3_1_SegmentRomEnd   alias _levData31_orgend
 
         section.64       levData31.data,levData31
 
-levDat31  incbin "leveldata/entity-2-0.cef",levData31.data, 32
+;levDat31  incbin "leveldata/entity-2-0.cef",levData31.data, 32
+levDat31  incbin "c:/levtemp/entity-2-0.dat",levData31.data, 32
 
 ; [ SPACE LEVEL 2 ] >>>>>
 
@@ -1518,7 +1519,8 @@ _levData_3_2_SegmentRomEnd   alias _levData32_orgend
 
         section.64       levData32.data,levData32
 
-levDat32  incbin "leveldata/entity-2-1.cef",levData32.data, 32
+;levDat32  incbin "leveldata/entity-2-1.cef",levData32.data, 32
+levDat32  incbin "c:/levtemp/entity-2-1.dat",levData32.data, 32
 
 ; [ SPACE LEVEL 3 ] >>>>>
 
@@ -2032,7 +2034,6 @@ _levData_10_1_SegmentRomEnd   alias _levData101_orgend
         section.64       levData101.data,levData101
 
 levDat101  incbin "leveldata/entity-9-0.cef",levData101.data, 32
-;levDat101  incbin "c:/levtemp/entity-9-0.dat",levData101.data, 32
 
 ; [ FRONTEND 2 ] >>>>>
 
@@ -2814,7 +2815,6 @@ _scrData_9_6_SegmentRomEnd   alias _scrData96_orgend
 scrDat96  incbin "leveldata/dummy.csf",scrData96.data, 32
 
 
-
 ; FRONTEND LEVEL SCRIPT DATA - BANKS 10+ ---------------------------------------------------------
 
 ; [ FRONTEND 1 ] >>>>>
@@ -2948,7 +2948,7 @@ sbnk1   incbin "sfx/sfx.bfx",sbank1.data, 32
 
 
 
-; [ TRACK_GARDEN ] >>>>>
+; [ TEST1_TRACK ] >>>>>
 
 mBank1        group   obj()
 mBank1bss     group   obj(),bss
@@ -2958,7 +2958,7 @@ _mBank1SegmentRomEnd   alias _mBank1_orgend
         section.64       mBank1.data,mBank1
 mbnk1  incbin "music/new/garden/garden.bin",mBank1.data, 32
 
-; [ TRACK_HUB ] >>>>>
+; [ TEST2_TRACK ] >>>>>
 
 mBank2        group   obj()
 mBank2bss     group   obj(),bss
@@ -2968,7 +2968,7 @@ _mBank2SegmentRomEnd   alias _mBank2_orgend
         section.64       mBank2.data,mBank2
 mbnk2  incbin "music/new/hub/hub.bin",mBank2.data, 32
 
-; [ TRACK_LAB ] >>>>>
+; [ TEST3_TRACK ] >>>>>
 
 mBank3        group   obj()
 mBank3bss     group   obj(),bss
@@ -2978,7 +2978,7 @@ _mBank3SegmentRomEnd   alias _mBank3_orgend
         section.64       mBank3.data,mBank3
 mbnk3  incbin "music/new/labs/labs.bin",mBank3.data, 32
 
-; [ TRACK_TOYSHOP ] >>>>>
+; [ TEST4_TRACK ] >>>>>
 
 mBank4        group   obj()
 mBank4bss     group   obj(),bss
@@ -2988,7 +2988,7 @@ _mBank4SegmentRomEnd   alias _mBank4_orgend
         section.64       mBank4.data,mBank4
 mbnk4  incbin "music/new/toyshop/toyshop.bin",mBank4.data, 32
 
-; [ TRACK_CITY ] >>>>>
+; [ TEST5_TRACK ] >>>>>
 
 mBank5        group   obj()
 mBank5bss     group   obj(),bss
@@ -2998,7 +2998,7 @@ _mBank5SegmentRomEnd   alias _mBank5_orgend
         section.64       mBank5.data,mBank5
 mbnk5  incbin "music/new/city/city.bin",mBank5.data, 32
 
-; [ TRACK_HALLOWEEN ] >>>>>
+; [ TEST6_TRACK ] >>>>>
 
 mBank6        group   obj()
 mBank6bss     group   obj(),bss
@@ -3008,7 +3008,7 @@ _mBank6SegmentRomEnd   alias _mBank6_orgend
         section.64       mBank6.data,mBank6
 mbnk6  incbin "music/new/halloween/halloween.bin",mBank6.data, 32
 
-; [ TRACK_SPACE ] >>>>>
+; [ TEST7_TRACK ] >>>>>
 
 mBank7        group   obj()
 mBank7bss     group   obj(),bss

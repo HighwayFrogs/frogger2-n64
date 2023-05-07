@@ -15,6 +15,7 @@
 
 #include "incs.h"
 
+
 float hedRotAmt = 0;
 
 /*	--------------------------------------------------------------------------------
@@ -26,8 +27,6 @@ float hedRotAmt = 0;
 */
 void InitActorAnim(ACTOR *tempActor)
 {
-	int i;
-
 	if( !tempActor->objectController )
 		return;
 	
@@ -43,12 +42,7 @@ void InitActorAnim(ACTOR *tempActor)
 	tempActor->animation->numberQueued = 0;
 	tempActor->animation->animTime = 0;
 	tempActor->animation->reachedEndOfAnimation = FALSE;
-
-	// Cue sounds from animations
-	tempActor->animation->sfxMapping = FindSfxMapping( tempActor->objectController->objectID, tempActor );
-	// Clear all loopflags
-	for( i=0; i<NUM_NME_ANIMS; i++ )
-		tempActor->animation->loopFlags[i] = 0;
+	
 }
 
 /*	--------------------------------------------------------------------------------
@@ -87,11 +81,10 @@ void AnimateActor(ACTOR *actor, int animNum, char loop, char queue, float speed,
 //	}
 
 	if(animNum > actorAnim->numAnimations)
-//	{
-		return;
+	{
 //		dprintf"Trying to access illegal animation\n"));
-//		animNum = 0;
-//	}
+		animNum = 0;
+	}
 
 	if(speed == 0)
 		actualSpeed = actorAnim->anims[animNum].speed;
@@ -139,9 +132,6 @@ void AnimateActor(ACTOR *actor, int animNum, char loop, char queue, float speed,
 		}
 		if(keepProportion)
 			actorAnim->morphTo = actorAnim->animTime = anim->animStart + proportion*(float)(anim->animEnd-anim->animStart);
-
-		if( actorAnim->sfxMapping && actorAnim->sfxMapping[actorAnim->currentAnimation] )
-			PlaySfxMappedSample( actor, 500, SAMPLE_VOLUME, -1/*128*/ );
 	}
 	else
 	{
@@ -243,8 +233,7 @@ void UpdateAnimations(ACTOR *actor)
 	actorAnim->reachedEndOfAnimation = FALSE;
 	actorAnim->animTime += (actorAnim->animationSpeed) * gameSpeed;	// * GAME_SPEED);
 
-	if (((actorAnim->animTime > anim->animEnd) || (actorAnim->animTime < anim->animStart)) &&
-		(actorAnim->loopAnimation == NO || actorAnim->numberQueued))
+	if(((actorAnim->animTime > anim->animEnd) || (actorAnim->animTime < anim->animStart)) && (actorAnim->loopAnimation == NO))
 	{
 		actorAnim->animTime = Bound(actorAnim->animTime,anim->animStart,anim->animEnd);
 		actorAnim->reachedEndOfAnimation = actorAnim->currentAnimation+1;
@@ -267,48 +256,28 @@ void UpdateAnimations(ACTOR *actor)
 				actorAnim->animTime = actorAnim->anims[actorAnim->currentAnimation].animStart;
 
 
-			if (--actorAnim->numberQueued)
+			actorAnim->numberQueued--;
+			for(i = 0;i < ANIM_QUEUE_LENGTH - 1;i++)
 			{
-				for(i = 0;i < ANIM_QUEUE_LENGTH - 1;i++)
-				{
-					actorAnim->queueAnimation[i] = actorAnim->queueAnimation[i + 1];
-					actorAnim->queueLoopAnimation[i] = actorAnim->queueLoopAnimation[i + 1];
-					actorAnim->queueAnimationSpeed[i] = actorAnim->queueAnimationSpeed[i + 1];
-					actorAnim->queueNumMorphFrames[i] = actorAnim->queueNumMorphFrames[i + 1];
-				}
-
-				actorAnim->queueAnimation[ANIM_QUEUE_LENGTH - 1] = -1;
-				actorAnim->queueLoopAnimation[ANIM_QUEUE_LENGTH - 1] = -1;
-				actorAnim->queueAnimationSpeed[ANIM_QUEUE_LENGTH - 1] = -1;
-				actorAnim->queueNumMorphFrames[ANIM_QUEUE_LENGTH - 1] = 0;
+				actorAnim->queueAnimation[i] = actorAnim->queueAnimation[i + 1];
+				actorAnim->queueLoopAnimation[i] = actorAnim->queueLoopAnimation[i + 1];
+				actorAnim->queueAnimationSpeed[i] = actorAnim->queueAnimationSpeed[i + 1];
+				actorAnim->queueNumMorphFrames[i] = actorAnim->queueNumMorphFrames[i + 1];
 			}
-			else
-			{
-				*actorAnim->queueAnimation = -1;
-				*actorAnim->queueLoopAnimation = -1;
-				*actorAnim->queueAnimationSpeed = -1;
-				*actorAnim->queueNumMorphFrames = 0;
-			}
-			if( actorAnim->sfxMapping )
-				PlaySfxMappedSample( actor, 500, SAMPLE_VOLUME, -1/*128*/ );
+			actorAnim->queueAnimation[ANIM_QUEUE_LENGTH - 1] = -1;
+			actorAnim->queueLoopAnimation[ANIM_QUEUE_LENGTH - 1] = -1;
+			actorAnim->queueAnimationSpeed[ANIM_QUEUE_LENGTH - 1] = -1;
+			actorAnim->queueNumMorphFrames[i] = 0;
 		}
 	}
 	else
 	{
-		
 		if(anim->animEnd == anim->animStart)
-			actorAnim->animTime = anim->animEnd;			
+			actorAnim->animTime = anim->animEnd;
 		else if(actorAnim->animTime > anim->animEnd)
-		{
 			actorAnim->animTime -= (anim->animEnd - anim->animStart);
-
-			if( actorAnim->sfxMapping )
-				PlaySfxMappedSample( actor, 500, SAMPLE_VOLUME, -1/*128*/ );
-
-		}
 		else if(actorAnim->animTime < anim->animStart)
-			actorAnim->animTime += (anim->animEnd - anim->animStart);			
-		
+			actorAnim->animTime += (anim->animEnd - anim->animStart);
 	}
 	if(actorAnim->numMorphFrames)
 	{
@@ -336,336 +305,4 @@ BOOL QueryAnimTime(ACTOR *actor, float time)
 		return YES;
 
 	return NO;
-}
-
-
-/*	--------------------------------------------------------------------------------
-	Function 	: Damage functions
-	Purpose 	: Frog is hurt but not dead
-	Parameters 	: 
-	Returns 	: 
-	Info 		:
-*/
-void DamageNormal( int pl )
-{
-	SPECFX *fx;
-
-	AnimateActor(frog[pl]->actor, FROG_ANIM_ASSONFIRE, NO, NO, 0.5F, 0, 0);
-	CreateAndAddSpecialEffect( FXTYPE_FROGSTUN, &frog[pl]->actor->pos, &currTile[pl]->normal, 30, 0, 0, 3.0 );
-
-	if( (fx = CreateAndAddSpecialEffect( FXTYPE_SPARKBURST, &frog[pl]->actor->pos, &currTile[pl]->normal, 30, 4, 0, 5)) )
-	{
-		SetFXColour( fx, 255, 255, 0 );
-		fx->gravity = 0.1;
-	}
-	if( (fx = CreateAndAddSpecialEffect( FXTYPE_SPARKBURST, &frog[pl]->actor->pos, &currTile[pl]->normal, 30, 3, 0, 5 )) )
-	{
-		SetFXColour( fx, 255, 255, 130 );
-		fx->gravity = 0.1;
-	}
-	if( (fx = CreateAndAddSpecialEffect( FXTYPE_SPARKLYTRAIL, &frog[pl]->actor->pos, &currTile[pl]->normal, 30, 2, 0, 5 )) )
-	{
-		SetFXColour( fx, 255, 255, 130 );
-		fx->gravity = 0.1;
-	}
-	if( (fx = CreateAndAddSpecialEffect( FXTYPE_SPARKLYTRAIL, &frog[pl]->actor->pos, &currTile[pl]->normal, 30, 2.5, 0, 5 )) )
-	{
-		SetFXColour( fx, 255, 255, 255 );
-		fx->gravity = 0.1;
-	}
-	if( (fx = CreateAndAddSpecialEffect( FXTYPE_SPARKBURST, &frog[pl]->actor->pos, &currTile[pl]->normal, 30, 3, 0, 5 )) )
-	{
-		SetFXColour( fx, 200, 255, 200 );
-	}
-	if( (fx = CreateAndAddSpecialEffect( FXTYPE_SPARKLYTRAIL, &frog[pl]->actor->pos, &currTile[pl]->normal, 30, 2.5, 0, 5 )) )
-	{
-		SetFXColour( fx, 255, 255, 255 );
-		fx->gravity = 0.1;
-	}
-	
-	// jump in air thing
-	if (!currPlatform[pl])
-	{
-		if (destTile[pl])
-			CalculateFrogJump(
-				&frog[pl]->actor->pos, &destTile[pl]->centre, &currTile[pl]->normal,
-				100, 50, pl);
-		else
-		{
-			CalculateFrogJump(
-				&frog[pl]->actor->pos, &currTile[pl]->centre, &currTile[pl]->normal,
-				100, 50, pl);
-			destTile[pl] = currTile[pl];
-		}
-		player[pl].canJump = 0;
-	}
-}
-
-void DamageRunOver( int pl )
-{
-	DamageNormal(pl);
-}
-
-void DamageDrowning( int pl )
-{
-	DamageNormal(pl);
-}
-
-void DamageSquashed( int pl )
-{
-	DamageNormal(pl);
-}
-
-void DamageFire( int pl )
-{
-	CreateAndAddSpecialEffect( FXTYPE_FIERYSMOKE, &frog[pl]->actor->pos, &currTile[pl]->normal, 50, 0.5, 0, 2 );
-	AnimateActor(frog[pl]->actor, FROG_ANIM_ASSONFIRE, NO, NO, 0.5F, 0, 0);
-}
-
-void DamageElectric( int pl )
-{
-	DamageNormal(pl);
-}
-
-void DamageFalling( int pl )
-{
-	DamageNormal(pl);
-}
-
-void DamageWhacking( int pl )
-{
-	DamageNormal(pl);
-}
-
-void DamageInflation( int pl )
-{
-	DamageNormal(pl);
-}
-
-void DamagePoison( int pl )
-{
-	DamageNormal(pl);
-}
-
-void DamageSlicing( int pl )
-{
-	DamageNormal(pl);
-}
-
-void DamageExplosion( int pl )
-{
-	DamageNormal(pl);
-}
-
-void DamageGibbing( int pl )
-{
-	DamageNormal(pl);
-}
-
-/*	--------------------------------------------------------------------------------
-	Function 	: Death functions
-	Purpose 	: Frog is dead
-	Parameters 	: 
-	Returns 	: 
-	Info 		:
-*/
-void DeathNormal( int pl )
-{
-	player[pl].deathBy = DEATHBY_NORMAL;
-	AnimateActor(frog[pl]->actor, FROG_ANIM_FWDSOMERSAULT, NO, NO, 0.5F, 0, 0);
-	GTInit( &player[pl].dead, 3 );
-}
-
-void DeathRunOver( int pl )
-{
-	DeathNormal(pl);
-}
-
-void DeathDrowning( int pl )
-{
-	DeathNormal(pl);
-}
-
-void DeathSquashed( int pl )
-{
-	player[pl].deathBy = DEATHBY_SQUASHED;
-	player[pl].idleEnable = 0;
-
-	// Drop in replacement model and animate gib explosion
-	frog[pl]->actor->LODObjectController = frog[pl]->actor->objectController;
-	FindObject( &frog[pl]->actor->objectController, UpdateCRC("dth-flat.obe"), "dth-flat.obe", NO );
-	InitActorAnim( frog[pl]->actor );
-
-	AnimateActor( frog[pl]->actor, 0, NO, NO, 0.2, 0, 0 );
-	AnimateActor( frog[pl]->actor, 1, YES, YES, 0.2, 0, 0 );
-
-	GTInit( &player[pl].dead, 3 );
-}
-
-void DeathFire( int pl )
-{
-	player[pl].deathBy = DEATHBY_FIRE;
-	AnimateActor(frog[pl]->actor, FROG_ANIM_ASSONFIRE, NO, NO, 0.5F, 0, 0);
-
-	BounceFrog( pl, 100, 50 );
-
-	GTInit( &player[pl].dead, 3 );
-}
-
-void DeathElectric( int pl )
-{
-	player[pl].deathBy = DEATHBY_ELECTRIC;
-	CreateAndAddSpecialEffect( FXTYPE_LIGHTNING, &frog[pl]->actor->pos, &currTile[pl]->normal, 5, 40, 0.25, 0.5 );
-	AnimateActor(frog[pl]->actor, FROG_ANIM_ELECTROCUTE, NO, NO, 0.5F, 0, 0);
-	GTInit( &player[pl].dead, 3 );
-}
-
-void DeathFalling( int pl )
-{
-	DeathNormal(pl);
-}
-
-void DeathWhacking( int pl )
-{
-	if( frog[pl]->actor->shadow ) frog[pl]->actor->shadow->draw = 0;
-
-	player[pl].deathBy = DEATHBY_WHACKING;
-	ThrowFrogAtScreen( pl );
-	GTInit( &player[pl].dead, 5 );
-}
-
-void DeathInflation( int pl )
-{
-	player[pl].deathBy = DEATHBY_INFLATION;
-	player[pl].idleEnable = 0;
-
-	// Drop in replacement model and animate gib explosion
-	frog[pl]->actor->LODObjectController = frog[pl]->actor->objectController;
-	FindObject( &frog[pl]->actor->objectController, UpdateCRC("dth-ball.obe"), "dth-ball.obe", NO );
-	InitActorAnim( frog[pl]->actor );
-
-	// Randomly play different type of inflation anim
-	if( Random(2) )
-	{
-		AnimateActor( frog[pl]->actor, 0, NO, NO, 0.2, 0, 0 );
-		AnimateActor( frog[pl]->actor, 2, YES, YES, 0.2, 0, 0 );
-	}
-	else
-	{
-		AnimateActor( frog[pl]->actor, 1, NO, NO, 0.2, 0, 0 );
-		AnimateActor( frog[pl]->actor, 3, YES, YES, 0.2, 0, 0 );
-	}
-
-	GTInit( &player[pl].dead, 5 );
-}
-
-void DeathPoison( int pl )
-{
-	player[pl].deathBy = DEATHBY_POISON;
-	AnimateActor(frog[pl]->actor, FROG_ANIM_LANDONHEAD, NO, NO, 0.5F, 0, 0);
-	GTInit( &player[pl].dead, 3 );
-}
-
-void DeathSlicing( int pl )
-{
-	SPECFX *fx;
-
-	player[pl].deathBy = DEATHBY_SLICING;
-
-	if( frog[pl]->actor->shadow ) frog[pl]->actor->shadow->draw = 0;
-
-	// Drop in replacement model and animate halves falling apart
-	frog[pl]->actor->LODObjectController = frog[pl]->actor->objectController;
-	FindObject( &frog[pl]->actor->objectController, UpdateCRC("dth-half.obe"), "dth-half.obe", NO );
-	InitActorAnim( frog[pl]->actor );
-
-	AnimateActor( frog[pl]->actor, 0, NO, NO, 0.25, 0, 0 );
-	AnimateActor( frog[pl]->actor, 1, YES, YES, 0.25, 0, 0 );
-
-	if( (fx = CreateAndAddSpecialEffect( FXTYPE_SPARKBURST, &frog[pl]->actor->pos, &currTile[pl]->normal, 20, 4, 0, 5 )) )
-	{
-		SetFXColour( fx, 255, 255, 0 );
-		fx->gravity = 0.1;
-	}
-	if( (fx = CreateAndAddSpecialEffect( FXTYPE_SPARKBURST, &frog[pl]->actor->pos, &currTile[pl]->normal, 20, 3, 0, 5 )) )
-	{
-		SetFXColour( fx, 255, 255, 130 );
-		fx->gravity = 0.1;
-	}
-	if( (fx = CreateAndAddSpecialEffect( FXTYPE_DECAL, &frog[pl]->actor->pos, &currTile[pl]->normal, 40, 0, 0, 5 )) )
-	{
-		SetFXColour( fx, 50, 200, 50 );
-		fx->tex = txtrSolidRing;
-	}
-	GTInit( &player[pl].dead, 3 );
-}
-
-void DeathExplosion( int pl )
-{
-	SPECFX *fx;
-
-	if( frog[pl]->actor->shadow ) frog[pl]->actor->shadow->draw = 0;
-
-	player[pl].deathBy = DEATHBY_EXPLOSION;
-	player[pl].idleEnable = 0;
-
-	// Drop in replacement model and animate gib explosion
-	frog[pl]->actor->LODObjectController = frog[pl]->actor->objectController;
-	FindObject( &frog[pl]->actor->objectController, UpdateCRC("dth-gib.obe"), "dth-gib.obe", NO );
-	InitActorAnim( frog[pl]->actor );
-
-	AnimateActor( frog[pl]->actor, 0, NO, NO, 0.2, 0, 0 );
-	AnimateActor( frog[pl]->actor, 2, YES, YES, 0.2, 0, 0 );
-
-	if( (fx = CreateAndAddSpecialEffect( FXTYPE_SPARKBURST, &frog[pl]->actor->pos, &currTile[pl]->normal, 20, 4, 0, 5 )) )
-	{
-		SetFXColour( fx, 255, 255, 0 );
-		fx->gravity = 0.1;
-	}
-	if( (fx = CreateAndAddSpecialEffect( FXTYPE_SPARKBURST, &frog[pl]->actor->pos, &currTile[pl]->normal, 20, 3, 0, 5 )) )
-	{
-		SetFXColour( fx, 255, 255, 130 );
-		fx->gravity = 0.1;
-	}
-	if( (fx = CreateAndAddSpecialEffect( FXTYPE_DECAL, &frog[pl]->actor->pos, &currTile[pl]->normal, 40, 0, 0, 5 )) )
-	{
-		SetFXColour( fx, 50, 200, 50 );
-		fx->tex = txtrSolidRing;
-	}
-	GTInit( &player[pl].dead, 3 );
-}
-
-void DeathGibbing( int pl )
-{
-	SPECFX *fx;
-
-	if( frog[pl]->actor->shadow ) frog[pl]->actor->shadow->draw = 0;
-
-	player[pl].deathBy = DEATHBY_GIBBING;
-	player[pl].idleEnable = 0;
-
-	// Drop in replacement model and animate gib explosion
-	frog[pl]->actor->LODObjectController = frog[pl]->actor->objectController;
-	FindObject( &frog[pl]->actor->objectController, UpdateCRC("dth-gib.obe"), "dth-gib.obe", NO );
-	InitActorAnim( frog[pl]->actor );
-
-	AnimateActor( frog[pl]->actor, 1, NO, NO, 0.2, 0, 0 );
-	AnimateActor( frog[pl]->actor, 3, YES, YES, 0.2, 0, 0 );
-
-	if( (fx = CreateAndAddSpecialEffect( FXTYPE_SPARKBURST, &frog[pl]->actor->pos, &currTile[pl]->normal, 20, 4, 0, 5 )) )
-	{
-		SetFXColour( fx, 255, 255, 0 );
-		fx->gravity = 0.1;
-	}
-	if( (fx = CreateAndAddSpecialEffect( FXTYPE_SPARKBURST, &frog[pl]->actor->pos, &currTile[pl]->normal, 20, 3, 0, 5 )) )
-	{
-		SetFXColour( fx, 255, 255, 130 );
-		fx->gravity = 0.1;
-	}
-	if( (fx = CreateAndAddSpecialEffect( FXTYPE_DECAL, &frog[pl]->actor->pos, &currTile[pl]->normal, 40, 0, 0, 5 )) )
-	{
-		SetFXColour( fx, 50, 200, 50 );
-		fx->tex = txtrSolidRing;
-	}
-	GTInit( &player[pl].dead, 3 );
 }

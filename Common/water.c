@@ -121,10 +121,10 @@ void RunWaterDemo()
 	Returns			: void
 	Info			: 
 */
-float modi1 = 0.08;		//0.065;
+float modi1 = 0.065;
 float modi2 = 1.29;
-float modi3 = 4;		//2.5;
-float modi4 = 96;
+float modi3 = 2.5;
+float modi4 = 96.0;
 
 int modc1 = 32;
 int modc2 = 96;
@@ -151,7 +151,7 @@ void UpdateWaterN64(ACTOR2 *wAct)
 		{
 			if(wAct->flags & ACTOR_SLIDYTEX)
 			{
-				in->v.tc[1] -= slideSpeed;
+				in->v.tc[1] -= (gameSpeed * slideSpeed * 1024);
 				in->v.cn[3] = modc2;
 			}
 			else
@@ -176,11 +176,8 @@ void UpdateWaterN64(ACTOR2 *wAct)
 				in->v.cn[3] = colMod;
 
 				// modge texture co-ordinates
-				if(!runningIntro)
-				{
-					in->v.tc[0] = wTC[currN64WaterObject][i].v[0] + mV;
-					in->v.tc[1] = wTC[currN64WaterObject][i].v[1] + mV;
-				}
+				in->v.tc[0] = wTC[currN64WaterObject][i].v[0] + mV;
+				in->v.tc[1] = wTC[currN64WaterObject][i].v[1] + mV;
 			}
 
 			in++;
@@ -277,8 +274,6 @@ void FreeN64WaterResources()
 	Returns			: void
 	Info			: 
 */
-float andyMod = 0.05;
-
 void UpdateModgyTexN64(ACTOR2 *mAct)
 {
 	// update the water - assumes drawlisted and skinned object....
@@ -295,8 +290,8 @@ void UpdateModgyTexN64(ACTOR2 *mAct)
 		while(i--)
 		{
 			// modge vertices
-			xval = in->v.ob[X] * andyMod;
-			zval = in->v.ob[Z] * andyMod;
+			xval = in->v.ob[X] * 0.05;
+			zval = in->v.ob[Z] * 0.05;
 
 			t2 = sinf(t + xval * zval * 0.5) - cosf(t + xval * 0.3 * zval);
 

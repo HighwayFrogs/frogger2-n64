@@ -62,7 +62,6 @@
 #include "levelplaying.h"
 #include "jalloc.h"
 #include "sprite.h"
-#include "particle.h"
 #include "overlays.h"
 #include "textoverlays.h"
 #include "frogger.h"
@@ -74,13 +73,11 @@
 #include "path.h"
 #include "enemies.h"
 #include "platform.h"
-#include "character.h"
 #include "cam.h"
 #include "game.h"
 #include "multi.h"
 #include "objects.h"
 #include "texture.h"
-#include "ptexture.h"
 #include "collect.h"
 #include "path.h"
 #include "platform.h"
@@ -89,7 +86,8 @@
 #include "tongue.h"
 #include "script.h"
 #include "event.h"
-#include "eventfuncs.h"
+#include "eventfuncs.h"	//doesn't need to be global! - Dave
+						// Probably not, but at least include it where it's needed please! - Jim
 
 #ifndef PC_VERSION
 #include "develop.h"
@@ -106,6 +104,7 @@
 #include "savegame.h"
 #include "menus.h"
 #include "defaultdata.h"
+#include "levelprogession.h"
 #include "audio.h"
 
 #ifndef PC_VERSION
@@ -128,4 +127,3 @@
 #include "dx_sound.h"
 #include "\work\froggerII\pc\levbanks\levext.h"
 #endif
-

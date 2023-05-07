@@ -19,19 +19,13 @@
 VECTOR *pointOfInterest;
 float	pOIDistance = 20000.0;
 
-FROGSTORE frogPool[FROG_NUMFROGS] = 
+char frogModel[4][16] = 
 {
-	{ "Frogger",	"frogger.obe",	"frogger.bmp",	1 },
-	{ "Lillie",		"femfrog.obe",	"lillie.bmp",	1 },
-	{ "Tad",		"tad.obe",		"babyfrog.bmp",	0 },
-	{ "Swampy",		"swampy.obe",	"swampy.bmp",	0 },
-	{ "Twee",		"twee.obe",		"twee.bmp",		1 },
-	{ "Toad",		"toad.obe",		"wart.bmp",		1 },
-	{ "Gnarl",		"frogger.obe",	"gnarly.bmp",	0 },
-	{ "Funky"		"frogger.obe",	"funky.bmp",	0 },
-	{ "Tank",		"tank.obe",		"robofrog.bmp",	0 },
+	"frogger.obe",
+	"toad.obe",
+	"femfrog.obe",
+	"frogger.obe"
 };
-
 
 //----------------------------------------------------------------------------//
 //----- GLOBALS --------------------------------------------------------------//
@@ -47,6 +41,16 @@ SPECFX *frogTrail[MAX_FROGS] = {NULL,NULL,NULL,NULL};
 
 long NUM_FROGS = 1;
 
+float CROAK_SOUND_RANGE			= 400;
+
+float croakRadius				= 15;
+float croakVelocity				= 1.1F;
+char croakFade					= 255;
+char croakFadeDec				= 16;
+char croakR						= 255;
+char croakG						= 255;
+char croakB						= 255;
+
 float globalFrogScale			= 0.6F;
 
 TEXTURE *frogEyeOpen,*frogEyeClosed;
@@ -59,7 +63,7 @@ void CreateFrogActor (GAMETILE *where, char *name,long p)
 {
 	ACTOR2 *me;
 
-	me = frog[p] = CreateAndAddActor(name,0,0,200.0,INIT_ANIMATION | INIT_SHADOW);
+	me = frog[p] = CreateAndAddActor(name,0,0,200.0,INIT_ANIMATION | INIT_SHADOW,0,0);
 /*	
 	hat[p] = CreateAndAddActor("hat-top.obe",0,0,200.0,INIT_ANIMATION | INIT_SHADOW,0,0);
 	
@@ -71,6 +75,7 @@ void CreateFrogActor (GAMETILE *where, char *name,long p)
 */
 	me->actor->shadow->radius = 30;
 	me->actor->shadow->alpha = 191;
+//	me->flags	|= ACTOR_DRAW_ALWAYS;
 	me->flags	= ACTOR_DRAW_ALWAYS;
 	
 	tongue[p].flags = TONGUE_NONE | TONGUE_IDLE;
@@ -78,45 +83,36 @@ void CreateFrogActor (GAMETILE *where, char *name,long p)
 	InitActorAnim (me->actor);
 	AnimateActor  (me->actor,FROG_ANIM_DANCE1,YES,NO,0.75F,0,0);
 
-	me->actor->scale.v[0] = globalFrogScale;
-	me->actor->scale.v[1] = globalFrogScale;
-	me->actor->scale.v[2] = globalFrogScale;
+	me->actor->scale.v[0] = globalFrogScale;	//0.09;
+	me->actor->scale.v[1] = globalFrogScale;	//0.09;
+	me->actor->scale.v[2] = globalFrogScale;	//0.09;
 	
 	SetFroggerStartPos(where,p);
 
-	player[p].healthPoints	= 1;
-	player[p].frogon		= -1;
-	player[p].frogunder		= -1;
+	me->action.healthPoints	= 3;
+	me->action.frogon		= -1;
+	me->action.frogunder		= -1;
 
 	me->radius				= 22.0F;
 }
 
 void CreateFrogger(unsigned char createFrogActor,unsigned char createFrogOverlays )
 {
-	int i, num;
+	int i;
 
 	if(createFrogActor)
 	{
 		for (i=0; i<NUM_FROGS; i++)
-		{
-			num = player[i].character;
-			if( num > FROG_NUMFROGS || !frogPool[num].active )
-			{
-				player[i].character = num = 0;
-			}
-
 			if (gTStart[i])
-				CreateFrogActor (gTStart[i],frogPool[num].model,i);
+				CreateFrogActor (gTStart[i],frogModel[i],i);
 			else
-				CreateFrogActor (gTStart[0],frogPool[num].model,i);
-
-			currPlatform[i] = NULL;
-		}
+				CreateFrogActor (gTStart[0],frogModel[i],i);
+		
+		for (i=0; i<NUM_FROGS; i++)
+			frog[i]->draw = 0;
 	}
 
-	InitCamera();
-/*
-	if (gameState.multi == SINGLEPLAYER)
+	if (NUM_FROGS == 1)
 	{
 		if(createFrogOverlays)
 		{
@@ -138,7 +134,7 @@ void CreateFrogger(unsigned char createFrogActor,unsigned char createFrogOverlay
 			}
 		}
 	}
-	else if( multiplayerMode != MULTIMODE_BATTLE )
+	else
 	{
 		int j,k = 0;
 		for (j=0; j<NUM_FROGS; j++)
@@ -154,73 +150,6 @@ void CreateFrogger(unsigned char createFrogActor,unsigned char createFrogOverlay
 		}
 		
 	}
-*/
+
+
 }
-
-
-/*	--------------------------------------------------------------------------------
-	Function 	: FroggerIdleAnim
-	Purpose 	: Choose and play an idle animation
-	Parameters 	: 
-	Returns 	: 
-	Info 		:
-*/
-void FroggerIdleAnim( int i )
-{
-	GAMETILE *t = currTile[i]->tilePtrs[frogFacing[(i + 2) & 3]];
-
-	// 2/3 chance of doing an idle based on the tile we're facing
-	if (t && (Random(3) > 0))	
-	{
-		// Play a looking-over-the-edge animation when we're next to a drop or deadly tile
-		if (t->state == TILESTATE_JOIN)
-		{
-			VECTOR v;
-			float height;
-			
-			SubVector(&v, &t->centre, &currTile[i]->centre);
-			height = DotProduct(&v, &currTile[i]->normal);
-
-			if (height < -10)
-			{
-				AnimateActor(frog[i]->actor, FROG_ANIM_LOOKDOWN, NO, NO, 0.15f, 0, 0);
-				AnimateActor(frog[i]->actor,FROG_ANIM_BREATHE,YES,YES,0.4F,0,0);
-				return;
-			}
-		}
-		else if (t->state == TILESTATE_DEADLY)
-		{
-			AnimateActor(frog[i]->actor, FROG_ANIM_LOOKDOWN, NO, NO, 0.15f, 0, 0);
-			AnimateActor(frog[i]->actor,FROG_ANIM_BREATHE,YES,YES,0.4F,0,0);
-			return;
-		}
-	}
-
-	// otherwise, play a normal idle
-	switch (Random(4))
-	{
-		case 0:
-			AnimateActor(frog[i]->actor,FROG_ANIM_SCRATCHHEAD,NO,NO,0.4F,0,0);
-			if (Random(10)>6)
-				AnimateActor(frog[i]->actor,FROG_ANIM_SCRATCHHEAD,NO,YES,0.4F,0,0);
-			AnimateActor(frog[i]->actor,FROG_ANIM_BREATHE,YES,YES,0.4F,0,0);
-			break;
-		case 1:
-			AnimateActor(frog[i]->actor,FROG_ANIM_DANCE1,YES,NO,0.3F,0,0);
-			break;
-		case 2:
-			AnimateActor(frog[i]->actor,FROG_ANIM_DANCE2,YES,NO,0.3F,0,0);
-			break;
-		case 3:
-			AnimateActor(frog[i]->actor,FROG_ANIM_DANCE3,NO,NO,0.3F,0,0);
-			if (Random(10)>6)
-				AnimateActor(frog[i]->actor,FROG_ANIM_DANCE1,YES,YES,0.3F,0,0);
-			else
-				AnimateActor(frog[i]->actor,FROG_ANIM_BREATHE,YES,YES,0.4F,0,0);
-			break;
-		case 4:
-			AnimateActor(frog[i]->actor,FROG_ANIM_BREATHE,YES,YES,0.4F,0,0);
-			break;
-	}
-}
-

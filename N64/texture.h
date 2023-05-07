@@ -34,7 +34,7 @@ extern unsigned long numTextureBanks;
 void LoadTextureBank(int num);
 void InitTextureBanks();
 void FindTexture(TEXTURE **texPtr, int texID, BOOL report);
-//void AnimateTexture(TEXTURE_ANIMATION *anim,Gfx *dl);
+void AnimateTexture(TEXTURE_ANIMATION *anim,Gfx *dl);
 
 
 #endif

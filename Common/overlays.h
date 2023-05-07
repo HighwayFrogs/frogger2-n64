@@ -35,8 +35,7 @@
 #define ANIMATION_RANDOMFRAMES	(1 << 4)
 #define ANIMATION_PLAYONCE		(1 << 5)
 #define ANIMATION_RANDOMSTART	(1 << 6)
-#define XLU_ADD					(1 << 7)
-#define XLU_SUBFIRST			(1 << 8)
+
 
 //----- [ GLOBALS ] ----------------------------------------------------------------------------//
 
@@ -49,6 +48,10 @@ typedef struct TAGSPRITEOVERLAYLIST
 
 
 extern SPRITEOVERLAYLIST spriteOverlayList;
+
+extern SPRITEOVERLAY *bronzeCup[8];
+extern SPRITEOVERLAY *silverCup[8];
+extern SPRITEOVERLAY *goldCup[8];
 
 //----- [ FUNCTION PROTOTYPES ] ----------------------------------------------------------------//
 

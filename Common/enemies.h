@@ -12,27 +12,6 @@
 #ifndef ENEMIES_H_INCLUDED
 #define ENEMIES_H_INCLUDED
 
-
-//----- [ ANIMATION BITS ] ---------------------------------------------------------------------//
-
-#define NMEANIM_HOMER_WALK		0
-#define NMEANIM_HOMER_IDLE		1
-#define NMEANIM_HOMER_ATTACK	2
-
-#define NMEANIM_PATH_WALK1		0
-#define NMEANIM_PATH_WALK2		1
-
-#define NMEANIM_SNAP_IDLE		0
-#define NMEANIM_SNAP_ATTACK		1
-#define NMEANIM_SNAP_EXTRA1		2
-#define NMEANIM_SNAP_EXTRA2		3
-
-#define NUM_NME_ANIMS			4
-
-
-typedef void (*DEATHANIM_FUNC) (int);
-
-
 //----- [ ENEMY FLAGS ] ---------------------------------------------------------------------//
 
 #define ENEMY_NEW_NONE					0
@@ -65,6 +44,7 @@ typedef void (*DEATHANIM_FUNC) (int);
 #define ENEMY_NEW_RANDOMMOVE			(1 << 26)	// Go to a random adjacent tile
 #define ENEMY_NEW_SHADOW				(1 << 27)	// Has a shadow
 #define ENEMY_NEW_TILEHOMING			(1 << 28)	// Homes in using tiles
+#define ENEMY_NEW_CURVEPATH				(1 << 29)	// Hermite interpolation between nodes
 
 
 typedef struct TAGENEMY
@@ -90,12 +70,11 @@ typedef struct TAGENEMY
 	short					isWaiting;				// enemy pause time at node
 	long					isSnapping;				// enemy is snapping (snapping time left)
 	short					isIdle;					// enemy idle state for starting animation
-	unsigned char			facing;					// For face forward nmes, the tile vector they face
 
 	GAMETILE				*inTile;				// tile enemy is currently 'in'
 	PATH					*path;					// ptr to enemy path data
 
-	void					(*Update) (struct TAGENEMY*);	// Enemy update function
+	void					(*Update) ();			// Enemy update function
 
 } ENEMY;
 
@@ -128,18 +107,12 @@ void UpdateEnemies();
 
 //------------------------------------------------------------------------------------------------
 
-ENEMY *CreateAndAddEnemy(char *eActorName, int flags, long ID, PATH *path, float animSpeed, unsigned char facing);
+ENEMY *CreateAndAddEnemy(char *eActorName, int flags, long ID, PATH *path, float animSpeed);
 void AssignPathToEnemy(ENEMY *nme,PATH *path,unsigned long pathFlags);
 BOOL EnemyReachedTopOrBottomPoint(ENEMY *nme);
 void UpdateEnemyPathNodes(ENEMY *nme);
 void CalcEnemyNormalInterps(ENEMY *nme);
 ENEMY *GetEnemyFromUID (long uid);
-
-int EnumEnemies(long id, int (*func)(ENEMY*, int), int param);
-int MoveEnemyToNode(ENEMY *nme, int node);
-void SetEnemyVisible(ENEMY *nme, int visible);
-void SetEnemyMoving(ENEMY *nme, int moving);
-
 
 //------------------------------------------------------------------------------------------------
 

@@ -51,7 +51,6 @@
 
 #include "incs.h"
 
-#define PLATFORM_NEAREST_DIST  500	// radius in which to check for nearest platform
 
 PLATFORMLIST platformList;								// the platform list
 PLATFORM *destPlatform[MAX_FROGS] = { NULL,NULL,NULL,NULL };	// platform that frog is about to attempt to jump to
@@ -62,7 +61,13 @@ PLATFORM *currPlatform[MAX_FROGS] = { NULL,NULL,NULL,NULL };	// platform that fr
 PLATFORM *nearestPlatform[MAX_FROGS];
 float nearestPlatDist[MAX_FROGS];
 
+float PLATFORM_NEAREST_DIST = 500.0f;	// radius in which to check for nearest platform
+
+float PLATFORM_GENEROSITY	= 20.0f;	// platform 'forgiveness'
+
+
 void CalcNextPlatformDest(PLATFORM *plat);
+
 
 //----- [ PLATFORM UPDATE FUNCTIONS ] ------------------------------------------------------------
 
@@ -138,9 +143,7 @@ void UpdatePlatforms()
 				{
 					//cur->pltActor->actor->xluOverride = 100;
 					cur->pltActor->draw = 1;
-					GetPositionForPathNode(&cur->pltActor->actor->pos, &cur->path->nodes[0]);
 					cur->active	= 1;
-					cur->pltActor->actor->xluOverride = 0;
 					cur->countdown = -1;
 				}
 				else continue;
@@ -157,9 +160,10 @@ void UpdatePlatforms()
 		{
 			float dist;
 
+			// don't include the *current* plat in the check
 			// and only consider platforms in the dest tile?? (TODO: debug!)
 
-			if (cur->inTile[0] != destTile[pl]) continue;
+			if (cur->inTile[0] != destTile[pl] /*|| cur == currPlatform[pl]*/) continue;
 
 			dist = DistanceBetweenPointsSquared(&cur->pltActor->actor->pos, &frog[pl]->actor->pos);
 			if (dist < nearestPlatDist[pl])
@@ -192,17 +196,6 @@ void UpdatePlatforms()
 		// check if this is a disappearing or crumbling platform
 		if(cur->flags & (PLATFORM_NEW_DISAPPEARWITHFROG| PLATFORM_NEW_CRUMBLES))
 		{
-			if (cur->pltActor->actor->xluOverride < 100)
-			{
-				if ((cur->pltActor->actor->xluOverride += (gameSpeed * 4)) > 100)
-				{
-					cur->pltActor->actor->xluOverride = 100;
-					cur->pltActor->actor->flags &= ~OBJECT_FLAGS_XLU;
-				}
-				else
-					cur->pltActor->actor->flags |= OBJECT_FLAGS_XLU;
-			}
-	
 			if (cur->countdown < 0)
 			{
 				if (cur->flags & PLATFORM_NEW_CARRYINGFROG)
@@ -248,9 +241,6 @@ void UpdatePlatforms()
 					cur->active = 0;
 					cur->carrying = NULL;
 					cur->countdown = cur->path->nodes->waitTime;
-
-					if( cur->path->nodes->sample )
-						PlaySample( cur->path->nodes->sample, &cur->pltActor->actor->pos, 0, SAMPLE_VOLUME, -1 );
 
 					if(cur->flags & PLATFORM_NEW_CRUMBLES)
 					{
@@ -363,7 +353,6 @@ void SubPlatform(PLATFORM *plat)
 void FreePlatformLinkedList()
 {
 	PLATFORM *cur,*next;
-	int pl;
 
 	// check if any elements in list
 	if(platformList.numEntries == 0)
@@ -379,15 +368,12 @@ void FreePlatformLinkedList()
 		SubPlatform(cur);
 	}
 
-	for (pl=0; pl<MAX_FROGS; pl++)
-		currPlatform[pl] = NULL;
-
 	// initialise list for future use
 	InitPlatformLinkedList();
 }
 
 
-PLATFORM *CreateAndAddPlatform(char *pActorName,int flags,long ID,PATH *path,float animSpeed,unsigned char facing)
+PLATFORM *CreateAndAddPlatform(char *pActorName,int flags,long ID,PATH *path,float animSpeed)
 {
 	int initFlags,i;
 	int platformType = 0;
@@ -396,8 +382,6 @@ PLATFORM *CreateAndAddPlatform(char *pActorName,int flags,long ID,PATH *path,flo
 	PLATFORM *newItem = (PLATFORM *)JallocAlloc(sizeof(PLATFORM),YES,"PLAT");
 	AddPlatform(newItem);
 	newItem->flags = flags;
-	newItem->facing = facing;
-	newItem->Update = NULL;
 
 	initFlags |= INIT_ANIMATION;
 
@@ -408,7 +392,7 @@ PLATFORM *CreateAndAddPlatform(char *pActorName,int flags,long ID,PATH *path,flo
 	}
 
 	// create and add platform actor
-	newItem->pltActor = CreateAndAddActor(pActorName,0,0,0,initFlags);
+	newItem->pltActor = CreateAndAddActor(pActorName,0,0,0,initFlags,0,0);
 	newItem->pltActor->animSpeed = animSpeed;
 
 	if(newItem->pltActor->actor->objectController)
@@ -460,17 +444,11 @@ PLATFORM *CreateAndAddPlatform(char *pActorName,int flags,long ID,PATH *path,flo
 	else if(newItem->flags & PLATFORM_NEW_FOLLOWPATH)
 		newItem->Update = UpdatePathPlatform;
 	else if(newItem->flags & (PLATFORM_NEW_MOVEUP | PLATFORM_NEW_MOVEDOWN))
-	{
 		newItem->Update = UpdateUpDownPlatform;
-		Orientate( &newItem->pltActor->actor->qRot, &newItem->path->nodes->worldTile->dirVector[newItem->facing], &newItem->path->nodes->worldTile->normal );
-	}
+	else if(newItem->flags & PLATFORM_NEW_NONMOVING)
+		newItem->Update = UpdateNonMovingPlatform;
 	else if(newItem->flags & PLATFORM_NEW_STEPONACTIVATED)
-	{
 		newItem->Update = UpdateStepOnActivatedPlatform;
-		Orientate( &newItem->pltActor->actor->qRot, &newItem->path->nodes->worldTile->dirVector[newItem->facing], &newItem->path->nodes->worldTile->normal );
-	}
-	else if( (newItem->flags & PLATFORM_NEW_NONMOVING) || (newItem->pltActor->actor && newItem->path && newItem->path->nodes) )
-		Orientate( &newItem->pltActor->actor->qRot, &newItem->path->nodes->worldTile->dirVector[newItem->facing], &newItem->path->nodes->worldTile->normal );
 
 	return newItem;
 }
@@ -478,7 +456,7 @@ PLATFORM *CreateAndAddPlatform(char *pActorName,int flags,long ID,PATH *path,flo
 void AssignPathToPlatform(PLATFORM *pform,PATH *path,unsigned long pathFlags)
 {
 	int i;
-	VECTOR platformStartPos, fwd;
+	VECTOR platformStartPos;
 
 	pform->path	= path;
 
@@ -508,15 +486,16 @@ void AssignPathToPlatform(PLATFORM *pform,PATH *path,unsigned long pathFlags)
 		if(pform->path->toNode < 0)
 			pform->path->fromNode = GET_PATHLASTNODE(path);
 	}
-	else if(pform->flags & (PLATFORM_NEW_MOVEUP | PLATFORM_NEW_MOVEDOWN))
+	else if((pform->flags & PLATFORM_NEW_MOVEUP) ||
+			(pform->flags & PLATFORM_NEW_MOVEDOWN))
 	{
 		// this platform moves up or down
 		pform->path->fromNode = pform->path->toNode = 0;
 	}
 	else
 	{
-		// this platform does not move - why use this at all ever?
-//		pform->flags |= PLATFORM_NEW_NONMOVING;
+		// this platform does not move
+		pform->flags |= PLATFORM_NEW_NONMOVING;
 		pform->path->fromNode = pform->path->toNode = 0;
 	}
 
@@ -527,17 +506,7 @@ void AssignPathToPlatform(PLATFORM *pform,PATH *path,unsigned long pathFlags)
 		GetPositionForPathNode(&platformStartPos,&path->nodes[pform->path->fromNode]);
 
 	SetVector(&pform->pltActor->actor->pos,&platformStartPos);
-	//NormalToQuaternion(&pform->pltActor->actor->qRot,&path->nodes[pform->path->fromNode].worldTile->normal);
-
-	SubVector(&fwd,
-		&pform->path->nodes[pform->path->toNode].worldTile->centre,
-		&pform->path->nodes[pform->path->fromNode].worldTile->centre);
-	MakeUnit(&fwd);
-
-	if (!(pform->flags & PLATFORM_NEW_FACEFORWARDS))
-		Orientate(&pform->pltActor->actor->qRot, &fwd, &pform->path->nodes[pform->path->fromNode].worldTile->normal);
-	else
-		Orientate( &pform->pltActor->actor->qRot, &pform->path->nodes->worldTile->dirVector[pform->facing], &pform->path->nodes->worldTile->normal );
+	NormalToQuaternion(&pform->pltActor->actor->qRot,&path->nodes[pform->path->fromNode].worldTile->normal);
 
 	// set platform current 'in' tile and speeds and pause times
 	pform->inTile[0]	= path->nodes[pform->path->fromNode].worldTile;
@@ -599,7 +568,7 @@ void CalcPlatformNormalInterps(PLATFORM *pform)
 	PATH *path;
 	PATHNODE *fromNode,*toNode;
 	float numSteps;
-	VECTOR fwd;
+	VECTOR destNormal,fromPos,toPos;
 
 	path = pform->path;
 	if(path->numNodes < 2)
@@ -607,22 +576,6 @@ void CalcPlatformNormalInterps(PLATFORM *pform)
 
 	fromNode	= &path->nodes[path->fromNode];
 	toNode		= &path->nodes[path->toNode];
-
-	pform->srcOrientation = pform->pltActor->actor->qRot;
-
-	if(!(pform->flags & PLATFORM_NEW_FACEFORWARDS))
-	{
-		SubVector(&fwd, &toNode->worldTile->centre, &fromNode->worldTile->centre);
-		MakeUnit(&fwd);
-
-		Orientate(&pform->destOrientation, &fwd, &toNode->worldTile->normal);
-	}
-	else
-	{
-		Orientate( &pform->destOrientation, &pform->path->nodes->worldTile->dirVector[pform->facing], &toNode->worldTile->normal );
-	}
-
-/*	 v v v v This isn't game speed independant at ALL! v v v v
 
 	// set the current platform normal to that of the 'from' node and get the dest normal
 	SetVector(&pform->currNormal,&fromNode->worldTile->normal);
@@ -643,10 +596,6 @@ void CalcPlatformNormalInterps(PLATFORM *pform)
 	pform->deltaNormal.v[X] /= numSteps;
 	pform->deltaNormal.v[Y] /= numSteps;
 	pform->deltaNormal.v[Z] /= numSteps;
-
-	 ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^
-*/
-
 }
 
 /*	--------------------------------------------------------------------------------
@@ -687,9 +636,6 @@ void CalcNextPlatformDest(PLATFORM *pform)
 				//SetVector(&pform->pltActor->actor->pos,&pformPos);
 			}
 		}
-
-		if( path->nodes[path->fromNode].sample )
-			PlaySample( path->nodes[path->fromNode].sample, &pform->pltActor->actor->pos, 0, SAMPLE_VOLUME, -1 );
 	}
 	else if(flags & PLATFORM_NEW_BACKWARDS)
 	{
@@ -717,19 +663,11 @@ void CalcNextPlatformDest(PLATFORM *pform)
 				//SetVector(&pform->pltActor->actor->pos,&pformPos);
 			}
 		}
-
-		if( path->nodes[path->fromNode].sample )
-			PlaySample( path->nodes[path->fromNode].sample, &pform->pltActor->actor->pos, 0, SAMPLE_VOLUME, -1 );
 	}
 	else if( flags & (PLATFORM_NEW_MOVEUP | PLATFORM_NEW_MOVEDOWN) )
 	{
 		if( flags & PLATFORM_NEW_PINGPONG )
-		{
 			pform->flags	^= (PLATFORM_NEW_MOVEUP | PLATFORM_NEW_MOVEDOWN);	// invert flags
-
-			if( path->nodes->sample )
-				PlaySample( path->nodes->sample, &pform->pltActor->actor->pos, 0, SAMPLE_VOLUME, -1 );
-		}
 		/*else
 		{
 			if( flags & PLATFORM_NEW_MOVEUP )
@@ -802,7 +740,6 @@ void UpdateSlerpPathPlatform( PLATFORM *cur )
 
 	// Skewer a line to rotate around, and make a rotation
 	CrossProduct((VECTOR *)&q3,&inVec,&fwd);
-	MakeUnit((VECTOR *)&q3);
 	t = DotProduct(&inVec,&fwd);
 	if (t<-0.999)
 		t=-0.999;
@@ -861,26 +798,10 @@ void UpdateSlerpPathPlatform( PLATFORM *cur )
 */
 void UpdatePathPlatform(PLATFORM *plat)
 {
-	VECTOR fromPosition,toPosition,fwd,moveVec,norm;
-	float length, n;
-	long progress;
+	VECTOR fromPosition,toPosition,fwd,moveVec;
+	float length;
 
-	// check if this platform has arrived at a path node
-	if(actFrameCount >= plat->path->endFrame)
-	{
-		do {
-			UpdatePlatformPathNodes(plat);
-			plat->path->startFrame = plat->path->endFrame + plat->isWaiting * waitScale;
-			plat->path->endFrame = plat->path->startFrame + (60*plat->currSpeed);
-		}
-		while (actFrameCount >= plat->path->endFrame && plat->isWaiting >= 0);
-
-		if (plat->isWaiting) return;
-	}
-	else if (actFrameCount > ((plat->path->startFrame + plat->path->endFrame) / 2))
-	{
-		plat->inTile[0] = plat->path->nodes[plat->path->toNode].worldTile;
-	}
+	float n;
 
 	// update the platform position
 	GetPositionForPathNode(&toPosition,&plat->path->nodes[plat->path->toNode]);
@@ -888,24 +809,75 @@ void UpdatePathPlatform(PLATFORM *plat)
 	
 	SubVector(&fwd,&toPosition,&fromPosition);
 	
-	progress = actFrameCount - plat->path->startFrame;
-	if( !progress ) progress = 1;
-
-	length = (float)progress/(float)(plat->path->endFrame - plat->path->startFrame);
+	length = (float)(actFrameCount - plat->path->startFrame)/(float)(plat->path->endFrame - plat->path->startFrame);
 	
 	ScaleVector(&fwd,length);
 	AddVector(&plat->pltActor->actor->pos,&fwd,&fromPosition);
-	//MakeUnit(&fwd);
+	MakeUnit(&fwd);
+
+	AddToVector(&plat->currNormal,&plat->deltaNormal);
 
 	if(!(plat->flags & PLATFORM_NEW_FACEFORWARDS))
 	{
-		//Orientate(&plat->pltActor->actor->qRot,&fwd,&inVec,&plat->currNormal);
-
-		QuatSlerp(&plat->srcOrientation, &plat->destOrientation, length, &plat->pltActor->actor->qRot);
+		Orientate(&plat->pltActor->actor->qRot,&fwd,&inVec,&plat->currNormal);
 	}
-	else
-		Orientate( &plat->pltActor->actor->qRot, &plat->path->nodes->worldTile->dirVector[plat->facing], &plat->inTile[0]->normal );
 
+/*	else	// if we orientate the platform correctly at the start of the path,
+			// we shouldn't ever need to re-orientate it. Er. I think.
+	{
+		SubVector(&moveVec,&plat->path->nodes[plat->path->startNode+1].worldTile->centre, &plat->path->nodes[plat->path->startNode].worldTile->centre );
+		if (plat->flags & PLATFORM_NEW_BACKWARDS) ScaleVector (&fwd,-1);
+		MakeUnit(&moveVec);
+		Orientate(&plat->pltActor->actor->qRot,&moveVec,&inVec,&plat->currNormal);
+	}
+*/
+
+	// check if this platform has arrived at a path node
+	if(actFrameCount > plat->path->endFrame)
+	{
+		UpdatePlatformPathNodes(plat);
+	
+		plat->path->startFrame = plat->path->endFrame + plat->isWaiting * waitScale;
+		plat->path->endFrame = plat->path->startFrame + (60*plat->currSpeed);
+	}
+	else if (actFrameCount > ((plat->path->startFrame + plat->path->endFrame) / 2))
+	{
+		// when we've gone past half-way (i.e. after half the current movement time),
+		// set the current "in" tile to halfway.
+		GAMETILE *nextTile = plat->path->nodes[plat->path->toNode].worldTile;
+
+		// TODO[: Move this section to FROGMOVE.c
+		if (plat->carrying)
+		{
+			int i, pl = -1;
+			// We need to find which frog we're carrying (yeeeeeesh)
+			for (i=0; i<4; i++)
+				if (frog[i] == plat->carrying)
+				{
+					pl = i; break;
+				}
+
+			// if we're moving onto a barred tile, push the frog in the other direction
+			if (nextTile->state == TILESTATE_BARRED)
+			{
+				VECTOR v;
+				
+				SubVector(&v,
+					&plat->path->nodes[plat->path->fromNode].worldTile->centre,
+					&plat->path->nodes[plat->path->toNode].worldTile->centre);
+					
+				PushFrog(&plat->pltActor->actor->pos, &v, pl);
+				AnimateActor(frog[pl]->actor, FROG_ANIM_FWDSOMERSAULT, NO, NO, 1.0, NO, NO);
+			}
+
+			frogFacing[pl] = GetTilesMatchingDirection(currTile[pl], frogFacing[pl], nextTile);
+			currTile[pl] = plat->inTile[0];
+
+			CheckTileForCollectable( nextTile, pl );
+		}
+
+		plat->inTile[0] = nextTile;
+	}
 }
 
 
@@ -922,7 +894,7 @@ void UpdateUpDownPlatform(PLATFORM *plat)
 	float start_offset, end_offset, t;
 
 	// check if this platform has arrived at a path node
-	if( actFrameCount >= plat->path->endFrame )
+	if( actFrameCount > plat->path->endFrame )
 	{
 		UpdatePlatformPathNodes(plat);
 
@@ -961,7 +933,6 @@ void UpdateUpDownPlatform(PLATFORM *plat)
 */
 void UpdateNonMovingPlatform(PLATFORM *plat)
 {
-//	Orientate( &plat->pltActor->actor->qRot, &plat->path->nodes->worldTile->dirVector[plat->facing], &plat->path->nodes->worldTile->normal );
 }
 
 
@@ -1010,9 +981,9 @@ void UpdateStepOnActivatedPlatform(PLATFORM *plat)
 			if (!(player[0].frogState & FROGSTATUS_ISDEAD))
 			{
 				//AnimateActor(frog[0]->actor,FROG_ANIM_,NO,NO,0.5F,0,0);
-				p;ayer[0].deathBy = DEATHBY_DROWNING;
+				frog[0]->action.deathBy = DEATHBY_DROWNING;
 				player[0].frogState |= FROGSTATUS_ISDEAD;
-				player[0].dead = 50;
+				frog[0]->action.dead = 50;
 			}
 		}
 */
@@ -1029,94 +1000,3 @@ void UpdateStepOnActivatedPlatform(PLATFORM *plat)
 		}
 	}
 }
-
-/*	--------------------------------------------------------------------------------
-    Function	: EnumPlatforms
-	Purpose		: Calls a function for every platform with a given UID
-	Parameters	: 
-	Returns		: 
-
-	func takes two params, the platform and the 'param' passed to EnumPlatforms
-*/
-
-int EnumPlatforms(long id, int (*func)(PLATFORM*, int), int param)
-{
-	PLATFORM *cur;
-	int count;
-
-	for(cur = platformList.head.next; cur != &platformList.head; cur = cur->next, count++)
-	{
-		if (!id || cur->uid == id)
-		{
-			if (!func(cur, param)) break;
-		}
-	}
-
-	return count;
-}
-
-void SetPlatformVisible(PLATFORM *plt, int visible)
-{
-	if (visible)
-	{
-		plt->active = 1;
-		plt->pltActor->draw = 1;
-		plt->countdown = -1;
-		
-		if (plt->isWaiting != -1)
-		{
-			plt->isWaiting = -1;
-			SetPlatformMoving(plt, 1);
-		}
-	}
-	else
-	{
-		plt->pltActor->draw = 0;
-		plt->active = 0;
-	}
-}
-
-void SetPlatformMoving(PLATFORM *plt, int moving)
-{
-	if (moving)
-	{
-		if (plt->isWaiting)
-		{
-			plt->isWaiting = 0;
-			plt->path->toNode = plt->path->fromNode;
-			plt->path->startFrame = actFrameCount;
-			plt->path->endFrame = actFrameCount + (60*plt->currSpeed);
-		}
-		//plt->Update(plt);
-	}
-	else
-	{
-		plt->isWaiting = -1;
-	}
-}
-
-/*	--------------------------------------------------------------------------------
-	Function		: MovePlatform
-	Purpose			: moves a platform to a given node in its path
-	Parameters		: PLATFORM*, int [can be used with EnumPlatforms]
-	Returns			: 1 for success
-*/
-int MovePlatformToNode(PLATFORM *plt, int flag)
-{
-	VECTOR fwd;
-
-	if (flag >= 0 && flag < plt->path->numNodes)
-	{
-		plt->path->toNode = flag;
-		plt->inTile[0] = plt->path->nodes[flag].worldTile;
-		plt->path->endFrame = actFrameCount;
-		plt->Update(plt);
-
-		plt->pltActor->actor->qRot = plt->srcOrientation = plt->destOrientation;
-	}
-	else
-		dprintf"MoveEnemyToNode(): Flag (%d) out of range\n", flag));
-
-	return 1;
-}
-

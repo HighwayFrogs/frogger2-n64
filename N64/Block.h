@@ -474,14 +474,6 @@ extern char *_objBank_9_5_SegmentRomStart;
 extern char *_objBank_9_5_SegmentRomEnd;
 extern char *_objBank_9_6_SegmentRomStart;
 extern char *_objBank_9_6_SegmentRomEnd;
-extern char *_objBank_9_7_SegmentRomStart;
-extern char *_objBank_9_7_SegmentRomEnd;
-extern char *_objBank_9_8_SegmentRomStart;
-extern char *_objBank_9_8_SegmentRomEnd;
-extern char *_objBank_9_9_SegmentRomStart;
-extern char *_objBank_9_9_SegmentRomEnd;
-extern char *_objBank_9_10_SegmentRomStart;
-extern char *_objBank_9_10_SegmentRomEnd;
 // SUPERRETRO WORLD - Level Entities
 extern char *_levData_9_1_SegmentRomStart;
 extern char *_levData_9_1_SegmentRomEnd;
@@ -495,14 +487,6 @@ extern char *_levData_9_5_SegmentRomStart;
 extern char *_levData_9_5_SegmentRomEnd;
 extern char *_levData_9_6_SegmentRomStart;
 extern char *_levData_9_6_SegmentRomEnd;
-extern char *_levData_9_7_SegmentRomStart;
-extern char *_levData_9_7_SegmentRomEnd;
-extern char *_levData_9_8_SegmentRomStart;
-extern char *_levData_9_8_SegmentRomEnd;
-extern char *_levData_9_9_SegmentRomStart;
-extern char *_levData_9_9_SegmentRomEnd;
-extern char *_levData_9_10_SegmentRomStart;
-extern char *_levData_9_10_SegmentRomEnd;
 // SUPERRETRO WORLD - Level Scripts
 extern char *_scrData_9_1_SegmentRomStart;
 extern char *_scrData_9_1_SegmentRomEnd;
@@ -516,14 +500,6 @@ extern char *_scrData_9_5_SegmentRomStart;
 extern char *_scrData_9_5_SegmentRomEnd;
 extern char *_scrData_9_6_SegmentRomStart;
 extern char *_scrData_9_6_SegmentRomEnd;
-extern char *_scrData_9_7_SegmentRomStart;
-extern char *_scrData_9_7_SegmentRomEnd;
-extern char *_scrData_9_8_SegmentRomStart;
-extern char *_scrData_9_8_SegmentRomEnd;
-extern char *_scrData_9_9_SegmentRomStart;
-extern char *_scrData_9_9_SegmentRomEnd;
-extern char *_scrData_9_10_SegmentRomStart;
-extern char *_scrData_9_10_SegmentRomEnd;
 
 
 
@@ -688,7 +664,6 @@ extern int					UseUCode;
 extern int					OutLen;
 
 extern char					mirrorTextures;
-extern char					runningIntro;
 
 extern short				farPlaneDist;
 extern short				nearPlaneDist;
@@ -722,8 +697,6 @@ extern char codeRunning;
 void ControllerProc(void *arg);
 void InitDisplayLists(void);
 void ComputeClockSpeed();
-
-int strncmp(const char *a,char *b,int len);
 
 
 // MEMORY CHECKING & DEBUGGING ROUTINES - ANDYE - CURRENTLY SPECIFIC TO N64 ----------------------

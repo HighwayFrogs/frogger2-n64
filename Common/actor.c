@@ -7,7 +7,6 @@
 	Programmer	: Matthew Cloy
 	Date		: 11/11/98
 
-
 ----------------------------------------------------------------------------------------------- */
 
 
@@ -31,24 +30,18 @@
 #include "mavis.h"
 #endif
 
-#define MAX_UNIQUE_ACTORS	500
-void XformActor(ACTOR *ptr);
+#define MAX_UNIQUE_ACTORS	50
 
-unsigned long ACTOR_DRAWDISTANCEINNER = 300000;
-unsigned long ACTOR_DRAWDISTANCEOUTER = 600000;
 
-float bFOV = 450.0;
-float texSlideSpeed = 40;
-extern float fStart,fEnd, FOV;
-extern long noClipping;
+unsigned long ACTOR_DRAWDISTANCEINNER = 250000;
+unsigned long ACTOR_DRAWDISTANCEOUTER = 500000;
+
 
 #define WATER_XLU 70
 long waterObject = 0;
 long modgyObject = 0;
-long sludgeObject = 0;
-long leafObject = 0;
 int objectMatrix = 0;
-long showActorNames = 0;
+
 ACTOR2 *actList = NULL;				// entire actor list
 ACTOR2 *backGnd = NULL;
 ACTOR2 *globalLevelActor = NULL;	// ptr to actor representing level
@@ -57,37 +50,25 @@ ACTOR2 *globalLevelActor = NULL;	// ptr to actor representing level
 //char uniqueEnemyCount[20];
 
 int uniqueActorCRC[MAX_UNIQUE_ACTORS];
-int numUniqueActors = 0;
+char numUniqueActors = 0;
 extern ACTOR2 *hat[MAX_FROGS];
-float ACTOR_DRAWFADERANGE;
 
 /* --------------------------------------------------------------------------------	
 	Programmer	: Matthew Cloy
-	Function    : 
-	Purpose		:
-	Parameters	: 
-	Returns		: 
-*/
+	Function    : DrawActorList
 
+	Purpose		:
+	Parameters	: (void)
+	Returns		: void 
+*/
+void XformActor(ACTOR *ptr);
+float texSlideSpeed = 40;
 void SlideObjectTextures(OBJECT *obj)
 {
 	int i;
-	
-	// For all the faces.....
-	for (i=0; i<obj->mesh->numFaces; i++)
+	for (i=0; i<obj->mesh->numFaces*3; i++)
 	{
-		// Do the sliding.
-		obj->mesh->faceTC[(i*3)].v[Y] -= (gameSpeed * texSlideSpeed);		
-		obj->mesh->faceTC[(i*3)+1].v[Y] -= (gameSpeed * texSlideSpeed);		
-		obj->mesh->faceTC[(i*3)+2].v[Y] -= (gameSpeed * texSlideSpeed);		
-
-		// Deal with the case when they might wrap.
-		if ((obj->mesh->faceTC[(i*3)].v[Y] < 4096) || (obj->mesh->faceTC[(i*3)+1].v[Y]<4096) || (obj->mesh->faceTC[(i*3)+2].v[Y]<4096))
-		{
-			obj->mesh->faceTC[(i*3)].v[Y] += 8192;		
-			obj->mesh->faceTC[(i*3)+1].v[Y] += 8192;
-			obj->mesh->faceTC[(i*3)+2].v[Y] += 8192;		
-		}
+		obj->mesh->faceTC[i].v[Y] -= (gameSpeed * texSlideSpeed);
 	}
 }
 
@@ -98,9 +79,6 @@ void SlideObjectTextures(OBJECT *obj)
 	Returns			: 
 	Info			: 
 */
-
-extern ACTOR2 *currentDrawActor2;
-
 void XformActorList()
 {
 	ACTOR2 *cur;
@@ -108,7 +86,6 @@ void XformActorList()
 	cur = actList;
 	while(cur)
 	{
-		currentDrawActor2 = cur;
 		if (gameState.mode == INGAME_MODE)
 		{
 			// calculate the distance between the camera and this actor
@@ -124,6 +101,7 @@ void XformActorList()
 			XformActor(cur->actor);
 		}
 
+
 		cur = cur->next;
 	}
 }
@@ -135,357 +113,10 @@ void XformActorList()
 	Returns			: void
 	Info			: 
 */
-
-void DrawBackground(void)
-{
-	float oFs = fStart, oFe = fEnd;
-	
-	waterObject = modgyObject = 0;
-	fStart = 7000.0;	fEnd = 7001.0;
-	backGnd->actor->visible = 1;
-	
-	noClipping = 1;
-
-	SetVector (&(backGnd->actor->pos),&(currCamSource));
-	currentDrawActor2 = backGnd;
-	XformActor(backGnd->actor);
-	DrawActor(backGnd->actor);
-
-	noClipping = 0;
-
-	fStart = oFs;	fEnd = oFe;
-
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ZWRITEENABLE,FALSE);
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ZENABLE,FALSE);
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_TEXTUREADDRESS, D3DTADDRESS_CLAMP);	// clamp textures
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_TEXTUREMAG,D3DFILTER_NEAREST);//D3DFILTER_LINEAR);
-
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ALPHABLENDENABLE,TRUE);
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ALPHATESTENABLE,TRUE);
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ALPHAREF,0);
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ALPHAFUNC,D3DCMP_NOTEQUAL);
-	
-	DrawBatchedPolys();
-	
-	// Draw the second mavis frame set, Transparent objects (non water objects)
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ALPHATESTENABLE,FALSE);
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ZWRITEENABLE,TRUE);
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ZENABLE,TRUE);
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_TEXTUREADDRESS, D3DTADDRESS_WRAP);	// wrap textures
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_TEXTUREMAG,D3DFILTER_NEAREST);
-	
-	BlankFrame(_);
-}
-
-/*	--------------------------------------------------------------------------------
-	Function		: DrawActorList
-	Purpose			: draws the actors in the actor list....doh !!
-	Parameters		: 
-	Returns			: void
-	Info			: 
-*/
-
-void DrawAttachedObjects(void)
-{
-	if (hat[0])
-	{
-		currentDrawActor2 = hat[0];
-
-		XformActor(hat[0]->actor);
-		DrawActor(hat[0]->actor);	
-	}
-}
-
-/*	--------------------------------------------------------------------------------
-	Function		: RenderObjects
-	Purpose			: 
-	Parameters		: 
-	Returns			: void
-	Info			: 
-*/
-extern unsigned long numHaloPoints;
-void StoreHaloPoints(void);
-void CheckHaloPoints(void);
-void DrawHalos(void);
-
-void RenderObjects(void)
-{
-	// Draw the first frame-set, opaque objects.
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_TEXTUREMAG,D3DFILTER_NEAREST);//D3DFILTER_LINEAR);
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_CULLMODE,D3DCULL_CW);
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ZFUNC,D3DCMP_LESS);
-	
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ALPHABLENDENABLE,TRUE);
-
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ALPHATESTENABLE,TRUE);
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ALPHAREF,0);
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ALPHAFUNC,D3DCMP_NOTEQUAL);
-	
-	DrawBatchedPolys();
-	BlankFrame(_);
-	
-	// Draw the second mavis frame set, Transparent objects (non water objects)
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ALPHATESTENABLE,FALSE);
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ZWRITEENABLE,FALSE);
-	
-	SwapFrame(1);
-	DrawBatchedPolys();
-	BlankFrame(_);
-
-	// Draw Additive frameset (num 3)
-	SwapFrame(3);
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_SRCBLEND,D3DBLEND_SRCALPHA);
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_DESTBLEND,D3DBLEND_ONE);
-
-
-	DrawBatchedPolys();
-	BlankFrame(_);
-
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_SRCBLEND,D3DBLEND_SRCALPHA);
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_DESTBLEND,D3DBLEND_ONE);
-	
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_SRCBLEND,D3DBLEND_SRCALPHA);
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_DESTBLEND,D3DBLEND_INVSRCALPHA);
-	// Draw the third mavis frame set, Transparent objects (non water objects)
-	SwapFrame(2);
-	DrawBatchedPolys();
-	BlankFrame(_);	
-	
-	//SwapFrame(4);
-	//DrawBatchedPolys();
-	//BlankFrame(_);
-	//pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_TEXTUREMAG,D3DFILTER_NEAREST);
-	
-	// We could take this out, I doubt it really matters which frame we use (Unless I put in varying poly counts, might be worth it.... Dunno)
-	// SwapFrame(0);
-	
-	//EndDrawHardware();
-	StoreHaloPoints();
-	//BeginDrawHardware();
-	
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ZWRITEENABLE,TRUE);
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ZENABLE,TRUE);
-
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_SRCBLEND,D3DBLEND_ZERO);
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_DESTBLEND,D3DBLEND_ONE);
-
-	SwapFrame(4);
-	DrawBatchedPolys();
-	BlankFrame(_);	
-
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_SRCBLEND,D3DBLEND_SRCALPHA);
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_DESTBLEND,D3DBLEND_INVSRCALPHA);
-
-	//EndDrawHardware();
-	
-	
-	//BeginDrawHardware();
-		
-}
-
-/*	--------------------------------------------------------------------------------
-	Function		: DrawObjects
-	Purpose			: 
-	Parameters		: 
-	Returns			: void
-	Info			: 
-*/
-
-float slideSpeeds[4] = {0,16,32,64};
-
-void DrawObjects(void)
-{
-	ACTOR2 *cur;
-	unsigned long slideVal;
-	
-	// Init for Stuff.
-	SwapFrame(0);
-
-	// The loop that fills out mavis frame info (The complex bit)
-	for (cur = actList; cur; cur = cur->next)
-		if ((cur->actor->objectController) && (cur->draw))
-		{
-			// Slide Texture Coordinates if appropriate
-			slideVal = ((cur->flags>>5) & 3);
-			if (slideVal)
-			{
-				texSlideSpeed = slideSpeeds[slideVal];
-
-				SlideObjectTextures(cur->actor->objectController->object);
-			}
-			
-			// Do we modge?
-			modgyObject = (cur->flags & ACTOR_MODGETEX);
-			 
-			// Main Draw bit, only draw if we are within range.
-			if(cur->distanceFromFrog < ACTOR_DRAWDISTANCEOUTER || cur->flags & ACTOR_DRAW_ALWAYS)
-			{
-				if (cur->flags & ACTOR_WATER)
-				{
-					// Draw a waterbased object, this does the setting, and setting back of states since it is called far less frequently
-					waterObject = 1;
-						
-					if (cur->flags & ACTOR_SLUDGE)
-						sludgeObject = 1;
-					else
-						sludgeObject = 0;
-
-					if (cur->flags & ACTOR_LEAVES)
-						leafObject = 1;
-					else
-						leafObject = 0;
-
-					SwapFrame(2);
-
-					DrawActor(cur->actor);
-
-					SwapFrame(0);
-					waterObject = 0;
-				}
-				else
-				{
-					// Put translucent clipping back in when objects are ordered right
-//					if( cur->distanceFromFrog > ACTOR_DRAWDISTANCEINNER )
-//						cur->actor->xluOverride = 100*(1.0-(sqrtf(((float)(cur->distanceFromFrog - ACTOR_DRAWDISTANCEINNER)))/ACTOR_DRAWFADERANGE));
-
-					if ((cur->actor->objectController->object->flags & OBJECT_FLAGS_XLU) || (cur->actor->flags & OBJECT_FLAGS_XLU))
-					{
-						// Draw transparent objects.
-						if (cur->flags & ACTOR_ADDITIVE)
-						{
-							// Additive-Xlu
-							SwapFrame(3);
-							DrawActor(cur->actor);
-						}
-						else
-						{			
-							// Semi-Xlu
-							SwapFrame(1);
-							DrawActor(cur->actor);
-						}
-						SwapFrame(0);
-					}
-					else
-					{
-						// Opaque objects are a piece of piss.
-						DrawActor(cur->actor);
-					}
-				}
-			}
-		}
-	
-	// Draw the hats (Would be much better if we had an "attached" object field in the OBJECT structure, 
-	DrawAttachedObjects();
-}
-
-/*	--------------------------------------------------------------------------------
-	Function		: DrawActorList
-	Purpose			: 
-	Parameters		: 
-	Returns			: void
-	Info			: 
-*/
-
-void DrawActorList(void)
-{
-	// Kill any left over frame information
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ALPHABLENDENABLE,FALSE);
-	BlankFrame(_);
-	
-	// Draw our background object, if applicable
-	if (backGnd)
-		DrawBackground();
-
-	// Calculate our actor fade range!
-	ACTOR_DRAWFADERANGE = sqrtf((float)ACTOR_DRAWDISTANCEOUTER - (float)ACTOR_DRAWDISTANCEINNER);	
-
-	// Draws all the objects (Have added to mavis, support for multiple frames allowing all the objects to be drawn in one go.)
-	DrawObjects();
-
-	// Renders the Mavis Set
-	RenderObjects();
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*	--------------------------------------------------------------------------------
-	Function		: DrawActorList
-	Purpose			: 
-	Parameters		: 
-	Returns			: 
-	Info			: 
-*/
-
-void DrawActorListOLD()
+float bFOV = 450.0;
+extern float fStart,fEnd, FOV;
+extern long noClipping;
+void DrawActorList()
 {
 	/****************************************************************************************/
 	// IMPORTANT NOTE FROM SHARKY...
@@ -503,11 +134,61 @@ void DrawActorListOLD()
 	/****************************************************************************************/
 
 #ifdef PC_VERSION
-		
-/*
-	if (!cur->draw || cur->flags & ACTOR_WATER || !cur->actor->objectController)
-			continue;
+	float ACTOR_DRAWFADERANGE = sqrtf((float)ACTOR_DRAWDISTANCEOUTER - (float)ACTOR_DRAWDISTANCEINNER);
 	
+	BlankFrame(_);
+
+	if (backGnd)
+	{
+		float oFs = fStart, oFe = fEnd;
+		
+		waterObject = 0;
+		modgyObject = 0;
+
+		fStart = 7000.0;
+		fEnd = 7001.0;
+
+		backGnd->actor->visible = 1;
+		
+		noClipping = 1;
+
+		SetVector (&(backGnd->actor->pos),&(currCamSource[0]));
+		XformActor(backGnd->actor);
+		DrawActor(backGnd->actor);
+
+		noClipping = 0;
+
+		fStart = oFs;
+		fEnd = oFe;
+
+		pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ZWRITEENABLE,FALSE);
+		pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ZENABLE,FALSE);
+		pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_TEXTUREADDRESS, D3DTADDRESS_CLAMP);	// clamp textures
+//		pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_WRAPV, 0);	// wrap textures
+		pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_TEXTUREMAG,D3DFILTER_LINEAR);
+		
+		DrawBatchedPolys();
+		BlankFrame(_);
+
+		pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_TEXTUREADDRESS, D3DTADDRESS_WRAP);	// wrap textures
+	}
+
+	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ZWRITEENABLE,TRUE);
+	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ZENABLE,TRUE);
+	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_TEXTUREMAG,D3DFILTER_NEAREST);
+		
+	cur = actList;
+	waterObject = 0;
+
+	BlankFrame(_);
+
+	while(cur)
+	{
+		float slideSpeed = 0;
+
+		waterObject = 0;
+		modgyObject = 0;
+
 		if ((cur->flags & ACTOR_SLIDYTEX))
 		{
 			if ((cur->flags & ACTOR_SLIDYTEX2))
@@ -518,9 +199,29 @@ void DrawActorListOLD()
 		else
 			if ((cur->flags & ACTOR_SLIDYTEX2))
 				slideSpeed = 32;
-		*/
+
 	
-/*		if( (cur->flags & ACTOR_DRAW_CULLED) && (cur->distanceFromFrog > ACTOR_DRAWDISTANCEINNER) && !(cur->flags & ACTOR_DRAW_ALWAYS))
+		if (slideSpeed>1)
+		{
+			texSlideSpeed = slideSpeed;
+			if (cur->actor->objectController)
+				SlideObjectTextures(cur->actor->objectController->object);
+		}
+
+		if(((cur->flags & ACTOR_WATER)) || (!cur->actor->objectController))
+		{
+			cur = cur->next;
+			continue;
+		}
+		
+		if (cur->flags & ACTOR_MODGETEX)
+			modgyObject = 1;
+		else
+			modgyObject = 0;
+
+		if( (cur->flags & ACTOR_DRAW_CULLED) &&
+			(cur->distanceFromFrog > ACTOR_DRAWDISTANCEINNER) &&
+			!(cur->flags & ACTOR_DRAW_ALWAYS) )
 		{
 			if( cur->distanceFromFrog < ACTOR_DRAWDISTANCEOUTER )
 			{
@@ -542,82 +243,82 @@ void DrawActorListOLD()
 				cur->actor->objectController->object->flags &= ~OBJECT_FLAGS_XLU;
 			}
 
-			if( cur->draw && !(cur->actor->objectController->object->flags & OBJECT_FLAGS_XLU) )
+			if(gameState.mode == INGAME_MODE || gameState.mode == OBJVIEW_MODE || 
+			   gameState.mode == RECORDKEY_MODE || gameState.mode == LEVELPLAYING_MODE ||
+			   gameState.mode == FRONTEND_MODE  || gameState.mode == CAMEO_MODE || gameState.mode == PAUSE_MODE )
 			{
-				DrawActor(cur->actor);
+				if( cur->draw )
+				if( !(cur->actor->objectController->object->flags & OBJECT_FLAGS_XLU) )
+				{
+					DrawActor(cur->actor);
+				}
 			}
 		}
-*/	
-	/* Water objects */
-	#ifndef RELEASE_BUILD
-	if (showActorNames)
-		dprintf"-------------------------------------------------------------\n"));
-	#endif
-
-	waterObject = 1;
-	for (cur = actList; cur; cur = cur->next)
-	{
-		#ifndef RELEASE_BUILD
-		if (showActorNames)
-		{
-			if (cur->actor->objectController)
-				dprintf"--- %s ---\n",cur->actor->objectController->object->name));
-			else
-				dprintf"*** nocontroll ***\n",cur->actor->objectController->object->name));
-		}
-		#endif
-
-		if(cur->flags & ACTOR_WATER && cur->actor->objectController)
-			DrawActor(cur->actor);
+	
+		cur = cur->next;
 	}
 	
-	#ifndef RELEASE_BUILD
-	if (showActorNames)
-	{
-		dprintf"-------------------------------------------------------------\n"));
-		showActorNames = 0;
-	}
-	#endif
+//	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ALPHABLENDENABLE,FALSE);
+	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_CULLMODE,D3DCULL_CW);
+	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ZENABLE,TRUE);
+	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ZFUNC,D3DCMP_LESS);
+	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ZWRITEENABLE,TRUE);
 
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ALPHABLENDENABLE,TRUE);
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ZWRITEENABLE,FALSE);
-	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_TEXTUREMAG,D3DFILTER_NEAREST);
+	if (hat[0])
+	{
+		XformActor(hat[0]->actor);
+		DrawActor(hat[0]->actor);	
+	}
 
 	DrawBatchedPolys();
-	BlankFrame(x);
-
-	/* Transparent objects..? */
+	BlankFrame();
 	
-	waterObject = 0;
-	for(cur = actList; cur; cur = cur->next)
+	waterObject = 1;
+	cur = actList;
+	while(cur)
 	{
-		if( !cur->draw || (cur->flags & (ACTOR_WATER | ACTOR_DRAW_CULLED)) || cur->distanceFromFrog > ACTOR_DRAWDISTANCEOUTER)
+		if((!(cur->flags & ACTOR_WATER)) || (!cur->actor->objectController))
+		{
+			cur = cur->next;
 			continue;
+		}
 
-		if( !cur->actor->objectController || !cur->actor->objectController->object->flags & OBJECT_FLAGS_XLU )
-			continue;
-
-		modgyObject = (cur->flags & ACTOR_MODGETEX);
-
-		DrawActor(cur->actor);
+		if( gameState.mode == INGAME_MODE || gameState.mode == OBJVIEW_MODE || 
+			gameState.mode == RECORDKEY_MODE || gameState.mode == LEVELPLAYING_MODE ||
+			gameState.mode == FRONTEND_MODE  || gameState.mode == CAMEO_MODE || gameState.mode == PAUSE_MODE )
+		{
+			DrawActor(cur->actor);
+		}
 		
-		if (cur->flags & ACTOR_ADDITIVE)
+		cur = cur->next;
+	}
+
+	waterObject = 0;
+	cur = actList;
+	while(cur)
+	{
+		if( ((cur->flags & ACTOR_WATER)) || (!cur->actor->objectController))
 		{
-			pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_SRCBLEND,D3DBLEND_SRCALPHA);
-			pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_DESTBLEND,D3DBLEND_ONE);
-//				pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_DESTBLEND,D3DBLEND_INVSRCALPHA);
-			pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_TEXTUREMAG,D3DFILTER_NEAREST);//D3DFILTER_LINEAR);
+			cur = cur->next;
+			continue;
 		}
 
-		DrawBatchedPolys();
-		BlankFrame(x);
-
-		if (cur->flags & ACTOR_ADDITIVE)
+		if( cur->actor->objectController->object->flags & OBJECT_FLAGS_XLU )
+		if( !((cur->flags & ACTOR_DRAW_CULLED) && (cur->distanceFromFrog > ACTOR_DRAWDISTANCEOUTER)) )
+		if( gameState.mode == INGAME_MODE || gameState.mode == OBJVIEW_MODE || 
+			gameState.mode == RECORDKEY_MODE || gameState.mode == LEVELPLAYING_MODE ||
+			gameState.mode == FRONTEND_MODE  || gameState.mode == CAMEO_MODE || gameState.mode == PAUSE_MODE )
 		{
-			pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_TEXTUREMAG,D3DFILTER_NEAREST);
-			pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_SRCBLEND,D3DBLEND_SRCALPHA);
-			pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_DESTBLEND,D3DBLEND_INVSRCALPHA);
+				
+		if (cur->flags & ACTOR_MODGETEX)
+			modgyObject = 1;
+		else
+			modgyObject = 0;
+
+			DrawActor(cur->actor);
 		}
+		
+		cur = cur->next;
 	}
 
 /*	pDirect3DDevice->lpVtbl->SetRenderState(pDirect3DDevice,D3DRENDERSTATE_ALPHABLENDENABLE,TRUE);
@@ -743,17 +444,6 @@ void DrawActorListOLD()
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
 /* --------------------------------------------------------------------------------
 	Programmer	: Matthew Cloy
 	Function	: FreeActorList
@@ -763,48 +453,45 @@ void DrawActorListOLD()
 	Returns		: void 
 */
 
-void FreeActor(ACTOR *c)
+void FreeActor(ACTOR2 *c)
 {
-	if((c->objectController) && (c->objectController->object))
+	ACTOR2 *cur = c;
+
+	if (!cur)
+		return;
+
+	if((cur->actor->objectController) && (cur->actor->objectController->object))
 	{
-	 	FreeObjectSprites(c->objectController->object);
+	 	FreeObjectSprites(cur->actor->objectController->object);
 
 		// NEW
-		if(c->objectController->drawList)
+		if(cur->actor->objectController->drawList)
 		{
-			JallocFree((UBYTE **)&c->objectController->vtx[0]);
-			JallocFree((UBYTE **)&c->objectController->drawList);
+			JallocFree((UBYTE **)&cur->actor->objectController->vtx[0]);
+			JallocFree((UBYTE **)&cur->actor->objectController->drawList);
 		}
 
 		// NEW
-		RemoveUniqueObject(c->objectController->object);
-		JallocFree((UBYTE **)&c->objectController);
+		RemoveUniqueObject(cur->actor->objectController->object);
+		JallocFree((UBYTE **)&cur->actor->objectController);
 	}
 
-	/*
-	if(c->LODObjectController)
-		JallocFree((UBYTE **)&c->LODObjectController);
-*/
-	if(c->matrix)
-		JallocFree((UBYTE **)&c->matrix);
+	if(cur->actor->LODObjectController)
+		JallocFree((UBYTE **)&cur->actor->LODObjectController);
 
-	if(c->animation)
-		JallocFree((UBYTE **)&c->animation);
+	if(cur->actor->matrix)
+		JallocFree((UBYTE **)&cur->actor->matrix);
 
-	if(c->shadow)
-		JallocFree((UBYTE **)&c->shadow);
+	if(cur->actor->animation)
+		JallocFree((UBYTE **)&cur->actor->animation);
 
-	JallocFree((UBYTE**)&c);
+	if(cur->actor->shadow)
+		JallocFree((UBYTE **)&cur->actor->shadow);
+
+	JallocFree((UBYTE**)&cur->actor);
+	JallocFree((UBYTE**)&cur);
 }
 
-
-void FreeActor2(ACTOR2 *c)
-{
-	if (!c) return;
-	
-	FreeActor(c->actor);
-	JallocFree((UBYTE**)&c);
-}
 
 /* --------------------------------------------------------------------------------
 	Programmer	: Matthew Cloy
@@ -824,15 +511,15 @@ void FreeActorList()
 	while (cur)
 	{
 		next = cur->next;
-		FreeActor2(cur);		
+		FreeActor(cur);		
 		cur = next;
 	}
 	actList = NULL;
 
-	FreeActor2(backGnd);		
+	FreeActor(backGnd);		
 	backGnd = NULL;
 
-	FreeActor2(hat[0]);		
+	FreeActor(hat[0]);		
 	hat[0] = NULL;
 }
 
@@ -843,11 +530,10 @@ void FreeActorList()
 	Parameters	: 
 	Returns		: ACTOR2 *
 */
-ACTOR2 *CreateAndAddActor(char *name,float cx,float cy,float cz,int initFlags)
+ACTOR2 *CreateAndAddActor(char *name,float cx,float cy,float cz,int initFlags,float offset,int startNode)
 {
 	ACTOR2 *newItem;
-	currentDrawActor2 = NULL;
-
+	
 	newItem			= (ACTOR2 *)JallocAlloc(sizeof(ACTOR2),YES,"ACTOR2");
 	newItem->actor	= (ACTOR *)JallocAlloc(sizeof(ACTOR),YES,"ACTOR");
 
@@ -868,12 +554,7 @@ ACTOR2 *CreateAndAddActor(char *name,float cx,float cy,float cz,int initFlags)
 	// add actor object sprites to sprite list
 	if((newItem->actor->objectController) && (newItem->actor->objectController->object))
 		AddObjectsSpritesToSpriteList(newItem->actor->objectController->object,0);
-	
-	if (strncmp("ghostie",name,6)==0)
-	{
-		newItem->flags = ACTOR_WATER;
-	}
-	else
+
 	if(name[0] != 'x' && name[1] != 'x')
 		newItem->flags = ACTOR_DRAW_CULLED;
 	else
@@ -886,10 +567,7 @@ ACTOR2 *CreateAndAddActor(char *name,float cx,float cy,float cz,int initFlags)
 		if (name[3]=='g')
 		{
 			newItem->flags = ACTOR_DRAW_ALWAYS | ACTOR_MODGETEX;
-			if (name[4]=='_')
-				newItem->flags |= ACTOR_SLIDYTEX;
 
-		
 #ifdef N64_VERSION
 			// add support for modgy objects
 			AddN64ModgyTexObjectResource(newItem->actor);
@@ -899,7 +577,7 @@ ACTOR2 *CreateAndAddActor(char *name,float cx,float cy,float cz,int initFlags)
 		{
 			if (name[2]=='a')
 			{
-				newItem->flags = ACTOR_DRAW_ALWAYS | ACTOR_ADDITIVE;
+				newItem->flags = ACTOR_DRAW_ALWAYS | ACTOR_MODGETEX | ACTOR_SLIDYTEX;
 
 #ifdef N64_VERSION
 				// add support for modgy objects
@@ -952,7 +630,6 @@ ACTOR2 *CreateAndAddActor(char *name,float cx,float cy,float cz,int initFlags)
 	Returns			: 
 	Info			: 
 */
-
 void AddObjectsSpritesToSpriteList(OBJECT *obj,short flags)
 {
 	SPRITE *sprite;
@@ -962,7 +639,7 @@ void AddObjectsSpritesToSpriteList(OBJECT *obj,short flags)
 	{
 		for(i=0; i<obj->numSprites; i++)
 		{
-			sprite = AllocateSprites( 1 );//(SPRITE *)JallocAlloc(sizeof(SPRITE),YES,"ObjSprite");
+			sprite = (SPRITE *)JallocAlloc(sizeof(SPRITE),YES,"ObjSprite");
 
 			sprite->texture = obj->sprites[i].textureID;
 			SetVector(&sprite->pos,&zero);
@@ -1008,10 +685,10 @@ void AddObjectsSpritesToSpriteList(OBJECT *obj,short flags)
 
 			sprite->flags |= flags;
 
-			sprite->offsetX = -32 / 2;
-			sprite->offsetY = -32 / 2;
+			sprite->offsetX = -sprite->texture->sx / 2;
+			sprite->offsetY = -sprite->texture->sy / 2;
 
-			//AddSprite(sprite,NULL);
+			AddSprite(sprite,NULL);
 			obj->sprites[i].sprite = sprite;
 		}
 	}
@@ -1030,7 +707,6 @@ void AddObjectsSpritesToSpriteList(OBJECT *obj,short flags)
 	Returns			: 
 	Info			: 
 */
-/*
 void RemoveObjectSprites(OBJECT *obj,BOOL f)
 {
 	int i;
@@ -1040,9 +716,9 @@ void RemoveObjectSprites(OBJECT *obj,BOOL f)
 		for(i=0; i<obj->numSprites; i++)
 		{
 			if(obj->sprites[i].sprite)
-				DeallocateSprites(obj->sprites[i].sprite, 1);
-//			if(f)
-//				JallocFree((UBYTE**)&obj->sprites[i].sprite);
+				SubSprite(obj->sprites[i].sprite);
+			if(f)
+				JallocFree((UBYTE**)&obj->sprites[i].sprite);
 		}
 	}
 
@@ -1052,7 +728,7 @@ void RemoveObjectSprites(OBJECT *obj,BOOL f)
 	if(obj->next)
 		RemoveObjectSprites(obj->next, f);
 }
-*/
+
 /*	--------------------------------------------------------------------------------
 	Function		: FreeObjectSprites
 	Purpose			: 
@@ -1060,15 +736,21 @@ void RemoveObjectSprites(OBJECT *obj,BOOL f)
 	Returns			: 
 	Info			: 
 */
-
 void FreeObjectSprites(OBJECT *obj)
 {
 	int i;
 
 	if(obj->sprites)
+	{
 		for(i=0; i<obj->numSprites; i++)
+		{
 			if(obj->sprites[i].sprite)
-				DeallocateSprites(obj->sprites[i].sprite,1);
+			{
+				SubSprite(obj->sprites[i].sprite);
+				JallocFree((UBYTE**)&obj->sprites[i].sprite);
+			}
+		}
+	}
 
 	if(obj->children)
 		FreeObjectSprites(obj->children);
@@ -1088,9 +770,11 @@ void FreeObjectSprites(OBJECT *obj)
 
 void MakeUniqueVtx(OBJECT_CONTROLLER *objC)
 {
+	short i;
 	Vtx *vtxa;
 	Vtx *vtxb;
 	Vtx *oldVtxa, *oldVtxb;
+	int offset;
 
 	oldVtxa = objC->vtx[0];
 	oldVtxb = objC->vtx[1];
@@ -1118,7 +802,7 @@ OBJECT *MakeUniqueObject(OBJECT *object)
 {
 	OBJECT	*obj;	
 	OBJECTSPRITE **spr, *tempSpr;
-//	int		i;
+	int		i;
 		
 	obj = object;
 	object = (OBJECT *)JallocAlloc(sizeof(OBJECT), YES, "UniqObj");
@@ -1199,7 +883,6 @@ void MakeUniqueActor(ACTOR *actor,int type)
 		if(actor->objectController->drawList)
 		{
 			MakeUniqueVtx(actor->objectController);
-			
 			XformActor(actor);
 		}
 
@@ -1211,7 +894,7 @@ void MakeUniqueActor(ACTOR *actor,int type)
 			XformActor(actor);
 		}
 	}
-/*
+
 	objCont = actor->LODObjectController;
 	if(objCont)
 	{
@@ -1219,7 +902,6 @@ void MakeUniqueActor(ACTOR *actor,int type)
 		memcpy(actor->LODObjectController, objCont, sizeof(OBJECT_CONTROLLER));
 		actor->LODObjectController->object = MakeUniqueObject(actor->LODObjectController->object);
 	}
-	*/
 }
 
 
@@ -1251,6 +933,7 @@ void RemoveUniqueObject(OBJECT *object)
 {
 	OBJECT	*obj;	
 	OBJECTSPRITE **spr;
+	int		i;
 		
 	obj = object;
 
@@ -1267,22 +950,6 @@ void RemoveUniqueObject(OBJECT *object)
 		RemoveUniqueObject(object->next);
 		
 	JallocFree((UBYTE**)&obj);
-}
-
-/*	-------------------------------------------------------------
-	Function	: SwapActorObject
-	Purpose		: Swaps the object associated with la la la blah
-	Returns		:
-*/
-void SwapActorObject(ACTOR2 *act, const char* name)
-{
-	VECTOR pos = act->actor->pos;
-
-	FreeActor(act->actor);
-
-	act->actor	= (ACTOR *)JallocAlloc(sizeof(ACTOR),YES,"ACTOR");
-	InitActor(act->actor, (char*)name, pos.v[0], pos.v[1], pos.v[2], INIT_ANIMATION);
-	MakeUniqueActor(act->actor,0);
 }
 
 /*	--------------------------------------------------------------------------------
@@ -1342,147 +1009,106 @@ void ActorLookAt( ACTOR *act, VECTOR *at, long flags )
 	}
 }
 
-/*	--------------------------------------------------------------------------------
-	Function 	: Orientate
-	Purpose 	: Creates an orientation quaternion from a given UNIT forward and UNIT up vector
-	Parameters 	: ->quat, forward', forward, up'
-	Returns 	: void
-	Info 		:
-*/
-#define OEPSILON ((float)0.01)
 
-void Orientate(QUATERNION *me, VECTOR *fd, VECTOR *up)
+void Orientate(QUATERNION *me, VECTOR *fd, VECTOR *mfd, VECTOR *up)
 {
-	QUATERNION r1,q1,q2;
-	VECTOR v1,v2,v3,v4;
-	float dp,dp2,scl;
-	float thetaOver2;
-	float sinThetaOver2;
-	long q1Unimportant = 0,q1Flip = 0;
+	VECTOR dirn;
+	QUATERNION rotn,q;
+	float dp,m;
 	
-	dp = up->v[Y];
-	
-	if (dp<1-OEPSILON)
+	CalculateQuatForPlane2( 0, me, up);
+	RotateVectorByQuaternion( &dirn, mfd, me);
+	dp = DotProduct( fd, &dirn );
+	CrossProduct( (VECTOR *)&rotn, &dirn, fd );
+	if(dp > -0.99)
 	{
-		if (dp>OEPSILON-1)
+		m = Magnitude( (VECTOR *)&rotn );
+		if(m > 0.0001)
 		{
-			r1.x = -up->v[Z];
-			r1.y = 0;
-			r1.z = up->v[X];
-			r1.w = acos(dp);
+			ScaleVector( (VECTOR *)&rotn, 1/m );
 
-			// Normalise it (only need to do 2 coords!)
-			scl = 1.0/sqrtf((r1.x*r1.x)+(r1.z*r1.z));
-			r1.x *= scl;
-			r1.z *= scl;
-
-			RotateVectorByXZRotation(&v1,fd,&r1);
-	
-			r1.w = -r1.w;
-			v1.v[Y] = 0;
-
-			GetQuaternionFromXZRotation(&q1,&r1);
-		}
-		else
-		{
-			// We're just fliping the X&Y coords!
-			v1.v[X] = fd->v[X];
-			v1.v[Y] = 0;
-			v1.v[Z] = -fd->v[Z];
-			q1.w = q1.y = q1.z = 0;
-			q1.x = 1;			
-
-			q1Flip = 1;			// We don't need the qMult later on!
+			if (dp<0.99)
+				rotn.w = acos(dp);
+			else
+				rotn.w = 0;
+			
+			GetQuaternionFromRotation( &q, &rotn );
+			QuaternionMultiply( me, &q, me );
 		}
 	}
 	else
 	{
-		v1.v[X] = fd->v[X];
-		v1.v[Y] = 0;
-		v1.v[Z] = fd->v[Z];
-		
-		q1.x = q1.y = q1.z = 0;
-		q1.w = 1;			
-
-		q1Unimportant = 1;	
+		vertQ.w = PI;
+		GetQuaternionFromRotation(&q,&vertQ);
+		QuaternionMultiply(me,me,&q);
 	}
-
-	// Again, makeunit from the two used values
-	scl = 1.0/sqrtf((v1.v[X]*v1.v[X])+(v1.v[Z]*v1.v[Z]));	
-	dp2 = v1.v[Z] * scl;
-
-	if (dp2<1-OEPSILON)
-	{
-		if (dp2>OEPSILON-1)
-		{
-			
-			if (q1Unimportant)
-			{
-
-				if (v1.v[X]>0)
-					thetaOver2 = acos(dp2)*0.5;
-				else
-					thetaOver2 = acos(dp2)*-0.5;
-
-				sinThetaOver2 = sinf(thetaOver2);
-
-				me->x = me->z = 0;
-				me->w = cosf(thetaOver2);
-				me->y = sinThetaOver2;
-			}
-			else
-			{
-				SetVector((VECTOR *)(&r1),up);
-				
-				if (v1.v[X]>0)
-					r1.w = acos(dp2);
-				else
-					r1.w = -acos(dp2);
-
-				GetQuaternionFromRotation(&q2,&r1);			
-
-				if (q1Flip)
-				{
-					me->w = -q2.x;
-					me->x = q2.w;
-					me->y = q2.z;
-					me->z = -q2.y;
-				}
-				else
-					QuaternionMultiply(me,&q2,&q1);
-			}
-		}
-		else
-		{	
-			// This could be more optimal!
-			q2.w = 0;
-			q2.x = -up->v[X];
-			q2.y = -up->v[Y];
-			q2.z = -up->v[Z];
-			
-			if (q1Unimportant)
-				SetQuaternion(me,&q2);
-			else
-			{
-				if (q1Flip)
-				{
-					me->w = -q2.x;
-					me->x = q2.w;
-					me->y = q2.z;
-					me->z = -q2.y;
-				}
-				else
-				{
-					// QuatMult of a w = 0 quaternion.
-					me->w = -q2.x*q1.x - q2.y*q1.y - q2.z*q1.z;
-					me->x = q2.x*q1.w + q2.y*q1.z - q2.z*q1.y;
-					me->y = q2.y*q1.w + q2.z*q1.x - q2.x*q1.z;
-					me->z = q2.z*q1.w + q2.x*q1.y - q2.y*q1.x;
-				}
-			}
-		}
-	}
-	else // No change, hence no need for qmult.		
-		SetQuaternion(me,&q1);			
 }
 
+
+void SitAndFace(ACTOR2 *me, GAMETILE *tile, long fFacing)
+{
+	VECTOR fwdVec = { 0,0,1 };
+	VECTOR dirn2;
+	QUATERNION rotn,q;
+	float frogMatrix[4][4];
+	float frogMatrix2[4][4];
+	float dp,m;
+	
+	CalculateQuatForPlane2(0,&me->actor->qRot,&tile->normal);
+	RotateVectorByQuaternion(&dirn2,&fwdVec,&me->actor->qRot);
+	dp = DotProduct(&tile->dirVector[fFacing],&dirn2);
+	CrossProduct((VECTOR *)&rotn,&dirn2,&tile->dirVector[fFacing]);
+	if(dp > -0.99)
+	{
+		m = Magnitude((VECTOR *)&rotn);
+		if(m > 0.0001)
+		{
+			ScaleVector((VECTOR *)&rotn,1/m);
+			rotn.w = acos(dp);
+			GetQuaternionFromRotation(&q,&rotn);
+			QuaternionMultiply(&me->actor->qRot,&q,&me->actor->qRot);
+		}
+	}
+	else
+	{
+		vertQ.w = PI;
+		GetQuaternionFromRotation(&q,&vertQ);
+		QuaternionMultiply(&me->actor->qRot,&me->actor->qRot,&q);
+	}
+}
+
+
+
+
+
+
+/*
+
+void RemoveUniqueActor(ACTOR *actor,int type)
+{
+	if((actor->objectController) && (actor->objectController->object))
+	{
+		if((type < 0) || ((type >= 0) && (type < CAMEO_ACTOR)))
+		{
+			SubActor(actor);
+			FreeObjectSprites(actor->objectController->object);
+
+			if(actor->objectController->drawList)
+			{
+				JallocFree((UBYTE **)&actor->objectController->Vtx[0]);
+				JallocFree((UBYTE **)&actor->objectController->drawList);
+			}
+
+
+			RemoveUniqueObject(actor->objectController->object);
+			JallocFree((UBYTE **)&actor->objectController);
+		
+			if((actor->LODObjectController) && (actor->LODObjectController->object))
+			{
+				RemoveUniqueObject(actor->LODObjectController->object);
+				JallocFree((UBYTE **)&actor->LODObjectController);
+			}
+		}
+	}
+}
+*/

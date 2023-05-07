@@ -448,7 +448,6 @@ void QuaternionToMatrix(QUATERNION *squat, MATRIX *dmatrix)
 	dmatrix->matrix[3][2] = (float)0.0;
 }
 
-
 //	--------------------------------------------------------------------------------
 //	Function : MatrixToQuaternion
 //	Purpose : Translate a matrix to a stationary quaternion
@@ -521,31 +520,20 @@ void MatrixToQuaternion(MATRIX *smatrix, QUATERNION *dquat)
 	Returns 	: 
 	Info 		: destination CAN be same as source
 */
-
-void QuaternionMultiply(QUATERNION *res,QUATERNION *q1,QUATERNION *q2)
+void QuaternionMultiply(QUATERNION *dest,QUATERNION *src1,QUATERNION *src2)
 {
+	float dp;
 	QUATERNION temp;
 
-	temp.w = q1->w*q2->w - q1->x*q2->x - q1->y*q2->y - q1->z*q2->z;
-	temp.x = q1->w*q2->x + q1->x*q2->w + q1->y*q2->z - q1->z*q2->y;
-	temp.y = q1->w*q2->y + q1->y*q2->w + q1->z*q2->x - q1->x*q2->z;
-	temp.z = q1->w*q2->z + q1->z*q2->w + q1->x*q2->y - q1->y*q2->x;
-/*    
-	float dp;
+	dp = src1->x*src2->x + src1->y*src2->y + src1->z*src2->z;
 
-	dp = q1->x*q2->x + q1->y*q2->y + q1->z*q2->z;
+	temp.w = src1->w*src2->w - dp;
+	temp.x = src1->w*src2->x + src2->w*src1->x + src1->y*src2->z - src1->z*src2->y;
+	temp.y = src1->w*src2->y + src2->w*src1->y + src1->z*src2->x - src1->x*src2->z;
+	temp.z = src1->w*src2->z + src2->w*src1->z + src1->x*src2->y - src1->y*src2->x;
 
-	temp.w = q1->w*q2->w - dp;
-	temp.x = q1->w*q2->x + q2->w*q1->x + q1->y*q2->z - q1->z*q2->y;
-	temp.y = q1->w*q2->y + q2->w*q1->y + q1->z*q2->x - q1->x*q2->z;
-	temp.z = q1->w*q2->z + q2->w*q1->z + q1->x*q2->y - q1->y*q2->x;
-*/
-	res->w = temp.w;
-	res->x = temp.x;
-	res->y = temp.y;
-	res->z = temp.z;
+	memcpy(dest,&temp,sizeof(QUATERNION));
 }
-
 
 /*	--------------------------------------------------------------------------------
 	Function 	: GetRotationFromQuaternion()
@@ -556,39 +544,6 @@ void QuaternionMultiply(QUATERNION *res,QUATERNION *q1,QUATERNION *q2)
 */
 void GetRotationFromQuaternion(QUATERNION *destQ,QUATERNION *srcQ)
 {
-/*	if (srcQ->w)
-	{
-        destQ->w = 2.0*acos(srcQ->w);
-		SetVector((VECTOR *)&destQ,(VECTOR *)&srcQ);
-		MakeUnit((VECTOR *)&destQ);
-	}
-	else
-	{
-        destQ->w = 0;
-        destQ->x = 0.0;
-        destQ->y = 1.0;
-        destQ->z = 0.0;		
-	}
-*/
-float length2 = srcQ->x*srcQ->x+srcQ->y*srcQ->y+srcQ->z*srcQ->z;
-    if ( length2 > 0.0 )
-    {
-        float invlen = 1.0/sqrtf(length2);
-        destQ->w = 2.0*acos(srcQ->w);
-        destQ->x = srcQ->x*invlen;
-        destQ->y = srcQ->y*invlen;
-        destQ->z = srcQ->z*invlen;
-    }
-    else
-    {
-        // angle is 0 (mod 2*pi), so any axis will do
-        destQ->w = 0;
-        destQ->x = 1.0;
-        destQ->y = 0.0;
-        destQ->z = 0.0;
-    }
-	
-/*
 	float theta,sinThetaOver2,m;
 
 	theta = 2 * acos(srcQ->w);
@@ -615,7 +570,6 @@ float length2 = srcQ->x*srcQ->x+srcQ->y*srcQ->y+srcQ->z*srcQ->z;
 		destQ->y = 1;
 		destQ->z = 0;
 	}
-*/
 }
 
 /*	--------------------------------------------------------------------------------
@@ -630,7 +584,7 @@ void GetQuaternionFromRotation(QUATERNION *destQ,QUATERNION *srcQ)
 	float thetaOver2;
 	float sinThetaOver2;
 
-	thetaOver2 = srcQ->w*0.5;
+	thetaOver2 = srcQ->w/2;
 	sinThetaOver2 = sinf(thetaOver2);
 
 	destQ->w = cosf(thetaOver2);
@@ -638,21 +592,6 @@ void GetQuaternionFromRotation(QUATERNION *destQ,QUATERNION *srcQ)
 	destQ->y = sinThetaOver2 * srcQ->y;
 	destQ->z = sinThetaOver2 * srcQ->z;
 }
-
-void GetQuaternionFromXZRotation(QUATERNION *destQ,QUATERNION *srcQ)
-{
-	float thetaOver2;
-	float sinThetaOver2;
-
-	thetaOver2 = srcQ->w*0.5;
-	sinThetaOver2 = sinf(thetaOver2);
-
-	destQ->w = cosf(thetaOver2);
-	destQ->x = sinThetaOver2 * srcQ->x;
-	destQ->y = 0;
-	destQ->z = sinThetaOver2 * srcQ->z;
-}
-
 
 /*	--------------------------------------------------------------------------------
 	Function 	: AddOneScaledVector()
@@ -1162,10 +1101,9 @@ void MakeUnit(VECTOR *vect)
 
 	if(m != 0)
 	{
-		m = 1/m;
-		vect->v[X] *= m;
-		vect->v[Y] *= m;
-		vect->v[Z] *= m;
+		vect->v[X] /= m;
+		vect->v[Y] /= m;
+		vect->v[Z] /= m;
 	}
 }
 
@@ -1186,21 +1124,6 @@ void MakeUnit2D(VECTOR *vect)
 		vect->v[Z] /= m;
 	}
 }
-
-void MakeUnitQuat( QUATERNION *q )
-{
-    float m = MagnitudeQuat(q);
-
-	if( m != 0 )
-	{
-		m = 1/m;
-		q->x *= m;
-		q->y *= m;
-		q->z *= m;
-		q->w *= m;
-	}
-}
-
 
 /*	--------------------------------------------------------------------------------
 	Function 	: ScaleVector()
@@ -1567,8 +1490,6 @@ void RotateVectorByQuaternion(VECTOR *result,VECTOR *vect,QUATERNION *q)
 	GetRotationFromQuaternion(&rot,q);
 	RotateVectorByRotation(result,vect,&rot);
 }
-
-
 /*	--------------------------------------------------------------------------------
 	Function 	: RotateVectorByQuaternion
 	Purpose 	: 
@@ -1611,55 +1532,6 @@ void RotateVectorByRotation(VECTOR *result,VECTOR *vect,QUATERNION *rot)
 
 		result->v[X] = mVec.v[X] + cosTheta * pVec.v[X] + sinTheta * vVec.v[X];
 		result->v[Y] = mVec.v[Y] + cosTheta * pVec.v[Y] + sinTheta * vVec.v[Y];
-		result->v[Z] = mVec.v[Z] + cosTheta * pVec.v[Z] + sinTheta * vVec.v[Z];
-	}
-}
-
-/*	--------------------------------------------------------------------------------
-	Function 	: RotateVectorByQuaternion
-	Purpose 	: 
-	Parameters 	: 
-	Returns 	: 
-	Info 		: destination CAN be same as source
-*/
-void RotateVectorByXZRotation(VECTOR *result,VECTOR *vect,QUATERNION *rot)
-{
-	float m,n,sinTheta,cosTheta;
-	VECTOR mVec,pVec,vVec;
-
-	m = vect->v[X]*rot->x;
-	m += vect->v[Z]*rot->z;
-
-	mVec.v[X] = m*rot->x;				
-	mVec.v[Y] = 0;
-	mVec.v[Z] = m*rot->z;				
-
-	SubVector(&pVec,vect,&mVec);
-
-	vVec.v[X] = -rot->z * pVec.v[Y];
-	vVec.v[Y] =  rot->z * pVec.v[X] - rot->x * pVec.v[Z];
-	vVec.v[Z] =  rot->x * pVec.v[Y];
-	
-	//CrossProduct(&vVec,(VECTOR *)rot,&pVec);
-
-	m = Magnitude(&pVec);
-
-	if(m == 0)
-		SetVector(result,vect);
-	else
-	{
-		n = Magnitude(&vVec);
-		if(n)
-		{
-			m /= n;
-			ScaleVector(&vVec,m);
-		}
-
-		cosTheta = cosf(rot->w);
-		sinTheta = sinf(rot->w);
-
-		result->v[X] = mVec.v[X] + cosTheta * pVec.v[X] + sinTheta * vVec.v[X];
-		result->v[Y] = cosTheta * pVec.v[Y] + sinTheta * vVec.v[Y];
 		result->v[Z] = mVec.v[Z] + cosTheta * pVec.v[Z] + sinTheta * vVec.v[Z];
 	}
 }
@@ -1758,15 +1630,7 @@ void CalculateQuatForPlane2(float yRot,QUATERNION *qAim,VECTOR *normal)
 	QUATERNION tempRot,tempQ;
 	VECTOR tempVect;
 	
-	if( normal->v[Y] > 1-QEPSILON && normal->v[Y] < 1+QEPSILON )
-	{
-		vertQ.w = Aabs(2*PI-yRot);// + PI);
-		tempRot.w = 0;
-		tempRot.x = 0;
-		tempRot.y = 1;
-		tempRot.z = 0;
-	}
-	else if((normal->v[Y] > -1-QEPSILON) && (normal->v[Y] < -1+QEPSILON))
+	if(normal->v[Y] == -1)
 	{
 		vertQ.w = Aabs(2*PI-yRot);// + PI);
 		tempRot.w = PI;
@@ -1786,6 +1650,40 @@ void CalculateQuatForPlane2(float yRot,QUATERNION *qAim,VECTOR *normal)
 	GetQuaternionFromRotation(qAim,&vertQ);
 	GetQuaternionFromRotation(&tempQ,&tempRot);
 	QuaternionMultiply(qAim,&tempQ,qAim);
+}
+
+
+/*	--------------------------------------------------------------------------------
+	Function 	: OrientateQuaternion
+	Purpose 	: Creates an orientation as a quaternion from a forward and an up vector
+	Parameters 	: QUATERNION*, up, forwards
+	Returns 	: 
+	Info 		: up and fwd should be UNIT vectors or it won't work!
+*/
+void OrientateQuaternion(QUATERNION *q, VECTOR *fwd, VECTOR *up)
+{
+	float mag, thetaOver2, sinThetaOver2;
+	VECTOR axis;
+
+	CrossProduct(&axis, fwd, up);		// axis is perp to two vectors
+	mag = Magnitude(&axis);
+
+	if (mag != 0)
+	{
+		ScaleVector(&axis, 1.0f/mag);
+
+		thetaOver2 = (float)acos(mag) * 0.5f;
+		sinThetaOver2 = sinf(thetaOver2);
+
+		q->x = sinThetaOver2 * fwd->v[0];
+		q->y = sinThetaOver2 * fwd->v[1];
+		q->z = sinThetaOver2 * fwd->v[2];
+		q->w = cosf(thetaOver2);
+	}
+	else
+	{
+		*q = zeroQuat;
+	}
 }
 
 #ifdef PC_VERSION	//----------------------------------------------------------------------------

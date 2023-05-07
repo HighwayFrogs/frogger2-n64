@@ -20,52 +20,35 @@ enum gameModes
 	//  Frontend / Title screen Modes
 	FRONTEND_MODE,
 
+	GAME_MODE,
 	INGAME_MODE,
 	MENU_MODE,
-
-	LEVELCOMPLETE_MODE,
-	WORLDCOMPLETE_MODE,
-	GAMECOMPLETE_MODE,
-	GAMEOVER_MODE,
-	INTRO_MODE,
 
 	CAMEO_MODE,
 
 	PAUSE_MODE,
 
-	GHOST_MODE,							// Mode To Whit Your Self Against Your Self [sic]
+	GHOST_MODE,							// Mode To Whit Your Self Against Your Self
 
 	LEVELPLAYING_MODE,
 	RECORDKEY_MODE,
 
-	TITLE_MODE,
-	LEVELSELECT_MODE,
-	CHARSELECT_MODE,
-	FMVPLAY_MODE,
-#ifdef N64_VERSION	
-	DEVELOPMENT_MODE,
 	SNDVIEW_MODE,
 	OBJVIEW_MODE,
 	WATERVIEW_MODE,
-	PROCVIEW_MODE,
-#endif
+
+	TITLE_MODE,
+	LEVELSELECT_MODE,
+	DEVELOPMENT_MODE,
 };
 
 #define SINGLEPLAYER	1
 #define MULTILOCAL		2
 #define MULTIREMOTE		3
 
-enum
-{
-	INVALID_MODE,
-	ARCADE_MODE,
-	STORY_MODE,
-};
-
 struct gameStateStruct
 {
 	unsigned char multi;
-	unsigned char single;
 	unsigned long mode;
 	unsigned long oldMode;
 	unsigned long menuMode;
@@ -86,14 +69,11 @@ enum
 	TILESTATE_GRAPPLE,
 	TILESTATE_SMASH,
 	TILESTATE_BARRED,
-	TILESTATE_FALL,
 
 	TILESTATE_FROGGER1AREA,
 	TILESTATE_FROGGER2AREA,
 	TILESTATE_FROGGER3AREA,
 	TILESTATE_FROGGER4AREA,
-
-	TILESTATE_OCCUPIED,
 
 	TILESTATE_CONVEYOR0SLOW = 0x20,
 	TILESTATE_CONVEYOR1SLOW,
@@ -109,17 +89,11 @@ enum
 	TILESTATE_CONVEYOR1FAST,
 	TILESTATE_CONVEYOR2FAST,
 	TILESTATE_CONVEYOR3FAST,
-
-	TILESTATE_CONVEYOR0ONEWAY = 0x2C,
-	TILESTATE_CONVEYOR1ONEWAY,
-	TILESTATE_CONVEYOR2ONEWAY,
-	TILESTATE_CONVEYOR3ONEWAY,
 };
 
-#define TILESTATE_CONVEYOR			0x20
-#define TILESTATE_CONVEYOR_MED		0x24
-#define TILESTATE_CONVEYOR_FAST		0x28
-#define TILESTATE_CONVEYOR_ONEWAY	0x2C
+#define TILESTATE_CONVEYOR		0x20
+#define TILESTATE_CONVEYOR_MED	0x24
+#define TILESTATE_CONVEYOR_FAST	0x28
 
 typedef struct _GAMETILE_INFO
 {
@@ -131,7 +105,7 @@ typedef struct _GAMETILE
 	struct _GAMETILE	*tilePtrs[4];		// north, south, east and west
 	struct _GAMETILE	*next;				// next tile in linked list
 	
-	GAMETILE_INFO		*gameInfo;
+	GAMETILE_INFO		*gameInfo;			// tile to teleport to if this tile is a teleporter
 
 	unsigned char		state;				// state of tile
 	

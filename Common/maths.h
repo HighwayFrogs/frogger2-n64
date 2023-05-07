@@ -17,13 +17,12 @@
 #define MagnitudeSquared2D(vect) ((vect)->v[X]*(vect)->v[X] + (vect)->v[Z]*(vect)->v[Z])
 #define Magnitude2D(vect) (sqrtf((vect)->v[X]*(vect)->v[X] + (vect)->v[Z]*(vect)->v[Z]))
 #define Magnitude(vect) (sqrtf((vect)->v[X]*(vect)->v[X] + (vect)->v[Y]*(vect)->v[Y] + (vect)->v[Z]*(vect)->v[Z]))
-#define MagnitudeQuat(q) (sqrt(q->w*q->w + q->x*q->x + q->y*q->y + q->z*q->z))
+
 
 /*
 #define ZeroVector(vect) SetVector(vect,&zero)
 */
 
-#define CreateVector(vec,x,y,z) { (vec)->v[X] = (x); (vec)->v[Y] = (y); (vec)->v[Z] = (z); }
 #define AddVector(res,v1,v2) {(res)->v[X] = (v1)->v[X] + (v2)->v[X];(res)->v[Y] = (v1)->v[Y] + (v2)->v[Y];(res)->v[Z] = (v1)->v[Z] + (v2)->v[Z];}
 #define AddToVector(res,v1) {(res)->v[X] += (v1)->v[X];(res)->v[Y] += (v1)->v[Y];(res)->v[Z] += (v1)->v[Z];}
 #define SubFromVector(res,v1) {(res)->v[X] -= (v1)->v[X];(res)->v[Y] -= (v1)->v[Y];(res)->v[Z] -= (v1)->v[Z];}
@@ -126,19 +125,18 @@ void QuaternionToMatrixZeroY(QUATERNION *squat, MATRIX *dmatrix);
 void MatrixToQuaternion(MATRIX *smatrix, QUATERNION *dquat);
 void GetRotationFromQuaternion(QUATERNION *destQ,QUATERNION *srcQ);
 void GetQuaternionFromRotation(QUATERNION *destQ,QUATERNION *srcQ);
-void GetQuaternionFromXZRotation(QUATERNION *destQ,QUATERNION *srcQ);
-void QuaternionMultiply(QUATERNION *res,QUATERNION *q1,QUATERNION *q2);
+void QuaternionMultiply(QUATERNION *dest,QUATERNION *src1,QUATERNION *src2);
 /*
 int IntersectEdges(float *x,float *y,POINT2D *v1,POINT2D *v2,POINT2D *v3,POINT2D *v4);
 */
 //void SetQuaternion(QUATERNION *q1,QUATERNION *q2);
 void NormalToQuaternion(QUATERNION *q,VECTOR *normal);
+void OrientatateQuaternion(QUATERNION *q, VECTOR *fwd, VECTOR *up);
 
 //vector functions
 //void ZeroVector(VECTOR *v1);
 void RotateVectorByQuaternion(VECTOR *result,VECTOR *vect,QUATERNION *q);
 void RotateVectorByRotation(VECTOR *result,VECTOR *vect,QUATERNION *rot);
-void RotateVectorByXZRotation(VECTOR *result,VECTOR *vect,QUATERNION *rot);
 //void SetVector(VECTOR *v1,VECTOR *v2);
 //void SubVector(VECTOR *result,VECTOR *operand1,VECTOR *operand2);
 void SubVector2D(VECTOR *result,VECTOR *operand1,VECTOR *operand2);
@@ -147,7 +145,6 @@ float FindShortestAngleSigned(float ang1,float ang2);
 //float Magnitude(VECTOR *vect);
 void MakeUnit(VECTOR *vect);
 void MakeUnit2D(VECTOR *vect);
-void MakeUnitQuat( QUATERNION *q );
 //void ScaleVector(VECTOR *vect,float scale);
 //void ScaleVector2D(VECTOR *vect,float scale);
 float Aabs(float angle);

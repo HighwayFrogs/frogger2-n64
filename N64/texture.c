@@ -208,9 +208,6 @@ void LoadTextureBank(int num)
 		if(tex->palette)
 			tex->palette = (short *)((int)tex->palette + (int)tex);
 		temp += tex->size;
-
-		// check if this is a procedural texture...
-
 	}
 
 	numTextureBanks++;
@@ -266,7 +263,7 @@ void FindTexture(TEXTURE **texPtr, int texID, BOOL report)
 	Returns 	: void
 	Info 		:
 */
-/*void AnimateTexture(TEXTURE_ANIMATION *anim,Gfx *dl)
+void AnimateTexture(TEXTURE_ANIMATION *anim,Gfx *dl)
 {
 	int lastFrame;
 	float speed;
@@ -320,5 +317,5 @@ void FindTexture(TEXTURE **texPtr, int texID, BOOL report)
 
 	}
 */
-//}
+}
 

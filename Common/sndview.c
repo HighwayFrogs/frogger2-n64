@@ -412,7 +412,6 @@ void RunSndView()
 
 		FreeMenuItems();
 		LoadTextureBank(SYSTEM_TEX_BANK);
-//		LoadTextureBank(INGAMEGENERIC_TEX_BANK);
 
 		title = CreateAndAddTextOverlay(30,24,"sound player",NO,255,smallFont,0,0);
 		titleShadow = CreateAndAddTextOverlay(32,26,"sound player",NO,255,smallFont,0,0);
@@ -457,16 +456,11 @@ void RunSndView()
 		curPane = CreateAndAddSpriteOverlay(43,63,"tippane.bmp",200,12,191,0);
 
 		// top pane
-//		sprPane = CreateAndAddSpriteOverlay(25,20,"tippane.bmp",270,25,191,0);
-		sprPane = CreateAndAddSpriteOverlay(25,20,"prc_watrd.bmp",270,25,191,0);
+		sprPane = CreateAndAddSpriteOverlay(25,20,"tippane.bmp",270,25,191,0);
 		// middle pane
-//		sprPane = CreateAndAddSpriteOverlay(25,46,"tippane.bmp",270,68,95,0);
-		sprPane = CreateAndAddSpriteOverlay(25,46,"prc_watrd.bmp",270,68,95,0);
+		sprPane = CreateAndAddSpriteOverlay(25,46,"tippane.bmp",270,68,95,0);
 		// bottom pane
-//		sprPane = CreateAndAddSpriteOverlay(25,115,"tippane.bmp",270,105,191,0);
-		sprPane = CreateAndAddSpriteOverlay(25,115,"prc_watrd.bmp",270,105,191,0);
-		
-		CreateAndAddProceduralTexture(sprPane->frames[0],"prc_watrd");
+		sprPane = CreateAndAddSpriteOverlay(25,115,"tippane.bmp",270,105,191,0);
 
 		sfxNum	= 0;
 		musNum	= 0;

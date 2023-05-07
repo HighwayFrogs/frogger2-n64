@@ -60,6 +60,7 @@ void InitCRCTable()
 unsigned long UpdateCRC(char *ptr)
 {
 	register int i, j;
+	int code;
 	int size = strlen(ptr);
 	unsigned long CRCaccum = 0;
 

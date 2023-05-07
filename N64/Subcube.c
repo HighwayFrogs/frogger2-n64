@@ -57,9 +57,6 @@ char hiliteNum = 0;
 
 void SetRendermodeForEnviroment(void);
 
-ACTOR2 *hat[MAX_FROGS];
-
-
 RENDER_MODE renderMode = 
 {
 	0,	//	UBYTE	transparentSurf;
@@ -679,7 +676,7 @@ void TransformSkinnedObject(OBJECT *obj, float time)
 	short i, j;
 	short	fromKey, toKey;
 	short	xluVal;
-	char tmp[6],wasHed;
+	char tmp[6];
 	Vtx		*vtx = currentObjectController->vtx[currentObjectController->vtxBuf];
 
 //handle position keyframes
@@ -828,19 +825,17 @@ void TransformSkinnedObject(OBJECT *obj, float time)
 	}
 
 	// check for frog head....
-	wasHed = 0;
 	for(i=0; i<5; i++)
 		tmp[i] = obj->name[i];
 	tmp[5] = '\0';
 
 	// ...and move it if necessary
-	if((gameState.mode == INGAME_MODE || runningIntro) && (!gstrcmp(tmp,"fghed\0")))
+	if((gameState.mode == INGAME_MODE) && (!gstrcmp(tmp,"fghed\0")))
 	{
 		float rotmat2[4][4];
 		QUATERNION quat, rot = {0,1,0,0};
 		VECTOR actVec;
 
-		wasHed = 1;
 		if(player[0].canJump)
 		{
 			if (pointOfInterest)
@@ -885,9 +880,11 @@ void TransformSkinnedObject(OBJECT *obj, float time)
 
 	PushMatrix(rotmat);
 
+
 	guScaleF(scalemat, scale.v[X], scale.v[Y], scale.v[Z]);
 
 	PushMatrix(scalemat);
+
 
 	//if the object has a collision sphere
 	if(obj->collSphere)

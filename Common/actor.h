@@ -23,9 +23,7 @@
 #define ACTOR_SLIDYTEX				(1 << 5)	//32
 #define ACTOR_SLIDYTEX2				(1 << 6)	//64
 #define ACTOR_MODGETEX				(1 << 7)	//128
-#define ACTOR_ADDITIVE				(1 << 8)	//256
-#define ACTOR_SLUDGE				(1 << 9)	//512
-#define ACTOR_LEAVES				(1 << 10)	//1024
+
 
 #define LOOKAT_ANYWHERE		1
 #define LOOKAT_2D			2
@@ -35,9 +33,28 @@
 
 #include "general.h"
 
+typedef struct TAGACTION
+{	
+	TIMER safe;
+	TIMER stun;
+	TIMER dead;
+
+	TIMER isCroaking;
+	TIMER isOnFire;
+
+	char frogon;
+	char frogunder;
+
+	char healthPoints;
+	unsigned char deathBy;
+
+} ACTION;
+
+
 typedef struct TAGACTOR2
 {
 	ACTOR			*actor;
+	ACTION			action;	
 	
 	struct TAGACTOR2	*next,*prev;
 
@@ -69,16 +86,14 @@ extern ACTOR2 *globalLevelActor;
 extern char dprintbuf[255];
 
 extern int uniqueActorCRC[];
-extern int numUniqueActors;
+extern char numUniqueActors;
 
-ACTOR2 *CreateAndAddActor(char *name,float cx,float cy,float cz,int initFlags);
-void SwapActorObject(ACTOR2 *act, const char* name);
-
+ACTOR2 *CreateAndAddActor(char *name,float cx,float cy,float cz,int initFlags,float offset,int startNode);
 void DrawActorList();
 void FreeActorList();
 
 void AddObjectsSpritesToSpriteList(OBJECT *obj,short flags);
-//void RemoveObjectSprites(OBJECT *obj,BOOL free);
+void RemoveObjectSprites(OBJECT *obj,BOOL free);
 void FreeObjectSprites(OBJECT *obj);
 
 void MakeUniqueActor(ACTOR *actor,int type);
@@ -91,6 +106,7 @@ void RemoveUniqueObject(OBJECT *object);
 void ResetUniqueActorList();
 
 void ActorLookAt( ACTOR *act, VECTOR *at, long flags );
-void Orientate(QUATERNION *me, VECTOR *fd, VECTOR *up);
+void Orientate(QUATERNION *me, VECTOR *fd, VECTOR *mfd, VECTOR *up);
+void SitAndFace(ACTOR2 *me, GAMETILE *tile, long fFacing);
 
 #endif

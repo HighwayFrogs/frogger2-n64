@@ -36,8 +36,6 @@ extern int PathAtFlag( TRIGGER *trigger );
 extern int BitCheck( TRIGGER *trigger );
 extern int FrogIsDead( TRIGGER *trigger );
 extern int LevelIsOpen( TRIGGER *trigger );
-extern int EnemyAtFlag(TRIGGER *trigger);
-extern int PlatformAtFlag(TRIGGER *trigger);
 
 /*----- [ EVENT PROTOTYPES ] -------------------------------------------------------------------*/
 extern void ChangeActorScale( EVENT *event );
@@ -49,5 +47,8 @@ extern void ToggleTileLink( EVENT *event );
 extern void PlaySFX( EVENT *event );
 extern void EvAnimateActor( EVENT *event );
 extern void TeleportFrog( EVENT *event );
+
+/*----- [ LEVEL SETUP PROTOTYPES ] -------------------------------------------------------------*/
+//extern void InitEventsForLevel( unsigned long worldID, unsigned long levelID );
 
 #endif

@@ -83,34 +83,12 @@ inline void lmemcpy( unsigned long *a, unsigned long *b, unsigned long size )
 
 
 /*	--------------------------------------------------------------------------------
-    Function		: FindClosestTileVector
-	Parameters		: Direction to match, gametile
-	Returns			: direction vector index
-*/
-short FindClosestTileVector( VECTOR *dir, GAMETILE *tile )
-{
-	int i, match=0;
-	float best=-1, dp;
-
-	for( i=0; i<4; i++ )
-	{
-		dp = DotProduct( &tile->dirVector[i], dir );
-		if( dp > best )
-		{
-			best = dp;
-			match = i;
-		}
-	}
-
-	return match;
-}
-
-
-/*	--------------------------------------------------------------------------------
     Function		: FindNearestTile
 	Parameters		: VECTOR
 	Returns			: GAMETILE*
 */
+
+
 GAMETILE* FindNearestTile(VECTOR v)
 {
 	GAMETILE *t, *closest;
@@ -143,15 +121,13 @@ GAMETILE* FindNearestJoinedTile( GAMETILE *tile, VECTOR *pos )
 	{
 		t = tile->tilePtrs[i];
 		if( t )
+		if( (t->state != TILESTATE_BARRED) && (t->state != TILESTATE_JOIN) )
 		{
-			if( (t->state != TILESTATE_BARRED) && (t->state != TILESTATE_JOIN) )
+			dist = DistanceBetweenPointsSquared(pos, &t->centre);
+			if (dist < closestDist)
 			{
-				dist = DistanceBetweenPointsSquared(pos, &t->centre);
-				if (dist < closestDist)
-				{
-					closest = t;
-					closestDist = dist;
-				}
+				closest = t;
+				closestDist = dist;
 			}
 
 			for( j=0; j<4; j++ )
@@ -171,26 +147,6 @@ GAMETILE* FindNearestJoinedTile( GAMETILE *tile, VECTOR *pos )
 	}
 
 	return closest;
-}
-
-GAMETILE *FindJoinedTileByDirectionAndType( GAMETILE *st, VECTOR *d, int type )
-{
-	float distance = 100000, t;
-	int i;
-	GAMETILE *res = NULL;
-
-	for (i=0; i<4; i++)
-	{
-		t = DotProduct( d, &st->dirVector[i] );
-		if( (t < distance) && st->tilePtrs[i] )
-		if( st->tilePtrs[i]->state == type )
-		{
-			distance = t;
-			res = st->tilePtrs[i];
-		}
-	}
-
-	return res;
 }
 
 GAMETILE *FindJoinedTileByDirection( GAMETILE *st, VECTOR *d )

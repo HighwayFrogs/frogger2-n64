@@ -40,8 +40,7 @@ TEXTOVERLAY *CreateAndAddTextOverlay(float x,float y,char *text,char centred,cha
 	newItem->flags		= flags;
 	newItem->draw		= 1;
 	newItem->font		= fontPtr;
-	newItem->scale		= 1;
-
+		
 	newItem->xPos		= x;
 	newItem->yPos		= y;
 	newItem->xPosTo		= x;

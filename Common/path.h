@@ -35,7 +35,6 @@ typedef struct TAGPATHNODE
 
 	float					speed;					// speed at this node
 	short					waitTime;				// pause time at this node
-	struct _SAMPLE			*sample;				// Played when an enemy/platform reaches this node
 
 } PATHNODE;
 

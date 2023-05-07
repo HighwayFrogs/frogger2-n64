@@ -66,10 +66,10 @@ int FrogOnTile( TRIGGER *trigger )
 */
 int FrogOnPlatform( TRIGGER *trigger )
 {
-	int pl = (int)trigger->data[0];
-	int id = (int)trigger->data[1];
+	ACTOR2 *frog = (ACTOR2 *)trigger->data[0];
+	PLATFORM *plt = (PLATFORM *)trigger->data[1];
 
-	if (currPlatform[pl] && (currPlatform[pl]->uid == id))
+	if( plt->carrying == frog )
 		return 1;
 
 	return 0;
@@ -106,11 +106,11 @@ int ActorWithinRadius( TRIGGER *trigger )
 
 int OnTimeout( TRIGGER *trigger )
 {
-	unsigned long time = (int)trigger->data[0];
+	int time = (int)trigger->data[0];
 
 	if (actFrameCount >= time)
 	{
-		(unsigned long)trigger->data[0] = actFrameCount + (unsigned long)trigger->data[1];
+		(int)trigger->data[0] = actFrameCount + (int)trigger->data[1];
 		return TRUE;
 	}
 	else
@@ -147,6 +147,7 @@ int LogicalAND( TRIGGER *trigger )
 {
 	int numT = (int)trigger->data[0];
 	long i;
+	short fireFlag = 1;
 	TRIGGER *t;
 
 	for( i=0; i<numT; i++ )
@@ -171,6 +172,7 @@ int LogicalOR( TRIGGER *trigger )
 {
 	int numT = (int)trigger->data[0];
 	long i;
+	short fireFlag = 0;
 	TRIGGER *t;
 
 	for( i=0; i<numT; i++ )
@@ -183,37 +185,6 @@ int LogicalOR( TRIGGER *trigger )
 	return 0;
 }
 
-int EnemyAtFlag(TRIGGER *trigger)
-{
-	int id, flag;
-	ENEMY *e;
-	
-	id = (int)trigger->data[0];
-	flag = (int)trigger->data[1];
-
-	for(e = enemyList.head.next; e != &enemyList.head; e = e->next)
-	{
-		if ((!id || e->uid == id) && (e->path->fromNode == flag))
-			return 1;
-	}
-	return 0;
-}
-
-int PlatformAtFlag(TRIGGER *trigger)
-{
-	int id, flag;
-	PLATFORM *p;
-	
-	id = (int)trigger->data[0];
-	flag = (int)trigger->data[1];
-
-	for(p = platformList.head.next; p != &platformList.head; p = p->next)
-	{
-		if ((!id || p->uid == id) && (p->path->fromNode == flag))
-			return 1;
-	}
-	return 0;
-}
 
 int PathAtFlag( TRIGGER *trigger )
 {
@@ -369,7 +340,7 @@ void PlaySFX( EVENT *event )
 	VECTOR *point = (VECTOR *)event->data[3];
 	float radius = *(float *)event->data[4];
 
-	PlaySample( FindSample(snum), point, radius, vol, -1/*pitch*/ );
+//		PlaySample( snum, point, radius, vol, pitch );
 }
 
 /*	--------------------------------------------------------------------------------
@@ -412,16 +383,45 @@ void ChangeLevel( EVENT *event )
 	NUM_FROGS = 1;*/
 
 
-	gameState.mode = LEVELCOMPLETE_MODE;
-	GTInit( &modeTimer, 1 );
+	GTInit( &levelIsOver, 15 );
 	showEndLevelScreen = 0;
 }
 
 void TeleportFrog( EVENT *event )
 {
-	int f = (int)event->data[0];
-	GAMETILE *tile = (GAMETILE*)event->data[1];
+	int fNum = (int)event->data[0],
+		tNum = (int)event->data[1];
+	GAMETILE *tile = (GAMETILE*)GetTileFromNumber(tNum);
 
-	TeleportActorToTile(frog[f], tile, f);
-//	CreateTeleportEffect(&frog[f]->actor->pos, &upVec, 255,255,255);
+	TeleportActorToTile(frog[fNum],tile,fNum);
+	fadeDir		= FADE_IN;
+	fadeOut		= 255;
+	fadeStep	= 8;
+	doScreenFade = 63;
+}
+
+/*----- [ LEVEL SETUP ] ------------------------------------------------------------------------*/
+
+/*	--------------------------------------------------------------------------------
+	Function 	: InitEventsForLevel
+	Purpose 	: Adds all triggers and events for the current level
+	Parameters 	: 
+	Returns 	: 
+	Info 		:
+*/
+void InitEventsForLevel( unsigned long worldID, unsigned long levelID )
+{
+	void **args;
+	TRIGGER *trigger;
+	EVENT *event;
+	VECTOR *pos = (VECTOR *)JallocAlloc( sizeof(VECTOR),YES,"Vector" );
+	VECTOR *scale = (VECTOR *)JallocAlloc( sizeof(VECTOR),YES,"Vector" );
+	float *fnum;
+	int *inum;
+
+	InitTriggerList( );
+
+	if ( worldID == WORLDID_GARDEN )
+	{
+	} // etc
 }

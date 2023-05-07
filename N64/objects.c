@@ -795,6 +795,24 @@ void LoadObjectBank(int num)
 			bankRomEnd		= (u32)&_objBank_9_6_SegmentRomEnd;
 			dprintf"RETRO LEVEL 6 OBJECT BANK - "));
 			break;
+/*
+		case BOSSA_RETRO_OBJ_BANK:
+			bankRomStart	= (u32)&_objBank_9_4_SegmentRomStart;
+			bankRomEnd		= (u32)&_objBank_9_4_SegmentRomEnd;
+			dprintf"RETRO BOSS A OBJECT BANK - "));
+			break;
+		case BONUS_RETRO_OBJ_BANK:
+			bankRomStart	= (u32)&_objBank_9_5_SegmentRomStart;
+			bankRomEnd		= (u32)&_objBank_9_5_SegmentRomEnd;
+			dprintf"RETRO BONUS OBJECT BANK - "));
+			break;
+		case MULTI_RETRO_OBJ_BANK:
+			bankRomStart	= (u32)&_objBank_9_6_SegmentRomStart;
+			bankRomEnd		= (u32)&_objBank_9_6_SegmentRomEnd;
+			dprintf"RETRO MULTIPLAYER OBJECT BANK - "));
+			break;
+*/
+
 		default:
 			dprintf"ERROR: no object bank specified....\n"));
 			for(;;);

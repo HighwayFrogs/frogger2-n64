@@ -215,9 +215,6 @@ typedef struct
 	short	*palette;
 }TEXTURE;
 
-#ifdef N64_VERSION
-typedef TEXTURE TEXENTRY;
-#endif
 
 typedef struct
 {
@@ -262,10 +259,16 @@ typedef struct
 
 typedef struct
 {
+//	float			altitude;
+//	PLANE			*altPlane;
 	float			radius;
 	UBYTE			alpha;
-	char			draw;
-
+	UBYTE			alphaAim;
+	UBYTE			alphaAimSpeed;
+//	char			collSphere;
+#ifndef PC_VERSION
+	Vtx				vert[4];
+#endif
 } ACTOR_SHADOW;
 
 
@@ -298,11 +301,8 @@ typedef struct
 	float		morphTo;
 	float		morphFrom;
 
-	char		loopFlags[5];		// NOTE: This assumes that frogger will never have looping sounds on animations
-	struct _SAMPLE **sfxMapping;	// Cue these sound effects off the animations
-
 }ACTOR_ANIMATION;
-/*
+
 typedef struct
 {
 	TEXTURE **texture;
@@ -342,12 +342,30 @@ typedef struct
 	float		lifetime;
 
 }SPRITE_ANIMATION;
-*/
+
+typedef struct TAGSPRITE
+{
+	struct TAGSPRITE *next,*prev;
+
+	TEXTURE *texture;
+	VECTOR pos;
+	short scaleX;
+	short scaleY;
+	short flags;
+	UBYTE r,g,b,a;
+	UBYTE red2,green2,blue2,alpha2;
+	BYTE  offsetX;
+	BYTE  offsetY;
+	SPRITE_ANIMATION anim;
+
+	char kill;
+
+}SPRITE;
 
 typedef struct OBJECTSPRITE
 {
 	TEXTURE		*textureID;
-	struct TAGSPRITE *sprite;		//actual sprite in sprite list
+	SPRITE		*sprite;		//actual sprite in sprite list
 	short		x, y, z;
 	short		sx;	//xsize - 32 is normal
 	short		sy;	//ysize - 32 is normal
@@ -357,7 +375,7 @@ typedef struct OBJECTSPRITE
 
 }OBJECTSPRITE;
 
-/*
+
 typedef struct
 {
 	FRAMELIST	*frameList;
@@ -367,7 +385,7 @@ typedef struct
 	BYTE		counter;
 
 }TEXTURE_ANIMATION;
-*/
+
 typedef struct
 {
 	s16		*verts;
@@ -398,8 +416,7 @@ typedef struct OBJECT
 	MESH		*mesh;
 	Gfx			*drawList;
 
-	long textureAnim; // NOT USED - just for padding
-
+	TEXTURE_ANIMATION *textureAnim;
 	//for skinning
 	SKINVTX		*effectedVerts;
 //	Vtx			**effectedVerts;
@@ -422,11 +439,8 @@ typedef struct OBJECT
 	short		numRotateKeys;
 
 	COLOUR		colour;
-#ifndef PCVERSION
 	void		*renderData;
-#else
-	D3DTLVERTEX *renderData;
-#endif
+
 	short		flags;
 
 	short		numChildren;
@@ -479,20 +493,31 @@ typedef struct
 typedef struct TAGACTOR
 {
 	struct TAGACTOR				*next,*prev;
+//	struct TAGACTOR				*collNext,*collPrev;
+//	struct TAGACTOR				*distNext,*distPrev;
 	float						distanceFromCamera;
 
 	Mtx							*matrix;
+//	SHORT						type;
+//	SHORT						objectType;
 	BYTE						status;
+//	UBYTE						sparkly;
+//	float						lifetime;
 	short						xluOverride;
 	int							flags;
+//	struct TAGACTOR				*owner;
 
 	float						maxRadius;
 
 	VECTOR						pos;
 	VECTOR						oldpos;
 	VECTOR						vel;
+//	VECTOR						oldVel;
+//	float						velInertia;
+//	float						speed;
 	VECTOR						rot;
 	VECTOR						rotaim;
+//	VECTOR						rotvel;
 								
 	QUATERNION					qRot;
 												
@@ -501,8 +526,15 @@ typedef struct TAGACTOR
 	OBJECT_CONTROLLER			*objectController;
 	OBJECT_CONTROLLER			*LODObjectController;
 	ACTOR_SHADOW				*shadow;
+//	ACTOR_BEHAVIOUR				*behaviour;
+//	ACTOR_STATS					*stats;
+//	ACTOR_COLLISION				*collision;	
 	ACTOR_ANIMATION				*animation;
-	unsigned char				visible;
+//	PLANE  						*planes;
+//	struct TAG_THOUGHT_BUBBLE	*thoughtBubble;
+//	OBJECT_CONTROLLER			*shatterBit;
+//	CLUSTER						*cluster;
+	int							visible;
 
 } ACTOR;
 
@@ -533,18 +565,6 @@ typedef struct TAGPLANE2
 
 } PLANE2;
 
-
-typedef struct TAGPOLY
-{
-	struct TAGPOLY *next;
-
-	PLANE2 plane;
-	unsigned char r, g, b, a;
-	float u, v, u1, v1, angle;
-	TEXTURE *tex;
-	VECTOR *vT;
-
-} POLYGON;
 
 
 #define dprintf debugPrintf(sprintf(outputMessageBuffer, 
