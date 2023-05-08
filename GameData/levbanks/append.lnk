@@ -632,7 +632,7 @@ _scenBank000SegmentRomEnd      alias   _scenBank000_orgend
 
            section.16	scenBank000.data,scenBank000
 
-cBank000  incbin  "levbanks/bin/gardenbossa.bi2",scenBank000.data,64
+sBank000  incbin  "levbanks/bin/gardenbossa.bi2",scenBank000.data,64
 
 ;--
 
@@ -644,7 +644,7 @@ _scenBank001SegmentRomEnd      alias   _scenBank001_orgend
 
            section.16	scenBank001.data,scenBank001
 
-cBank001  incbin  "levbanks/bin/halloween1.bi2",scenBank001.data,64
+sBank001  incbin  "levbanks/bin/halloween1.bi2",scenBank001.data,64
 
 ;--
 
@@ -656,7 +656,7 @@ _scenBank002SegmentRomEnd      alias   _scenBank002_orgend
 
            section.16	scenBank002.data,scenBank002
 
-cBank002  incbin  "levbanks/bin/space2.bi2",scenBank002.data,64
+sBank002  incbin  "levbanks/bin/space2.bi2",scenBank002.data,64
 
 ;--
 
@@ -668,7 +668,7 @@ _scenBank003SegmentRomEnd      alias   _scenBank003_orgend
 
            section.16	scenBank003.data,scenBank003
 
-cBank003  incbin  "levbanks/bin/space3.bi2",scenBank003.data,64
+sBank003  incbin  "levbanks/bin/space3.bi2",scenBank003.data,64
 
 ;--
 
@@ -680,7 +680,7 @@ _scenBank004SegmentRomEnd      alias   _scenBank004_orgend
 
            section.16	scenBank004.data,scenBank004
 
-cBank004  incbin  "levbanks/bin/spaceboss.bi2",scenBank004.data,64
+sBank004  incbin  "levbanks/bin/spaceboss.bi2",scenBank004.data,64
 
 ;--
 
@@ -692,7 +692,7 @@ _scenBank005SegmentRomEnd      alias   _scenBank005_orgend
 
            section.16	scenBank005.data,scenBank005
 
-cBank005  incbin  "levbanks/bin/spacemaster.bi2",scenBank005.data,64
+sBank005  incbin  "levbanks/bin/spacemaster.bi2",scenBank005.data,64
 
 ;--
 
@@ -704,7 +704,7 @@ _scenBank006SegmentRomEnd      alias   _scenBank006_orgend
 
            section.16	scenBank006.data,scenBank006
 
-cBank006  incbin  "levbanks/bin/sretro1.bi2",scenBank006.data,64
+sBank006  incbin  "levbanks/bin/sretro1.bi2",scenBank006.data,64
 
 ;--
 
@@ -716,7 +716,7 @@ _scenBank007SegmentRomEnd      alias   _scenBank007_orgend
 
            section.16	scenBank007.data,scenBank007
 
-cBank007  incbin  "levbanks/bin/garden2.bi2",scenBank007.data,64
+sBank007  incbin  "levbanks/bin/garden2.bi2",scenBank007.data,64
 
 ;--
 
@@ -728,7 +728,7 @@ _scenBank008SegmentRomEnd      alias   _scenBank008_orgend
 
            section.16	scenBank008.data,scenBank008
 
-cBank008  incbin  "levbanks/bin/city3.bi2",scenBank008.data,64
+sBank008  incbin  "levbanks/bin/city3.bi2",scenBank008.data,64
 
 ;--
 
@@ -740,7 +740,7 @@ _scenBank009SegmentRomEnd      alias   _scenBank009_orgend
 
            section.16	scenBank009.data,scenBank009
 
-cBank009  incbin  "levbanks/bin/citybonus.bi2",scenBank009.data,64
+sBank009  incbin  "levbanks/bin/citybonus.bi2",scenBank009.data,64
 
 ;--
 
@@ -752,7 +752,7 @@ _scenBank010SegmentRomEnd      alias   _scenBank010_orgend
 
            section.16	scenBank010.data,scenBank010
 
-cBank010  incbin  "levbanks/bin/garden1.bi2",scenBank010.data,64
+sBank010  incbin  "levbanks/bin/garden1.bi2",scenBank010.data,64
 
 ;--
 
@@ -764,7 +764,7 @@ _scenBank011SegmentRomEnd      alias   _scenBank011_orgend
 
            section.16	scenBank011.data,scenBank011
 
-cBank011  incbin  "levbanks/bin/city2.bi2",scenBank011.data,64
+sBank011  incbin  "levbanks/bin/city2.bi2",scenBank011.data,64
 
 ;--
 
@@ -776,7 +776,7 @@ _scenBank012SegmentRomEnd      alias   _scenBank012_orgend
 
            section.16	scenBank012.data,scenBank012
 
-cBank012  incbin  "levbanks/bin/ancients3.bi2",scenBank012.data,64
+sBank012  incbin  "levbanks/bin/ancients3.bi2",scenBank012.data,64
 
 ;--
 
@@ -788,7 +788,7 @@ _scenBank013SegmentRomEnd      alias   _scenBank013_orgend
 
            section.16	scenBank013.data,scenBank013
 
-cBank013  incbin  "levbanks/bin/city1.bi2",scenBank013.data,64
+sBank013  incbin  "levbanks/bin/city1.bi2",scenBank013.data,64
 
 ;--
 
@@ -800,7 +800,7 @@ _scenBank014SegmentRomEnd      alias   _scenBank014_orgend
 
            section.16	scenBank014.data,scenBank014
 
-cBank014  incbin  "levbanks/bin/gardenbonus.bi2",scenBank014.data,64
+sBank014  incbin  "levbanks/bin/gardenbonus.bi2",scenBank014.data,64
 
 ;--
 
@@ -812,7 +812,7 @@ _scenBank015SegmentRomEnd      alias   _scenBank015_orgend
 
            section.16	scenBank015.data,scenBank015
 
-cBank015  incbin  "levbanks/bin/halloweenboss.bi2",scenBank015.data,64
+sBank015  incbin  "levbanks/bin/halloweenboss.bi2",scenBank015.data,64
 
 ;--
 
@@ -824,7 +824,7 @@ _scenBank016SegmentRomEnd      alias   _scenBank016_orgend
 
            section.16	scenBank016.data,scenBank016
 
-cBank016  incbin  "levbanks/bin/halloweenmulti.bi2",scenBank016.data,64
+sBank016  incbin  "levbanks/bin/halloweenmulti.bi2",scenBank016.data,64
 
 ;--
 
@@ -836,7 +836,7 @@ _scenBank017SegmentRomEnd      alias   _scenBank017_orgend
 
            section.16	scenBank017.data,scenBank017
 
-cBank017  incbin  "levbanks/bin/lab1.bi2",scenBank017.data,64
+sBank017  incbin  "levbanks/bin/lab1.bi2",scenBank017.data,64
 
 ;--
 
@@ -848,7 +848,7 @@ _scenBank018SegmentRomEnd      alias   _scenBank018_orgend
 
            section.16	scenBank018.data,scenBank018
 
-cBank018  incbin  "levbanks/bin/lab2.bi2",scenBank018.data,64
+sBank018  incbin  "levbanks/bin/lab2.bi2",scenBank018.data,64
 
 ;--
 
@@ -860,7 +860,7 @@ _scenBank019SegmentRomEnd      alias   _scenBank019_orgend
 
            section.16	scenBank019.data,scenBank019
 
-cBank019  incbin  "levbanks/bin/sub2.bi2",scenBank019.data,64
+sBank019  incbin  "levbanks/bin/sub2.bi2",scenBank019.data,64
 
 ;--
 
@@ -872,7 +872,7 @@ _scenBank020SegmentRomEnd      alias   _scenBank020_orgend
 
            section.16	scenBank020.data,scenBank020
 
-cBank020  incbin  "levbanks/bin/sub3.bi2",scenBank020.data,64
+sBank020  incbin  "levbanks/bin/sub3.bi2",scenBank020.data,64
 
 ;--
 
@@ -884,7 +884,7 @@ _scenBank021SegmentRomEnd      alias   _scenBank021_orgend
 
            section.16	scenBank021.data,scenBank021
 
-cBank021  incbin  "levbanks/bin/sub4.bi2",scenBank021.data,64
+sBank021  incbin  "levbanks/bin/sub4.bi2",scenBank021.data,64
 
 ;--
 
@@ -896,7 +896,7 @@ _scenBank022SegmentRomEnd      alias   _scenBank022_orgend
 
            section.16	scenBank022.data,scenBank022
 
-cBank022  incbin  "levbanks/bin/subtest.bi2",scenBank022.data,64
+sBank022  incbin  "levbanks/bin/subtest.bi2",scenBank022.data,64
 
 ;--
 
@@ -908,7 +908,7 @@ _scenBank023SegmentRomEnd      alias   _scenBank023_orgend
 
            section.16	scenBank023.data,scenBank023
 
-cBank023  incbin  "levbanks/bin/title.bi2",scenBank023.data,64
+sBank023  incbin  "levbanks/bin/title.bi2",scenBank023.data,64
 
 ;--
 
@@ -920,7 +920,7 @@ _scenBank024SegmentRomEnd      alias   _scenBank024_orgend
 
            section.16	scenBank024.data,scenBank024
 
-cBank024  incbin  "levbanks/bin/subboss.bi2",scenBank024.data,64
+sBank024  incbin  "levbanks/bin/subboss.bi2",scenBank024.data,64
 
 ;--
 
@@ -932,7 +932,7 @@ _scenBank025SegmentRomEnd      alias   _scenBank025_orgend
 
            section.16	scenBank025.data,scenBank025
 
-cBank025  incbin  "levbanks/bin/submulti.bi2",scenBank025.data,64
+sBank025  incbin  "levbanks/bin/submulti.bi2",scenBank025.data,64
 
 ;--
 
@@ -944,7 +944,7 @@ _scenBank026SegmentRomEnd      alias   _scenBank026_orgend
 
            section.16	scenBank026.data,scenBank026
 
-cBank026  incbin  "levbanks/bin/lab3.bi2",scenBank026.data,64
+sBank026  incbin  "levbanks/bin/lab3.bi2",scenBank026.data,64
 
 ;--
 
@@ -956,7 +956,7 @@ _scenBank027SegmentRomEnd      alias   _scenBank027_orgend
 
            section.16	scenBank027.data,scenBank027
 
-cBank027  incbin  "levbanks/bin/labbossa.bi2",scenBank027.data,64
+sBank027  incbin  "levbanks/bin/labbossa.bi2",scenBank027.data,64
 
 ;--
 
@@ -968,7 +968,7 @@ _scenBank028SegmentRomEnd      alias   _scenBank028_orgend
 
            section.16	scenBank028.data,scenBank028
 
-cBank028  incbin  "levbanks/bin/labbossb.bi2",scenBank028.data,64
+sBank028  incbin  "levbanks/bin/labbossb.bi2",scenBank028.data,64
 
 ;--
 
@@ -980,7 +980,7 @@ _scenBank029SegmentRomEnd      alias   _scenBank029_orgend
 
            section.16	scenBank029.data,scenBank029
 
-cBank029  incbin  "levbanks/bin/labbossc.bi2",scenBank029.data,64
+sBank029  incbin  "levbanks/bin/labbossc.bi2",scenBank029.data,64
 
 ;--
 
@@ -992,7 +992,7 @@ _scenBank030SegmentRomEnd      alias   _scenBank030_orgend
 
            section.16	scenBank030.data,scenBank030
 
-cBank030  incbin  "levbanks/bin/labmulti.bi2",scenBank030.data,64
+sBank030  incbin  "levbanks/bin/labmulti.bi2",scenBank030.data,64
 
 ;--
 
@@ -1004,7 +1004,7 @@ _scenBank031SegmentRomEnd      alias   _scenBank031_orgend
 
            section.16	scenBank031.data,scenBank031
 
-cBank031  incbin  "levbanks/bin/levela.bi2",scenBank031.data,64
+sBank031  incbin  "levbanks/bin/levela.bi2",scenBank031.data,64
 
 ;--
 
@@ -1016,7 +1016,7 @@ _scenBank032SegmentRomEnd      alias   _scenBank032_orgend
 
            section.16	scenBank032.data,scenBank032
 
-cBank032  incbin  "levbanks/bin/space1.bi2",scenBank032.data,64
+sBank032  incbin  "levbanks/bin/space1.bi2",scenBank032.data,64
 
 ;--
 
@@ -1028,7 +1028,7 @@ _scenBank033SegmentRomEnd      alias   _scenBank033_orgend
 
            section.16	scenBank033.data,scenBank033
 
-cBank033  incbin  "levbanks/bin/sretro10.bi2",scenBank033.data,64
+sBank033  incbin  "levbanks/bin/sretro10.bi2",scenBank033.data,64
 
 ;--
 
@@ -1040,7 +1040,7 @@ _scenBank034SegmentRomEnd      alias   _scenBank034_orgend
 
            section.16	scenBank034.data,scenBank034
 
-cBank034  incbin  "levbanks/bin/sretro2.bi2",scenBank034.data,64
+sBank034  incbin  "levbanks/bin/sretro2.bi2",scenBank034.data,64
 
 ;--
 
@@ -1052,7 +1052,7 @@ _scenBank035SegmentRomEnd      alias   _scenBank035_orgend
 
            section.16	scenBank035.data,scenBank035
 
-cBank035  incbin  "levbanks/bin/sretro3.bi2",scenBank035.data,64
+sBank035  incbin  "levbanks/bin/sretro3.bi2",scenBank035.data,64
 
 ;--
 
@@ -1064,7 +1064,7 @@ _scenBank036SegmentRomEnd      alias   _scenBank036_orgend
 
            section.16	scenBank036.data,scenBank036
 
-cBank036  incbin  "levbanks/bin/sretro4.bi2",scenBank036.data,64
+sBank036  incbin  "levbanks/bin/sretro4.bi2",scenBank036.data,64
 
 ;--
 
@@ -1076,7 +1076,7 @@ _scenBank037SegmentRomEnd      alias   _scenBank037_orgend
 
            section.16	scenBank037.data,scenBank037
 
-cBank037  incbin  "levbanks/bin/sretro5.bi2",scenBank037.data,64
+sBank037  incbin  "levbanks/bin/sretro5.bi2",scenBank037.data,64
 
 ;--
 
@@ -1088,7 +1088,7 @@ _scenBank038SegmentRomEnd      alias   _scenBank038_orgend
 
            section.16	scenBank038.data,scenBank038
 
-cBank038  incbin  "levbanks/bin/sretro6.bi2",scenBank038.data,64
+sBank038  incbin  "levbanks/bin/sretro6.bi2",scenBank038.data,64
 
 ;--
 
@@ -1100,7 +1100,7 @@ _scenBank039SegmentRomEnd      alias   _scenBank039_orgend
 
            section.16	scenBank039.data,scenBank039
 
-cBank039  incbin  "levbanks/bin/sretro7.bi2",scenBank039.data,64
+sBank039  incbin  "levbanks/bin/sretro7.bi2",scenBank039.data,64
 
 ;--
 
@@ -1112,7 +1112,7 @@ _scenBank040SegmentRomEnd      alias   _scenBank040_orgend
 
            section.16	scenBank040.data,scenBank040
 
-cBank040  incbin  "levbanks/bin/sretro8.bi2",scenBank040.data,64
+sBank040  incbin  "levbanks/bin/sretro8.bi2",scenBank040.data,64
 
 ;--
 
@@ -1124,7 +1124,7 @@ _scenBank041SegmentRomEnd      alias   _scenBank041_orgend
 
            section.16	scenBank041.data,scenBank041
 
-cBank041  incbin  "levbanks/bin/sretro9.bi2",scenBank041.data,64
+sBank041  incbin  "levbanks/bin/sretro9.bi2",scenBank041.data,64
 
 ;--
 
@@ -1136,7 +1136,7 @@ _scenBank042SegmentRomEnd      alias   _scenBank042_orgend
 
            section.16	scenBank042.data,scenBank042
 
-cBank042  incbin  "levbanks/bin/start.bi2",scenBank042.data,64
+sBank042  incbin  "levbanks/bin/start.bi2",scenBank042.data,64
 
 ;--
 
@@ -1148,7 +1148,7 @@ _scenBank043SegmentRomEnd      alias   _scenBank043_orgend
 
            section.16	scenBank043.data,scenBank043
 
-cBank043  incbin  "levbanks/bin/sub1.bi2",scenBank043.data,64
+sBank043  incbin  "levbanks/bin/sub1.bi2",scenBank043.data,64
 
 ;--
 
@@ -1160,7 +1160,7 @@ _scenBank044SegmentRomEnd      alias   _scenBank044_orgend
 
            section.16	scenBank044.data,scenBank044
 
-cBank044  incbin  "levbanks/bin/ancients2.bi2",scenBank044.data,64
+sBank044  incbin  "levbanks/bin/ancients2.bi2",scenBank044.data,64
 
 ;--
 
@@ -1172,7 +1172,7 @@ _scenBank045SegmentRomEnd      alias   _scenBank045_orgend
 
            section.16	scenBank045.data,scenBank045
 
-cBank045  incbin  "levbanks/bin/toy1.bi2",scenBank045.data,64
+sBank045  incbin  "levbanks/bin/toy1.bi2",scenBank045.data,64
 
 ;--
 
@@ -1184,7 +1184,7 @@ _scenBank046SegmentRomEnd      alias   _scenBank046_orgend
 
            section.16	scenBank046.data,scenBank046
 
-cBank046  incbin  "levbanks/bin/ancients1.bi2",scenBank046.data,64
+sBank046  incbin  "levbanks/bin/ancients1.bi2",scenBank046.data,64
 
 ;--
 
@@ -1196,7 +1196,7 @@ _scenBank047SegmentRomEnd      alias   _scenBank047_orgend
 
            section.16	scenBank047.data,scenBank047
 
-cBank047  incbin  "levbanks/bin/language.bi2",scenBank047.data,64
+sBank047  incbin  "levbanks/bin/language.bi2",scenBank047.data,64
 
 ;--
 
@@ -1208,7 +1208,7 @@ _scenBank048SegmentRomEnd      alias   _scenBank048_orgend
 
            section.16	scenBank048.data,scenBank048
 
-cBank048  incbin  "levbanks/bin/gardenmulti.bi2",scenBank048.data,64
+sBank048  incbin  "levbanks/bin/gardenmulti.bi2",scenBank048.data,64
 
 ;--
 
@@ -1220,7 +1220,7 @@ _scenBank049SegmentRomEnd      alias   _scenBank049_orgend
 
            section.16	scenBank049.data,scenBank049
 
-cBank049  incbin  "levbanks/bin/ancientsboss.bi2",scenBank049.data,64
+sBank049  incbin  "levbanks/bin/ancientsboss.bi2",scenBank049.data,64
 
 ;--
 
@@ -1232,7 +1232,7 @@ _scenBank050SegmentRomEnd      alias   _scenBank050_orgend
 
            section.16	scenBank050.data,scenBank050
 
-cBank050  incbin  "levbanks/bin/halloween3.bi2",scenBank050.data,64
+sBank050  incbin  "levbanks/bin/halloween3.bi2",scenBank050.data,64
 
 ;--
 
@@ -1244,4 +1244,4 @@ _scenBank051SegmentRomEnd      alias   _scenBank051_orgend
 
            section.16	scenBank051.data,scenBank051
 
-cBank051  incbin  "levbanks/bin/sretroboss.bi2",scenBank051.data,64
+sBank051  incbin  "levbanks/bin/sretroboss.bi2",scenBank051.data,64

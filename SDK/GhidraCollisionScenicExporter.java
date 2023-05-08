@@ -100,7 +100,7 @@ public class GhidraCollisionScenicExporter extends GhidraScript {
 				.append("_").append(sceBase).append("SegmentRomStart    alias   _").append(sceBase).append("_org\n")
 				.append("_").append(sceBase).append("SegmentRomEnd      alias   _").append(sceBase).append("_orgend\n\n")
 				.append("           section.16\t").append(sceBase).append(".data,").append(sceBase).append("\n\n")
-				.append("cBank").append(String.format("%03d", i)).append("  incbin  \"levbanks/bin/").append(name).append(".bi2\",").append(sceBase).append(".data,64\n\n");
+				.append("sBank").append(String.format("%03d", i)).append("  incbin  \"levbanks/bin/").append(name).append(".bi2\",").append(sceBase).append(".data,64\n\n");
 		}
 		
 		println(colFileLnk.append(sceFileLnk.toString()).toString());
