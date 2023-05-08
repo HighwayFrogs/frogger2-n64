@@ -5,18 +5,278 @@
 
 enum
 {
-	NUM_COLL_BANK
+	GARDENBOSSA_COLL_BANK = 0,
+	HALLOWEEN1_COLL_BANK = 1,
+	SPACE2_COLL_BANK = 2,
+	SPACE3_COLL_BANK = 3,
+	SPACEBOSS_COLL_BANK = 4,
+	SPACEMASTER_COLL_BANK = 5,
+	SRETRO1_COLL_BANK = 6,
+	GARDEN2_COLL_BANK = 7,
+	CITY3_COLL_BANK = 8,
+	CITYBONUS_COLL_BANK = 9,
+	GARDEN1_COLL_BANK = 10,
+	CITY2_COLL_BANK = 11,
+	ANCIENTS3_COLL_BANK = 12,
+	CITY1_COLL_BANK = 13,
+	GARDENBONUS_COLL_BANK = 14,
+	HALLOWEENBOSS_COLL_BANK = 15,
+	HALLOWEENMULTI_COLL_BANK = 16,
+	LAB1_COLL_BANK = 17,
+	LAB2_COLL_BANK = 18,
+	SUB2_COLL_BANK = 19,
+	SUB3_COLL_BANK = 20,
+	SUB4_COLL_BANK = 21,
+	SUBTEST_COLL_BANK = 22,
+	TITLE_COLL_BANK = 23,
+	SUBBOSS_COLL_BANK = 24,
+	SUBMULTI_COLL_BANK = 25,
+	LAB3_COLL_BANK = 26,
+	LABBOSSA_COLL_BANK = 27,
+	LABBOSSB_COLL_BANK = 28,
+	LABBOSSC_COLL_BANK = 29,
+	LABMULTI_COLL_BANK = 30,
+	LEVELA_COLL_BANK = 31,
+	SPACE1_COLL_BANK = 32,
+	SRETRO10_COLL_BANK = 34,
+	SRETRO2_COLL_BANK = 34,
+	SRETRO3_COLL_BANK = 35,
+	SRETRO4_COLL_BANK = 36,
+	SRETRO5_COLL_BANK = 37,
+	SRETRO6_COLL_BANK = 38,
+	SRETRO7_COLL_BANK = 39,
+	SRETRO8_COLL_BANK = 40,
+	SRETRO9_COLL_BANK = 41,
+	START_COLL_BANK = 42,
+	SUB1_COLL_BANK = 43,
+	ANCIENTS2_COLL_BANK = 44,
+	TOY1_COLL_BANK = 45,
+	ANCIENTS1_COLL_BANK = 46,
+	LANGUAGE_COLL_BANK = 47,
+	GARDENMULTI_COLL_BANK = 48,
+	ANCIENTSBOSS_COLL_BANK = 49,
+	HALLOWEEN3_COLL_BANK = 50,
+	SRETROBOSS_COLL_BANK = 51,
+	NUM_COLL_BANK = 52
 };
 
 extern unsigned long numLevels;
-extern char levelNames[0][32];
+extern char levelNames[52][32];
 
-extern char **collBanksStart[0];
-extern char **collBanksEnd[0];
+extern char **collBanksStart[52];
+extern char **collBanksEnd[52];
 
-extern char **scenBanksStart[0];
-extern char **scenBanksEnd[0];
+extern char **scenBanksStart[52];
+extern char **scenBanksEnd[52];
 
+extern char *_collBank000SegmentRomStart;
+extern char *_collBank000SegmentRomEnd;
+extern char *_collBank001SegmentRomStart;
+extern char *_collBank001SegmentRomEnd;
+extern char *_collBank002SegmentRomStart;
+extern char *_collBank002SegmentRomEnd;
+extern char *_collBank003SegmentRomStart;
+extern char *_collBank003SegmentRomEnd;
+extern char *_collBank004SegmentRomStart;
+extern char *_collBank004SegmentRomEnd;
+extern char *_collBank005SegmentRomStart;
+extern char *_collBank005SegmentRomEnd;
+extern char *_collBank006SegmentRomStart;
+extern char *_collBank006SegmentRomEnd;
+extern char *_collBank007SegmentRomStart;
+extern char *_collBank007SegmentRomEnd;
+extern char *_collBank008SegmentRomStart;
+extern char *_collBank008SegmentRomEnd;
+extern char *_collBank009SegmentRomStart;
+extern char *_collBank009SegmentRomEnd;
+extern char *_collBank010SegmentRomStart;
+extern char *_collBank010SegmentRomEnd;
+extern char *_collBank011SegmentRomStart;
+extern char *_collBank011SegmentRomEnd;
+extern char *_collBank012SegmentRomStart;
+extern char *_collBank012SegmentRomEnd;
+extern char *_collBank013SegmentRomStart;
+extern char *_collBank013SegmentRomEnd;
+extern char *_collBank014SegmentRomStart;
+extern char *_collBank014SegmentRomEnd;
+extern char *_collBank015SegmentRomStart;
+extern char *_collBank015SegmentRomEnd;
+extern char *_collBank016SegmentRomStart;
+extern char *_collBank016SegmentRomEnd;
+extern char *_collBank017SegmentRomStart;
+extern char *_collBank017SegmentRomEnd;
+extern char *_collBank018SegmentRomStart;
+extern char *_collBank018SegmentRomEnd;
+extern char *_collBank019SegmentRomStart;
+extern char *_collBank019SegmentRomEnd;
+extern char *_collBank020SegmentRomStart;
+extern char *_collBank020SegmentRomEnd;
+extern char *_collBank021SegmentRomStart;
+extern char *_collBank021SegmentRomEnd;
+extern char *_collBank022SegmentRomStart;
+extern char *_collBank022SegmentRomEnd;
+extern char *_collBank023SegmentRomStart;
+extern char *_collBank023SegmentRomEnd;
+extern char *_collBank024SegmentRomStart;
+extern char *_collBank024SegmentRomEnd;
+extern char *_collBank025SegmentRomStart;
+extern char *_collBank025SegmentRomEnd;
+extern char *_collBank026SegmentRomStart;
+extern char *_collBank026SegmentRomEnd;
+extern char *_collBank027SegmentRomStart;
+extern char *_collBank027SegmentRomEnd;
+extern char *_collBank028SegmentRomStart;
+extern char *_collBank028SegmentRomEnd;
+extern char *_collBank029SegmentRomStart;
+extern char *_collBank029SegmentRomEnd;
+extern char *_collBank030SegmentRomStart;
+extern char *_collBank030SegmentRomEnd;
+extern char *_collBank031SegmentRomStart;
+extern char *_collBank031SegmentRomEnd;
+extern char *_collBank032SegmentRomStart;
+extern char *_collBank032SegmentRomEnd;
+extern char *_collBank033SegmentRomStart;
+extern char *_collBank033SegmentRomEnd;
+extern char *_collBank034SegmentRomStart;
+extern char *_collBank034SegmentRomEnd;
+extern char *_collBank035SegmentRomStart;
+extern char *_collBank035SegmentRomEnd;
+extern char *_collBank036SegmentRomStart;
+extern char *_collBank036SegmentRomEnd;
+extern char *_collBank037SegmentRomStart;
+extern char *_collBank037SegmentRomEnd;
+extern char *_collBank038SegmentRomStart;
+extern char *_collBank038SegmentRomEnd;
+extern char *_collBank039SegmentRomStart;
+extern char *_collBank039SegmentRomEnd;
+extern char *_collBank040SegmentRomStart;
+extern char *_collBank040SegmentRomEnd;
+extern char *_collBank041SegmentRomStart;
+extern char *_collBank041SegmentRomEnd;
+extern char *_collBank042SegmentRomStart;
+extern char *_collBank042SegmentRomEnd;
+extern char *_collBank043SegmentRomStart;
+extern char *_collBank043SegmentRomEnd;
+extern char *_collBank044SegmentRomStart;
+extern char *_collBank044SegmentRomEnd;
+extern char *_collBank045SegmentRomStart;
+extern char *_collBank045SegmentRomEnd;
+extern char *_collBank046SegmentRomStart;
+extern char *_collBank046SegmentRomEnd;
+extern char *_collBank047SegmentRomStart;
+extern char *_collBank047SegmentRomEnd;
+extern char *_collBank048SegmentRomStart;
+extern char *_collBank048SegmentRomEnd;
+extern char *_collBank049SegmentRomStart;
+extern char *_collBank049SegmentRomEnd;
+extern char *_collBank050SegmentRomStart;
+extern char *_collBank050SegmentRomEnd;
+extern char *_collBank051SegmentRomStart;
+extern char *_collBank051SegmentRomEnd;
 
+extern char *_scenBank000SegmentRomStart;
+extern char *_scenBank000SegmentRomEnd;
+extern char *_scenBank001SegmentRomStart;
+extern char *_scenBank001SegmentRomEnd;
+extern char *_scenBank002SegmentRomStart;
+extern char *_scenBank002SegmentRomEnd;
+extern char *_scenBank003SegmentRomStart;
+extern char *_scenBank003SegmentRomEnd;
+extern char *_scenBank004SegmentRomStart;
+extern char *_scenBank004SegmentRomEnd;
+extern char *_scenBank005SegmentRomStart;
+extern char *_scenBank005SegmentRomEnd;
+extern char *_scenBank006SegmentRomStart;
+extern char *_scenBank006SegmentRomEnd;
+extern char *_scenBank007SegmentRomStart;
+extern char *_scenBank007SegmentRomEnd;
+extern char *_scenBank008SegmentRomStart;
+extern char *_scenBank008SegmentRomEnd;
+extern char *_scenBank009SegmentRomStart;
+extern char *_scenBank009SegmentRomEnd;
+extern char *_scenBank010SegmentRomStart;
+extern char *_scenBank010SegmentRomEnd;
+extern char *_scenBank011SegmentRomStart;
+extern char *_scenBank011SegmentRomEnd;
+extern char *_scenBank012SegmentRomStart;
+extern char *_scenBank012SegmentRomEnd;
+extern char *_scenBank013SegmentRomStart;
+extern char *_scenBank013SegmentRomEnd;
+extern char *_scenBank014SegmentRomStart;
+extern char *_scenBank014SegmentRomEnd;
+extern char *_scenBank015SegmentRomStart;
+extern char *_scenBank015SegmentRomEnd;
+extern char *_scenBank016SegmentRomStart;
+extern char *_scenBank016SegmentRomEnd;
+extern char *_scenBank017SegmentRomStart;
+extern char *_scenBank017SegmentRomEnd;
+extern char *_scenBank018SegmentRomStart;
+extern char *_scenBank018SegmentRomEnd;
+extern char *_scenBank019SegmentRomStart;
+extern char *_scenBank019SegmentRomEnd;
+extern char *_scenBank020SegmentRomStart;
+extern char *_scenBank020SegmentRomEnd;
+extern char *_scenBank021SegmentRomStart;
+extern char *_scenBank021SegmentRomEnd;
+extern char *_scenBank022SegmentRomStart;
+extern char *_scenBank022SegmentRomEnd;
+extern char *_scenBank023SegmentRomStart;
+extern char *_scenBank023SegmentRomEnd;
+extern char *_scenBank024SegmentRomStart;
+extern char *_scenBank024SegmentRomEnd;
+extern char *_scenBank025SegmentRomStart;
+extern char *_scenBank025SegmentRomEnd;
+extern char *_scenBank026SegmentRomStart;
+extern char *_scenBank026SegmentRomEnd;
+extern char *_scenBank027SegmentRomStart;
+extern char *_scenBank027SegmentRomEnd;
+extern char *_scenBank028SegmentRomStart;
+extern char *_scenBank028SegmentRomEnd;
+extern char *_scenBank029SegmentRomStart;
+extern char *_scenBank029SegmentRomEnd;
+extern char *_scenBank030SegmentRomStart;
+extern char *_scenBank030SegmentRomEnd;
+extern char *_scenBank031SegmentRomStart;
+extern char *_scenBank031SegmentRomEnd;
+extern char *_scenBank032SegmentRomStart;
+extern char *_scenBank032SegmentRomEnd;
+extern char *_scenBank033SegmentRomStart;
+extern char *_scenBank033SegmentRomEnd;
+extern char *_scenBank034SegmentRomStart;
+extern char *_scenBank034SegmentRomEnd;
+extern char *_scenBank035SegmentRomStart;
+extern char *_scenBank035SegmentRomEnd;
+extern char *_scenBank036SegmentRomStart;
+extern char *_scenBank036SegmentRomEnd;
+extern char *_scenBank037SegmentRomStart;
+extern char *_scenBank037SegmentRomEnd;
+extern char *_scenBank038SegmentRomStart;
+extern char *_scenBank038SegmentRomEnd;
+extern char *_scenBank039SegmentRomStart;
+extern char *_scenBank039SegmentRomEnd;
+extern char *_scenBank040SegmentRomStart;
+extern char *_scenBank040SegmentRomEnd;
+extern char *_scenBank041SegmentRomStart;
+extern char *_scenBank041SegmentRomEnd;
+extern char *_scenBank042SegmentRomStart;
+extern char *_scenBank042SegmentRomEnd;
+extern char *_scenBank043SegmentRomStart;
+extern char *_scenBank043SegmentRomEnd;
+extern char *_scenBank044SegmentRomStart;
+extern char *_scenBank044SegmentRomEnd;
+extern char *_scenBank045SegmentRomStart;
+extern char *_scenBank045SegmentRomEnd;
+extern char *_scenBank046SegmentRomStart;
+extern char *_scenBank046SegmentRomEnd;
+extern char *_scenBank047SegmentRomStart;
+extern char *_scenBank047SegmentRomEnd;
+extern char *_scenBank048SegmentRomStart;
+extern char *_scenBank048SegmentRomEnd;
+extern char *_scenBank049SegmentRomStart;
+extern char *_scenBank049SegmentRomEnd;
+extern char *_scenBank050SegmentRomStart;
+extern char *_scenBank050SegmentRomEnd;
+extern char *_scenBank051SegmentRomStart;
+extern char *_scenBank051SegmentRomEnd;
 
 #endif
