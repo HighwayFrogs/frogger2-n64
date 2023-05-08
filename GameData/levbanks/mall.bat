@@ -12,7 +12,7 @@ call mipout.bat
 mipple objconv *.ase c2 > mipout.bat
 call mipout.bat
 
-gnumake
+make
 linkmake > append.lnk
 
 del *.ase > NUL

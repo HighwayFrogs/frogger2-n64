@@ -16,7 +16,7 @@
 #include "incs.h"
 
 REACTIVEANIM reactiveAnims[] = {
-#include "x:\teamspirit\pcversion\reactive.txt"
+//#include "reactive.txt"
 };
 
 ENEMYLIST enemyList;						// the enemy linked list
@@ -161,7 +161,7 @@ void NMEDamageFrog( int num, ENEMY *nme )
 		frog[num]->action.healthPoints--;
 
 		#ifdef N64_VERSION
-		StartRumble(120,1.5,5,ActiveController);
+		//StartRumble(120,1.5,5,ActiveController);
 		#endif
 	}
 	

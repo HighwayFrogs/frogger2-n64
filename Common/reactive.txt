@@ -1,0 +1,13 @@
+// Reactive animations
+// Created by reading data from the N64 ROM.
+/*
+Name		C-Anim	F-Anim	Type
+*****************************************/
+"roll.obe",	1,		0x2A,	2,
+"vac.obe",	2,		0x27,	7,
+
+
+////////////////////////////////////////////////////
+// Leave this here please (And ignore it!)
+"",0,0,0
+#pragma message("(Reactive anims included from reactive.txt)")

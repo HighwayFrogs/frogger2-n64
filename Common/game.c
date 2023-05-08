@@ -237,7 +237,7 @@ void GameProcessController(long pl)
 			// To enable endless double jumping
 			//player[pl].hasDoubleJumped = 0;
 #ifdef N64_VERSION
-			StartRumble(100,1,3,ActiveController);
+			//StartRumble(100,1,3,ActiveController);
 #endif
 		}
 		else if(!(player[pl].isSuperHopping) && !(player[pl].inputPause))
@@ -592,7 +592,7 @@ void RunCredits()
 			{
 				cText[cn]->vA = amt; 
 				//cText[cn]->angle = 90+ ((amt * 360 * 2) / 0xff);
-				cText[cn]->yScale = 3-(amt/128.0);
+				//cText[cn]->yScale = 3-(amt/128.0);
 				cText[cn]->sinA = 6-(amt/(256.0/6));
 			}
 		
@@ -607,7 +607,7 @@ void RunCredits()
 			{
 				cText[cn]->vA = amt; 
 				//cText[cn]->angle = 90+ ((amt * 360 * 2) / 0xff);
-				cText[cn]->yScale = 3-(amt/128.0);
+				//cText[cn]->yScale = 3-(amt/128.0);
 				cText[cn]->sinA = 6-(amt/(256.0/6));
 			}
 	}
@@ -616,7 +616,7 @@ void RunCredits()
 	{
 		rText[cn]->angle = (360*8) - (cText[cn]->angle);
 		rText[cn]->vA = ((unsigned char) cText[cn]->vA) / (6-(cn*2));
-		rText[cn]->yScale = cText[cn]->yScale;
+		//rText[cn]->yScale = cText[cn]->yScale;
 	}
 }
 

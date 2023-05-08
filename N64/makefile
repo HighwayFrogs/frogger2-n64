@@ -12,7 +12,7 @@ assembler = asmn64
 
 ;compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DUSE_AUDIO -DNO_SCRIPTS -DNO_ENTITIES -DUSE_MENUS -I ../../SDK/include
 ;compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DUSE_AUDIO -DNO_SCRIPTS -DUSE_MENUS -I ../../SDK/include
-compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DUSE_AUDIO -DUSE_MENUS -DNO_ATTACHEDEFFECTS -I ../../SDK/include
+compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DUSE_AUDIO -DUSE_MENUS -DNO_ATTACHEDEFFECTS -I. -I ../../SDK/include -I ../../SDK/include/PR
 ;compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DUSE_AUDIO -DUSE_MENUS -I ../../SDK/include
 assemble_opt = /l
 
@@ -20,7 +20,7 @@ assemble_opt = /l
 ###############################################################
 ##  Linker
 
-linker = psylink
+linker = slink
 
 objects = $(patsubst \/%,\\%,$(patsubst %.c2,%.nob,$(wildcard objects/*.c2)))
 	

@@ -4,7 +4,7 @@ c_obj_files = $(patsubst %.c,%.obj,$(wildcard *.c)) $(patsubst %.c,%.obj,$(wildc
 ##  Compiler
 
 compiler = ccn64
-compile_opt = -c -O0 -I c:/work/n64/include -I ../
+compile_opt = -c -O0 -I ../../Common -I ../../n64  -I ../../SDK/include -I ../
 
 
 ###############################################################
