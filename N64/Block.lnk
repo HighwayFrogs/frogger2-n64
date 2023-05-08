@@ -1308,7 +1308,7 @@ _levData_1_1_SegmentRomEnd   alias _levData11_orgend
         section.64       levData11.data,levData11
 
 ;levDat11  incbin "leveldata/entity-0-0.cef",levData11.data, 32
-levDat11  incbin "c:/levtemp/entity-0-0.dat",levData11.data, 32
+levDat11  incbin "leveldata/entity-0-0.dat",levData11.data, 32
 
 ; [ GARDEN LEVEL 2 ] >>>>>
 
@@ -1507,7 +1507,7 @@ _levData_3_1_SegmentRomEnd   alias _levData31_orgend
         section.64       levData31.data,levData31
 
 ;levDat31  incbin "leveldata/entity-2-0.cef",levData31.data, 32
-levDat31  incbin "c:/levtemp/entity-2-0.dat",levData31.data, 32
+levDat31  incbin "leveldata/entity-2-0.dat",levData31.data, 32
 
 ; [ SPACE LEVEL 2 ] >>>>>
 
@@ -1520,7 +1520,7 @@ _levData_3_2_SegmentRomEnd   alias _levData32_orgend
         section.64       levData32.data,levData32
 
 ;levDat32  incbin "leveldata/entity-2-1.cef",levData32.data, 32
-levDat32  incbin "c:/levtemp/entity-2-1.dat",levData32.data, 32
+levDat32  incbin "leveldata/entity-2-1.dat",levData32.data, 32
 
 ; [ SPACE LEVEL 3 ] >>>>>
 
