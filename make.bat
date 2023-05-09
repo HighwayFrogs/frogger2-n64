@@ -1,20 +1,21 @@
 @echo OFF
 
+:: Setup temp directory with copied code.
+if not exist build md build
+if not exist build\temp md build\temp
+del /s build\temp /Q
+copy .\Common build\temp
+copy .\N64 build\temp
+xcopy /e /v /y .\GameData build\temp
+copy build\temp\levbanks\levext.cc build\temp\levext.c
+
 :: Setup the path to include the SDK binaries.
-SET PATH=%~dp0SDK\bin
+SET OLD_PATH=%PATH%
+SET PATH=%PATH%;%~dp0SDK\bin
 set SN_PATH=%~dp0SDK\bin
 
-:: Setup temp directory with copied code.
-if not exist BUILD md BUILD
-if not exist BUILD\TEMP md BUILD\TEMP
-if not exist BUILD\TEMP\levbanks md BUILD\TEMP\levbanks
-del BUILD\TEMP /Q
-copy .\Common BUILD\TEMP
-copy .\N64 BUILD\TEMP
-copy .\GameData\levbanks BUILD\TEMP\levbanks
-
 :: Make the game.
-cd BUILD\TEMP
+cd build\temp
 make
 
 :: Verify Frogger 2 executable was made.
@@ -30,8 +31,10 @@ goto okay
 echo *** There Were Errors ***
 PAUSE
 cd ..\..
+SET PATH=%OLD_PATH%
 goto :EOF
 
 :okay
 echo Success
+SET PATH=%OLD_PATH%
 PAUSE
