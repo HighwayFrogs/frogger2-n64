@@ -20,7 +20,7 @@ assemble_opt = /l
 ###############################################################
 ##  Linker
 
-linker = slink
+linker = psylink
 
 objects = $(patsubst \/%,\\%,$(patsubst %.c2,%.nob,$(wildcard objects/*.c2)))
 	
