@@ -1,7 +1,6 @@
 
 #include <ultra64.h>
 #include "incs.h"
-#include <stdio.h>
 #include "memload.h"
 #include "eventfuncs.h"
 #include "script.h"

@@ -188,7 +188,7 @@ void boot()
 
     // NOTE: Cannot call osSyncPrintf() until an idle thread.is set-up
     
-    osInitialize();
+    __osInitialize_common();
 	
 #ifndef ROM_BUILD
 	init_debug();

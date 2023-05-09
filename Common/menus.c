@@ -12,7 +12,7 @@
 #define F3DEX_GBI_2
 
 #include <ultra64.h>
-#include <limits.h>
+//#include <limits.h>
 
 #include "incs.h"
 
@@ -24,7 +24,7 @@ SPRITEOVERLAY *atari = NULL;
 SPRITEOVERLAY *konami = NULL;
 SPRITEOVERLAY *sprOver = NULL;
 
-unsigned long USE_MENUS = 0;
+unsigned long USE_MENUS_VAR = 0;
 
 /* LOGO information for Frogger 2 logo */
 
@@ -446,7 +446,7 @@ void RunPauseMenu()
 			case 1:   // quit game
 				FreeAllLists();
 
-			if (!USE_MENUS)
+			if (!USE_MENUS_VAR)
 			{
 				if (player[0].worldNum == WORLDID_FRONTEND)
 				{

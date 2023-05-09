@@ -12,7 +12,7 @@ assembler = asmn64
 
 ;compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DUSE_AUDIO -DNO_SCRIPTS -DNO_ENTITIES -DUSE_MENUS -I ../../SDK/include
 ;compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DUSE_AUDIO -DNO_SCRIPTS -DUSE_MENUS -I ../../SDK/include
-compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DUSE_AUDIO -DUSE_MENUS -DNO_ATTACHEDEFFECTS -I. -I ../../SDK/include -I ../../SDK/include/PR
+compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DUSE_AUDIO -DUSE_MENUS -DNO_ATTACHEDEFFECTS -DROM_BUILD -I. -I ../../SDK/include -I ../../SDK/include/PR
 ;compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DUSE_AUDIO -DUSE_MENUS -I ../../SDK/include
 assemble_opt = /l
 
@@ -33,11 +33,13 @@ block.bin: $(textures) $(c_obj_files) $(objects) $(textures) snmain.obj block.ln
 	copy /B block.lnk+levbanks\append.lnk block2.lnk
     $(linker) /s /p /c /m /g @block2.lnk,block.bin,block.sym,block.map
     setcsum block.bin 0x80100000
+	makemask block.bin
 
 link:
 	copy /B block.lnk+levbanks\append.lnk block2.lnk
     $(linker) /s /p /c /m /g @block2.lnk,block.bin,block.sym,block.map
     setcsum block.bin 0x80100000
+	makemask block.bin
 
 snmain.obj: snmain.s
 	$(assembler) $(assemble_opt) snmain,snmain

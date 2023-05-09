@@ -31,6 +31,7 @@ RUMBLE delayRumble[4];
 
 void InitRumble()
 {
+	/*
 	int i;
 	for(i=0; i<4; i++)
 	{
@@ -42,6 +43,7 @@ void InitRumble()
 			anyRumblePresent = YES;
 		}
 	}
+	*/
 }
 
 
@@ -54,6 +56,7 @@ void InitRumble()
 */
 void UpdateRumble()
 {
+	/*
 	int i, res;
 
 	for(i=0; i<numPlayers; i++)
@@ -121,6 +124,7 @@ void UpdateRumble()
 			}
 		}				
 	}
+	*/
 }
 
 
@@ -134,7 +138,7 @@ void UpdateRumble()
 //#define DEBUG_RUMBLE
 void StartRumble(float freq, float inertia, short life, short num, char* string)
 {
-
+/*
 	if(!pad[num].rumblePresent || rumble[num].lifetime>0)
 		return;
 
@@ -148,6 +152,7 @@ void StartRumble(float freq, float inertia, short life, short num, char* string)
 	rumble[num].freq = freq; 
 		
 //	dprintf"rumbleCount=%f, lifetime=%i, freq=%f\n",rumble[num].rumbleCount	, rumble[num].lifetime, rumble[num].freq));
+	*/
 }
 
 
@@ -160,6 +165,7 @@ void StartRumble(float freq, float inertia, short life, short num, char* string)
 */
 void StopAllRumbles()
 {
+	/*
 	int i;
 	for(i=0; i<numPlayers; i++)
 	{
@@ -169,6 +175,7 @@ void StopAllRumbles()
 				rumble[i].lifetime = 0;	
 		}
 	}
+	*/
 }
 
 /*	--------------------------------------------------------------------------------
@@ -180,7 +187,7 @@ void StopAllRumbles()
 */
 void StartDelayedRumble(float freq, float inertia, short life, short num, char* string, short delay)
 {
-
+/*
 	if(!pad[num].rumblePresent || rumble[num].lifetime>0)
 		return;
 
@@ -194,5 +201,6 @@ void StartDelayedRumble(float freq, float inertia, short life, short num, char* 
 	delayRumble[num].freq = freq; 
 	delayRumble[num].delay = delay;
 //	dprintf"rumbleCount=%f, lifetime=%i, freq=%f\n",rumble[num].rumbleCount	, rumble[num].lifetime, rumble[num].freq));
+*/
 }
 
