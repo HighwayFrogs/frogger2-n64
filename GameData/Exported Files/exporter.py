@@ -24,3 +24,17 @@ while symbol != None:
   data = getBytes(symbol.getAddress(), nextSymbol.getAddress().getOffset() - symbol.getAddress().getOffset());
   Files.write(File(symbol.getName()).toPath(), data, [])
   symbol = nextSymbol
+  
+# acostab
+from java.io import File
+from java.nio.file import Files
+addr = toAddr(0x8018e400)
+data = getBytes(addr, 40064)
+Files.write(File("acos.bin").toPath(), data, [])
+
+# acostab
+from java.io import File
+from java.nio.file import Files
+addr = toAddr(0x80198080)
+data = getBytes(addr, 31296)
+Files.write(File("atan.bin").toPath(), data, [])
