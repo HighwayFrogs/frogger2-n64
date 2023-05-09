@@ -24,15 +24,16 @@ _codeSegmentEnd         alias   _code_objend
         section.64      code.bss,codebss
 
 
-		inclib	"tonylib2.lib",code
-		inclib	"libsn.lib",code
+;		inclib	"tonylib2.lib",code
+		inclib	"../../SDK/lib/libultra.lib",code
+		inclib	"../../SDK/lib/libsn.lib",code
 ;		inclib	"lib211b.lib", code
-		inclib	"lib314.lib", code
-        include "c:/n64/PR/rspboot.obj",code
+;		inclib	"lib314.lib", code
+        include "../../SDK/lib/PR/rspboot.obj",code
 
         include "snmain.obj",code
-        include "c:/gnun64/lib/psyq.obj",code
-        include "c:/gnun64/lib/psyqdbg.obj",code
+        include "../../SDK/lib/psyq.obj",code
+        include "../../SDK/lib/psyqdbg.obj",code
 
         include "controll.obj",code
         include "block.obj",code
@@ -96,18 +97,18 @@ _codeSegmentEnd         alias   _code_objend
 		include "rumblepak.obj",code
 
 ; REQUIRED FOR NEW MICROCODE --> START
-		include "c:/n64/PR/gspF3Dex2.fifo.obj",code
-		include "c:/n64/PR/gspS2Dex2.fifo.obj",code
-		include "c:/n64/PR/gspL3Dex2.fifo.obj",code
+		include "../../SDK/lib/PR/gspF3Dex2.fifo.obj",code
+		include "../../SDK/lib/PR/gspS2Dex2.fifo.obj",code
+		include "../../SDK/lib/PR/gspL3Dex2.fifo.obj",code
 ; REQUIRED FOR NEW MICROCODE --> END
 
-		include "c:/n64/pr/aspmain.obj",code
+		include "../../SDK/lib/PR/aspmain.obj",code
 
 ;--- new audio stuff ---
 
-		include "c:/gnun64/lib/n_aspMain.obj",code
-		inclib  "libn_gmus.lib",code
-		inclib	"libn_gaudio_sc.lib",code
+		include "../../SDK/lib/PR/n_aspMain.obj",code
+		inclib  "../../SDK/lib/libn_gmus.lib",code
+		inclib	"../../SDK/lib/libn_gaudio_sc.lib",code
 
 ;-----------------------
 
