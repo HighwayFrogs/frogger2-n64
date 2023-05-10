@@ -17,24 +17,27 @@ set SN_PATH=%~dp0SDK\bin
 :: Make the game.
 cd build\temp
 make
+SET MAKE_ERROR=%ERRORLEVEL%
+SET PATH=%OLD_PATH%
+
 
 :: Verify Frogger 2 executable was made.
-if errorlevel 1 goto error
+if NOT "%MAKE_ERROR%"=="0" goto error
 if NOT EXIST block.bin goto error
 
 move block.bin ..\Frogger2.n64
-cd ..\
+if exist block.sym move block.sym ..\Frogger2.sym
+if exist block.map move block.map ..\Frogger2.map
+cd ..\..\
 
 goto okay
 
 :error
 echo *** There Were Errors ***
+cd ..\..\
 PAUSE
-cd ..\..
-SET PATH=%OLD_PATH%
 goto :EOF
 
 :okay
 echo Success
-SET PATH=%OLD_PATH%
 PAUSE
