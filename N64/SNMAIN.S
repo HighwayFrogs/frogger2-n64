@@ -48,13 +48,13 @@ l2:
 	la      sp,$80400000-16 ; initialise stack pointer
 
 	zerosect .bss   ; clear out .bss section
-	zerosect .sbss	; clear out .sbss section
+;	zerosect .sbss	; clear out .sbss section
 
 ; set GP from linker value
 
-        xref    __SN_GP_BASE
+;        xref    __SN_GP_BASE
 
-        la      gp,__SN_GP_BASE
+;        la      gp,__SN_GP_BASE
 
 ; run game
 
