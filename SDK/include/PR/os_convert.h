@@ -23,8 +23,8 @@
         Copyright (C) 1998 Nintendo. (Originated by SGI)
         
         $RCSfile: os_convert.h,v $
-        $Revision: 1.2 $
-        $Date: 1999/04/21 02:53:11 $
+        $Revision: 1.1 $
+        $Date: 1998/10/09 08:01:05 $
  *---------------------------------------------------------------------*/
 
 #ifndef _OS_CONVERT_H_
@@ -70,14 +70,8 @@ extern "C" {
 #define OS_CYCLES_TO_NSEC(c)	(((u64)(c)*(1000000000LL/15625000LL))/(OS_CPU_COUNTER/15625000LL))
 #define OS_CYCLES_TO_USEC(c)	(((u64)(c)*(1000000LL/15625LL))/(OS_CPU_COUNTER/15625LL))
 
-/* OS_K?_TO_PHYSICAL macro bug fix for CodeWarrior */
-#ifndef __MWERKS__
 #define	OS_K0_TO_PHYSICAL(x)	(u32)(((char *)(x)-0x80000000))
 #define	OS_K1_TO_PHYSICAL(x)	(u32)(((char *)(x)-0xa0000000))
-#else
-#define	OS_K0_TO_PHYSICAL(x)	((char *)(x)-0x80000000)
-#define	OS_K1_TO_PHYSICAL(x)	((char *)(x)-0xa0000000)
-#endif
 
 #define	OS_PHYSICAL_TO_K0(x)	(void *)(((u32)(x)+0x80000000))
 #define	OS_PHYSICAL_TO_K1(x)	(void *)(((u32)(x)+0xa0000000))

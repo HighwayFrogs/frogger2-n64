@@ -11,8 +11,8 @@
  **************************************************************************/
 /**************************************************************************
  *
- *  $Revision: 1.140 $
- *  $Date: 1999/05/19 08:37:59 $
+ *  $Revision: 1.138 $
+ *  $Date: 1998/12/24 09:05:08 $
  *  $Source: /hosts/gate3/exdisk2/cvs/N64OS/Master/cvsmdev2/PR/include/gbi.h,v $
  *
  **************************************************************************/
@@ -1713,9 +1713,9 @@ typedef union {
 }
 
 #define	gsDma0p(c, s, l)						\
-{{									\
+{									\
 	_SHIFTL((c), 24, 8) | _SHIFTL((l), 0, 24), (unsigned int)(s)	\
-}}
+}
 
 #define	gDma1p(pkt, c, s, l, p)						\
 {									\
@@ -1727,11 +1727,11 @@ typedef union {
 }
 
 #define	gsDma1p(c, s, l, p)						\
-{{									\
+{									\
 	(_SHIFTL((c), 24, 8) | _SHIFTL((p), 16, 8) | 			\
 	 _SHIFTL((l), 0, 16)), 						\
         (unsigned int)(s)						\
-}}
+}
 
 #define	gDma2p(pkt, c, adrs, len, idx, ofs)				\
 {									\
@@ -1741,11 +1741,11 @@ typedef union {
 	_g->words.w1 = (unsigned int)(adrs);				\
 }
 #define	gsDma2p(c, adrs, len, idx, ofs)					\
-{{									\
+{									\
 	(_SHIFTL((c),24,8)|_SHIFTL(((len)-1)/8,19,5)|			\
 	 _SHIFTL((ofs)/8,8,8)|_SHIFTL((idx),0,8)),			\
         (unsigned int)(adrs)						\
-}}
+}
 
 #define	gSPNoOp(pkt)		gDma0p(pkt, G_SPNOOP, 0, 0)
 #define	gsSPNoOp()		gsDma0p(G_SPNOOP, 0, 0)
@@ -1778,10 +1778,10 @@ typedef union {
 	_g->words.w1 = (unsigned int)(v);				\
 }
 # define	gsSPVertex(v, n, v0)					\
-{{									\
+{									\
 	(_SHIFTL(G_VTX,24,8)|_SHIFTL((n),12,8)|_SHIFTL((v0)+(n),1,7)),	\
         (unsigned int)(v)						\
-}}
+}
 #elif	(defined(F3DEX_GBI)||defined(F3DLP_GBI))
 /*
  * F3DEX_GBI: G_VTX GBI format was changed to support 64 vertice.
@@ -1836,9 +1836,9 @@ typedef union {
 }
 
 #define	gsImmp0(c)							\
-{{									\
+{									\
 	_SHIFTL((c), 24, 8)						\
-}}
+}
 
 #define	gImmp1(pkt, c, p0)						\
 {									\
@@ -1849,9 +1849,9 @@ typedef union {
 }
 
 #define	gsImmp1(c, p0)							\
-{{									\
+{									\
 	_SHIFTL((c), 24, 8), (unsigned int)(p0)				\
-}}
+}
 
 #define	gImmp2(pkt, c, p0, p1)						\
 {									\
@@ -1862,9 +1862,9 @@ typedef union {
 }
 
 #define	gsImmp2(c, p0, p1)						\
-{{									\
+{									\
 	_SHIFTL((c), 24, 8),  _SHIFTL((p0), 16, 16) | _SHIFTL((p1), 8, 8)\
-}}
+}
 
 #define	gImmp3(pkt, c, p0, p1, p2)					\
 {									\
@@ -1876,10 +1876,10 @@ typedef union {
 }
 
 #define	gsImmp3(c, p0, p1, p2)						\
-{{									\
+{									\
 	_SHIFTL((c), 24, 8), (_SHIFTL((p0), 16, 16) | 			\
 			      _SHIFTL((p1), 8, 8) | _SHIFTL((p2), 0, 8))\
-}}
+}
 
 #define	gImmp21(pkt, c, p0, p1, dat)					\
 {									\
@@ -1891,10 +1891,10 @@ typedef union {
 }
 
 #define	gsImmp21(c, p0, p1, dat)					\
-{{									\
+{									\
 	_SHIFTL((c), 24, 8) | _SHIFTL((p0), 8, 16) | _SHIFTL((p1), 0, 8),\
         (unsigned int) (dat)						\
-}}
+}
 
 #ifdef	F3DEX_GBI_2
 #define gMoveWd(pkt, index, offset, data)				\
@@ -1922,13 +1922,13 @@ typedef union {
 }
 
 #define gsSPSprite2DScaleFlip(sx, sy, fx, fy)                           \
-{{                                                                       \
+{                                                                       \
           (_SHIFTL(G_SPRITE2D_SCALEFLIP, 24, 8) |                       \
 	   _SHIFTL((fx), 8, 8) |                                        \
 	   _SHIFTL((fy), 0, 8)),	                                \
 	  (_SHIFTL((sx), 16, 16) |                                      \
 	   _SHIFTL((sy),  0, 16))                                       \
-}}
+}
 
 #define gSPSprite2DDraw(pkt, px, py)                                    \
 {                                                                       \
@@ -1940,11 +1940,11 @@ typedef union {
 }
 
 #define gsSPSprite2DDraw(px, py)                                        \
-{{                                                                       \
+{                                                                       \
           (_SHIFTL(G_SPRITE2D_DRAW, 24, 8)),                            \
 	  (_SHIFTL((px), 16, 16) |                                      \
 	   _SHIFTL((py),  0, 16))                                       \
-}}
+}
 
 
 /*
@@ -1995,10 +1995,10 @@ typedef union {
 	_g->words.w1 = 0;						\
 }
 #define gsSP1Triangle(v0, v1, v2, flag)					\
-{{									\
+{									\
 	_SHIFTL(G_TRI1, 24, 8)|__gsSP1Triangle_w1f(v0, v1, v2, flag),	\
 	0								\
-}}
+}
 
 /***
  ***  Line
@@ -2012,10 +2012,10 @@ typedef union {
 	_g->words.w1 = 0;						\
 }
 #define gsSPLine3D(v0, v1, flag)					\
-{{									\
+{									\
 	_SHIFTL(G_LINE3D, 24, 8)|__gsSPLine3D_w1f(v0, v1, 0, flag),	\
 	0								\
-}}
+}
 
 /***
  ***  LineW
@@ -2035,10 +2035,10 @@ typedef union {
 	_g->words.w1 = 0;						\
 }
 #define gsSPLineW3D(v0, v1, wd, flag)					\
-{{									\
+{									\
 	_SHIFTL(G_LINE3D, 24, 8)|__gsSPLine3D_w1f(v0, v1, wd, flag),	\
 	0								\
-}}
+}
 
 /***
  ***  1 Quadrangle
@@ -2053,11 +2053,11 @@ typedef union {
 }
 
 #define gsSP1Quadrangle(v0, v1, v2, v3, flag)                           \
-{{                                                                       \
+{                                                                       \
         (_SHIFTL(G_QUAD, 24, 8)|                                        \
          __gsSP1Quadrangle_w1f(v0, v1, v2, v3, flag)),                  \
          __gsSP1Quadrangle_w2f(v0, v1, v2, v3, flag)                    \
-}}
+}
 #else	/* F3DEX_GBI_2 */
 
 /***
@@ -2071,10 +2071,10 @@ typedef union {
 	_g->words.w1 = __gsSP1Triangle_w1f(v0, v1, v2, flag);		\
 }
 #define gsSP1Triangle(v0, v1, v2, flag)					\
-{{									\
+{									\
 	_SHIFTL(G_TRI1, 24, 8),						\
 	__gsSP1Triangle_w1f(v0, v1, v2, flag)				\
-}}
+}
 
 /***
  ***  Line
@@ -2087,10 +2087,10 @@ typedef union {
 	_g->words.w1 = __gsSPLine3D_w1f(v0, v1, 0, flag);		\
 }
 #define gsSPLine3D(v0, v1, flag)					\
-{{									\
+{									\
 	_SHIFTL(G_LINE3D, 24, 8),					\
 	__gsSPLine3D_w1f(v0, v1, 0, flag)				\
-}}
+}
 
 /***
  ***  LineW
@@ -2109,10 +2109,10 @@ typedef union {
 	_g->words.w1 = __gsSPLine3D_w1f(v0, v1, wd, flag);		\
 }
 #define gsSPLineW3D(v0, v1, wd, flag)					\
-{{									\
+{									\
 	_SHIFTL(G_LINE3D, 24, 8),					\
 	__gsSPLine3D_w1f(v0, v1, wd, flag)				\
-}}
+}
 
 /***
  ***  1 Quadrangle
@@ -2127,11 +2127,11 @@ typedef union {
 }
 
 #define gsSP1Quadrangle(v0, v1, v2, v3, flag)                           \
-{{                                                                       \
+{                                                                       \
         (_SHIFTL(G_TRI2, 24, 8)|                                        \
          __gsSP1Quadrangle_w1f(v0, v1, v2, v3, flag)),                  \
          __gsSP1Quadrangle_w2f(v0, v1, v2, v3, flag)                    \
-}}
+}
 #endif	/* F3DEX_GBI_2 */
 
 #if	(defined(F3DLP_GBI)||defined(F3DEX_GBI))
@@ -2148,11 +2148,11 @@ typedef union {
 }
 
 #define gsSP2Triangles(v00, v01, v02, flag0, v10, v11, v12, flag1)	\
-{{									\
+{									\
 	(_SHIFTL(G_TRI2, 24, 8)|					\
 	 __gsSP1Triangle_w1f(v00, v01, v02, flag0)),			\
 	 __gsSP1Triangle_w1f(v10, v11, v12, flag1)			\
-}}
+}
 
 #endif	/* F3DEX_GBI/F3DLP_GBI */
 
@@ -2167,10 +2167,10 @@ typedef union {
 }
 
 #define gsSPCullDisplayList(vstart,vend)				\
-{{									\
+{									\
 	_SHIFTL(G_CULLDL, 24, 8) | _SHIFTL((vstart)*2, 0, 16),		\
 	_SHIFTL((vend)*2, 0, 16)					\
-}}
+}
 
 #else
 #define gSPCullDisplayList(pkt,vstart,vend)				\
@@ -2183,10 +2183,10 @@ typedef union {
 }
 
 #define gsSPCullDisplayList(vstart,vend)				\
-{{									\
+{									\
 	_SHIFTL(G_CULLDL, 24, 8) | ((0x0f & (vstart))*40), 		\
 	((0x0f & ((vend)+1))*40)					\
-}}
+}
 #endif
 
 #define gSPSegment(pkt, segment, base)					\
@@ -2290,11 +2290,11 @@ typedef union {
 	_g->words.w1 = (unsigned int)(val);				\
 }
 # define gsSPModifyVertex(vtx, where, val)				\
-{{									\
+{									\
 	_SHIFTL(G_MODIFYVTX,24,8)|					\
 	_SHIFTL((where),16,8)|_SHIFTL((vtx)*2,0,16),			\
 	(unsigned int)(val)						\
-}}
+}
 #else
 # define gSPModifyVertex(pkt, vtx, where, val)				\
 	 gMoveWd(pkt, G_MW_POINTS, (vtx)*40+(where), val)
@@ -2340,10 +2340,10 @@ typedef union {
 }
 
 #define	gsSPBranchLessZrg(dl, vtx, zval, near, far, flag, zmin, zmax)	      \
-{{	_SHIFTL(G_RDPHALF_1,24,8),					      \
-	(unsigned int)(dl),						}},    \
-{{	_SHIFTL(G_BRANCH_Z,24,8)|_SHIFTL((vtx)*5,12,12)|_SHIFTL((vtx)*2,0,12),\
-	G_DEPTOZSrg(zval, near, far, flag, zmin, zmax),			}}
+{	_SHIFTL(G_RDPHALF_1,24,8),					      \
+	(unsigned int)(dl),						},    \
+{	_SHIFTL(G_BRANCH_Z,24,8)|_SHIFTL((vtx)*5,12,12)|_SHIFTL((vtx)*2,0,12),\
+	G_DEPTOZSrg(zval, near, far, flag, zmin, zmax),			}
 
 #define	gSPBranchLessZ(pkt, dl, vtx, zval, near, far, flag)		\
 	gSPBranchLessZrg(pkt, dl, vtx, zval, near, far, flag, 0, G_MAXZ)
@@ -2369,10 +2369,10 @@ typedef union {
 }
 
 #define	gsSPBranchLessZraw(dl, vtx, zval)				\
-{{	_SHIFTL(G_RDPHALF_1,24,8),					      \
-	(unsigned int)(dl),						}},    \
-{{	_SHIFTL(G_BRANCH_Z,24,8)|_SHIFTL((vtx)*5,12,12)|_SHIFTL((vtx)*2,0,12),\
-	(unsigned int)(zval),						}}
+{	_SHIFTL(G_RDPHALF_1,24,8),					      \
+	(unsigned int)(dl),						},    \
+{	_SHIFTL(G_BRANCH_Z,24,8)|_SHIFTL((vtx)*5,12,12)|_SHIFTL((vtx)*2,0,12),\
+	(unsigned int)(zval),						}
 
 /*
  * gSPLoadUcode   RSP loads specified ucode.
@@ -2392,11 +2392,11 @@ typedef union {
 }
 
 #define	gsSPLoadUcodeEx(uc_start, uc_dstart, uc_dsize)			\
-{{	_SHIFTL(G_RDPHALF_1,24,8),					\
-	(unsigned int)(uc_dstart),				}},	\
-{{	_SHIFTL(G_LOAD_UCODE,24,8)|					\
+{	_SHIFTL(G_RDPHALF_1,24,8),					\
+	(unsigned int)(uc_dstart),				},	\
+{	_SHIFTL(G_LOAD_UCODE,24,8)|					\
 	  _SHIFTL((int)(uc_dsize)-1,0,16),				\
-	(unsigned int)(uc_start),				}}
+	(unsigned int)(uc_start),				}
 
 #define	gSPLoadUcode(pkt, uc_start, uc_dstart)				\
         gSPLoadUcodeEx((pkt), (uc_start), (uc_dstart), SP_UCODE_DATA_SIZE)
@@ -2424,11 +2424,11 @@ typedef union {
 }
 
 #define	gsSPDma_io(flag, dmem, dram, size)				\
-{{									\
+{									\
 	_SHIFTL(G_DMA_IO,24,8)|_SHIFTL((flag),23,1)|			\
 	_SHIFTL((dmem)/8,13,10)|_SHIFTL((size)-1,0,12),			\
 	(unsigned int)(dram)						\
-}}
+}
 
 #define	gSPDmaRead(pkt,dmem,dram,size)	gSPDma_io((pkt),0,(dmem),(dram),(size))
 #define	gsSPDmaRead(dmem,dram,size)	gsSPDma_io(0,(dmem),(dram),(size))
@@ -2731,11 +2731,11 @@ typedef union {
 	_g->words.w1 = (_SHIFTL((s),16,16) | _SHIFTL((t),0,16));	\
 }
 # define gsSPTexture(s, t, level, tile, on)				\
-{{									\
+{									\
 	(_SHIFTL(G_TEXTURE,24,8) | _SHIFTL(BOWTIE_VAL,16,8) |		\
 	 _SHIFTL((level),11,3) | _SHIFTL((tile),8,3) | _SHIFTL((on),1,7)),\
         (_SHIFTL((s),16,16) | _SHIFTL((t),0,16))			\
-}}
+}
 /* 
  * Different version of SPTexture macro, has an additional parameter
  * which is currently reserved in the microcode.
@@ -2751,11 +2751,11 @@ typedef union {
 	_g->words.w1 = (_SHIFTL((s),16,16) | _SHIFTL((t),0,16));	\
 }
 # define gsSPTextureL(s, t, level, xparam, tile, on)			\
-{{									\
+{									\
 	(_SHIFTL(G_TEXTURE,24,8) | _SHIFTL((xparam),16,8) |		\
 	 _SHIFTL((level),11,3) | _SHIFTL((tile),8,3) | _SHIFTL((on),1,7)),\
         (_SHIFTL((s),16,16) | _SHIFTL((t),0,16))			\
-}}
+}
 #else
 /*
  * Macros to turn texture on/off
@@ -2770,11 +2770,11 @@ typedef union {
 	_g->words.w1 = (_SHIFTL((s),16,16)|_SHIFTL((t),0,16));		\
 }
 # define gsSPTexture(s, t, level, tile, on)				\
-{{									\
+{									\
 	(_SHIFTL(G_TEXTURE,24,8)|_SHIFTL(BOWTIE_VAL,16,8)|		\
 	 _SHIFTL((level),11,3)|_SHIFTL((tile),8,3)|_SHIFTL((on),0,8)),	\
         (_SHIFTL((s),16,16)|_SHIFTL((t),0,16))				\
-}}
+}
 /* 
  * Different version of SPTexture macro, has an additional parameter
  * which is currently reserved in the microcode.
@@ -2789,11 +2789,11 @@ typedef union {
 	_g->words.w1 = (_SHIFTL((s),16,16)|_SHIFTL((t),0,16));		\
 }
 # define gsSPTextureL(s, t, level, xparam, tile, on)			\
-{{									\
+{									\
 	(_SHIFTL(G_TEXTURE,24,8)|_SHIFTL((xparam),16,8)|		\
 	 _SHIFTL((level),11,3)|_SHIFTL((tile),8,3)|_SHIFTL((on),0,8)),	\
         (_SHIFTL((s),16,16)|_SHIFTL((t),0,16))				\
-}}
+}
 #endif
 
 #define gSPPerspNormalize(pkt, s)	gMoveWd(pkt, G_MW_PERSPNORM, 0, (s))
@@ -2818,9 +2818,9 @@ typedef union {
 }
 
 #define gsSPEndDisplayList()						\
-{{									\
+{									\
 	_SHIFTL(G_ENDDL, 24, 8), 0					\
-}}
+}
 
 #ifdef	F3DEX_GBI_2
 /*
@@ -2839,15 +2839,15 @@ typedef union {
 }
 
 #define	gsSPGeometryMode(c, s)						\
-{{									\
+{									\
 	(_SHIFTL(G_GEOMETRYMODE,24,8)|_SHIFTL(~(u32)(c),0,24)),(u32)(s)	\
-}}
+}
 #define	gSPSetGeometryMode(pkt, word)	gSPGeometryMode((pkt),0,(word))
 #define	gsSPSetGeometryMode(word)	gsSPGeometryMode(0,(word))
 #define	gSPClearGeometryMode(pkt, word)	gSPGeometryMode((pkt),(word),0)
 #define	gsSPClearGeometryMode(word)	gsSPGeometryMode((word),0)
 #define	gSPLoadGeometryMode(pkt, word)	gSPGeometryMode((pkt),-1,(word))
-#define	gsSPLoadGeometryMode(word)	gsSPGeometryMode(-1,(word))
+#define	gsSPLoadGeometryMode(pkt, word)	gsSPGeometryMode(-1,(word))
 
 #else	/* F3DEX_GBI_2 */
 #define	gSPSetGeometryMode(pkt, word)					\
@@ -2859,9 +2859,9 @@ typedef union {
 }
 
 #define	gsSPSetGeometryMode(word)					\
-{{									\
+{									\
 	_SHIFTL(G_SETGEOMETRYMODE, 24, 8), (unsigned int)(word)		\
-}}
+}
 
 #define	gSPClearGeometryMode(pkt, word)					\
 {									\
@@ -2872,9 +2872,9 @@ typedef union {
 }
 
 #define	gsSPClearGeometryMode(word)					\
-{{									\
+{									\
 	_SHIFTL(G_CLEARGEOMETRYMODE, 24, 8), (unsigned int)(word)	\
-}}
+}
 #endif	/* F3DEX_GBI_2 */
 
 #ifdef	F3DEX_GBI_2
@@ -2887,10 +2887,10 @@ typedef union {
 }
 
 #define	gsSPSetOtherMode(cmd, sft, len, data)				\
-{{									\
+{									\
 	_SHIFTL(cmd,24,8)|_SHIFTL(32-(sft)-(len),8,8)|_SHIFTL((len)-1,0,8), \
 	(unsigned int)(data)						\
-}}
+}
 #else
 #define	gSPSetOtherMode(pkt, cmd, sft, len, data)			\
 {									\
@@ -2902,10 +2902,10 @@ typedef union {
 }
 
 #define	gsSPSetOtherMode(cmd, sft, len, data)				\
-{{									\
+{									\
 	_SHIFTL(cmd, 24, 8) | _SHIFTL(sft, 8, 8) | _SHIFTL(len, 0, 8),	\
 	(unsigned int)(data)						\
-}}
+}
 #endif
 
 /*
@@ -3009,11 +3009,11 @@ typedef union {
 }
 
 #define	gsSetImage(cmd, fmt, siz, width, i)				\
-{{									\
+{									\
 	_SHIFTL(cmd, 24, 8) | _SHIFTL(fmt, 21, 3) |			\
 	_SHIFTL(siz, 19, 2) | _SHIFTL((width)-1, 0, 12),		\
 	(unsigned int)(i)						\
-}}
+}
 
 #define	gDPSetColorImage(pkt, f, s, w, i)	gSetImage(pkt, G_SETCIMG, f, s, w, i)
 #define	gsDPSetColorImage(f, s, w, i)		gsSetImage(G_SETCIMG, f, s, w, i)
@@ -3042,10 +3042,10 @@ typedef union {
 }
 
 #define	gsDPSetCombine(muxs0, muxs1)					\
-{{									\
+{									\
 	_SHIFTL(G_SETCOMBINE, 24, 8) | _SHIFTL(muxs0, 0, 24),		\
 	(unsigned int)(muxs1)						\
-}}
+}
 
 #define	GCCc0w0(saRGB0, mRGB0, saA0, mA0)				\
 		(_SHIFTL((saRGB0), 20, 4) | _SHIFTL((mRGB0), 15, 5) | 	\
@@ -3087,7 +3087,7 @@ typedef union {
 
 #define	gsDPSetCombineLERP(a0, b0, c0, d0, Aa0, Ab0, Ac0, Ad0,		\
 		a1, b1, c1, d1,	Aa1, Ab1, Ac1, Ad1)			\
-{{									\
+{									\
 	_SHIFTL(G_SETCOMBINE, 24, 8) |					\
 	_SHIFTL(GCCc0w0(G_CCMUX_##a0, G_CCMUX_##c0,			\
 		       G_ACMUX_##Aa0, G_ACMUX_##Ac0) |			\
@@ -3097,7 +3097,7 @@ typedef union {
 		       GCCc1w1(G_CCMUX_##b1, G_ACMUX_##Aa1,		\
 			       G_ACMUX_##Ac1, G_CCMUX_##d1,		\
 			       G_ACMUX_##Ab1, G_ACMUX_##Ad1))		\
-}}
+}
 
 /*
  * SetCombineMode macros are NOT redunant. It allow the C preprocessor
@@ -3121,9 +3121,9 @@ typedef union {
 }
 
 #define	gsDPSetColor(c, d)						\
-{{									\
+{									\
 	_SHIFTL(c, 24, 8), (unsigned int)(d)				\
-}}
+}
 
 #define	DPRGBColor(pkt, cmd, r, g, b, a)				\
             gDPSetColor(pkt, cmd,					\
@@ -3169,12 +3169,12 @@ typedef union {
 }
 
 #define	gsDPSetPrimColor(m, l, r, g, b, a)				\
-{{									\
+{									\
 	(_SHIFTL(G_SETPRIMCOLOR, 24, 8) | _SHIFTL(m, 8, 8) |		\
 	 _SHIFTL(l, 0, 8)),						\
 	(_SHIFTL(r, 24, 8) | _SHIFTL(g, 16, 8) | _SHIFTL(b, 8, 8) |	\
 	 _SHIFTL(a, 0, 8))						\
-}}
+}
 
 /*
  * gDPSetOtherMode (This is for expert user.)
@@ -3213,10 +3213,10 @@ typedef union {
 }
 
 #define	gsDPSetOtherMode(mode0, mode1)					\
-{{									\
+{									\
 	_SHIFTL(G_RDPSETOTHERMODE,24,8)|_SHIFTL(mode0,0,24),		\
 	(unsigned int)(mode1)						\
-}}
+}
 
 /*
  * Texturing macros
@@ -3289,10 +3289,10 @@ typedef union {
 }
 
 #define gsDPLoadTileGeneric(c, tile, uls, ult, lrs, lrt)		\
-{{									\
+{									\
 	_SHIFTL(c, 24, 8) | _SHIFTL(uls, 12, 12) | _SHIFTL(ult, 0, 12),	\
 	_SHIFTL(tile, 24, 3) | _SHIFTL(lrs, 12, 12) | _SHIFTL(lrt, 0, 12)\
-}}
+}
 
 #define	gDPSetTileSize(pkt, t, uls, ult, lrs, lrt)			\
 		gDPLoadTileGeneric(pkt, G_SETTILESIZE, t, uls, ult, lrs, lrt)
@@ -3319,14 +3319,14 @@ typedef union {
 
 #define	gsDPSetTile(fmt, siz, line, tmem, tile, palette, cmt,		\
 		maskt, shiftt, cms, masks, shifts)			\
-{{									\
+{									\
 	(_SHIFTL(G_SETTILE, 24, 8) | _SHIFTL(fmt, 21, 3) | 		\
 	 _SHIFTL(siz, 19, 2) | _SHIFTL(line, 9, 9) | _SHIFTL(tmem, 0, 9)),\
         (_SHIFTL(tile, 24, 3) | _SHIFTL(palette, 20, 4) | 		\
 	 _SHIFTL(cmt, 18, 2) | _SHIFTL(maskt, 14, 4) | 			\
 	 _SHIFTL(shiftt, 10, 4) | _SHIFTL(cms, 8, 2) | 			\
 	 _SHIFTL(masks, 4, 4) | _SHIFTL(shifts, 0, 4))			\
-}}
+}
 
 /*
  *  For RCP 2.0, the maximum number of texels that can be loaded
@@ -3350,13 +3350,13 @@ typedef union {
 }
 
 #define gsDPLoadBlock(tile, uls, ult, lrs, dxt)				\
-{{									\
+{									\
 	(_SHIFTL(G_LOADBLOCK, 24, 8) | _SHIFTL(uls, 12, 12) | 		\
 	 _SHIFTL(ult, 0, 12)),						\
 	(_SHIFTL(tile, 24, 3) | 					\
 	 _SHIFTL((MIN(lrs,G_TX_LDBLK_MAX_TXL)), 12, 12) |		\
 	 _SHIFTL(dxt, 0, 12))						\
-}}
+}
 
 #define	gDPLoadTLUTCmd(pkt, tile, count)				\
 {									\
@@ -3367,10 +3367,10 @@ typedef union {
 }
 
 #define	gsDPLoadTLUTCmd(tile, count)					\
-{{									\
+{									\
 	_SHIFTL(G_LOADTLUT, 24, 8),					\
 	_SHIFTL((tile), 24, 3) | _SHIFTL((count), 14, 10)		\
-}}
+}
 
 #define	gDPLoadTextureBlock(pkt, timg, fmt, siz, width, height,		\
 		pal, cms, cmt, masks, maskt, shifts, shiftt)		\
@@ -4302,24 +4302,24 @@ typedef union {
 }
 
 #define gsDPSetScissor(mode, ulx, uly, lrx, lry)			\
-{{									\
+{									\
 	_SHIFTL(G_SETSCISSOR, 24, 8) |					\
 	_SHIFTL((int)((float)(ulx)*4.0F), 12, 12) |			\
 	_SHIFTL((int)((float)(uly)*4.0F), 0, 12),			\
 	_SHIFTL(mode, 24, 2) |						\
 	_SHIFTL((int)((float)(lrx)*4.0F), 12, 12) |			\
 	_SHIFTL((int)((float)(lry)*4.0F), 0, 12)			\
-}}
+}
 
 #define gsDPSetScissorFrac(mode, ulx, uly, lrx, lry)			\
-{{									\
+{									\
 	_SHIFTL(G_SETSCISSOR, 24, 8) |					\
 	_SHIFTL((int)((ulx)), 12, 12) |					\
 	_SHIFTL((int)((uly)), 0, 12),					\
 	_SHIFTL(mode, 24, 2) |						\
 	_SHIFTL((int)(lrx), 12, 12) |					\
 	_SHIFTL((int)(lry), 0, 12)					\
-}}
+}
 
 /* Fraction never used in fill */
 #define	gDPFillRectangle(pkt, ulx, uly, lrx, lry)			\
@@ -4332,11 +4332,11 @@ typedef union {
 }
 
 #define	gsDPFillRectangle(ulx, uly, lrx, lry)				\
-{{									\
+{									\
 	(_SHIFTL(G_FILLRECT, 24, 8) | _SHIFTL((lrx), 14, 10) | 		\
 	 _SHIFTL((lry), 2, 10)),					\
 	(_SHIFTL((ulx), 14, 10) | _SHIFTL((uly), 2, 10))		\
-}}
+}
 
 /* like gDPFillRectangle but accepts negative arguments */
 #define	gDPScisFillRectangle(pkt, ulx, uly, lrx, lry)			\
@@ -4362,12 +4362,12 @@ typedef union {
 }
 
 #define gsDPSetConvert(k0, k1, k2, k3, k4, k5)				\
-{{									\
+{									\
 	(_SHIFTL(G_SETCONVERT, 24, 8) |					\
-	 _SHIFTL(k0, 13, 9) | _SHIFTL(k1, 4, 9) | _SHIFTR(k2, 5, 4)),	\
+	 _SHIFTL(k0, 13, 9) | _SHIFTL(k1, 4, 9) | _SHIFTL(k2, 5, 4)),	\
 	(_SHIFTL(k2, 27, 5) | _SHIFTL(k3, 18, 9) | _SHIFTL(k4, 9, 9) | 	\
 	 _SHIFTL(k5, 0, 9))						\
-}}
+}
 
 #define	gDPSetKeyR(pkt, cR, sR, wR)					\
 {									\
@@ -4379,10 +4379,10 @@ typedef union {
 }
 
 #define	gsDPSetKeyR(cR, sR, wR)						\
-{{									\
+{									\
 	_SHIFTL(G_SETKEYR, 24, 8),					\
 	_SHIFTL(wR, 16, 12) | _SHIFTL(cR, 8, 8) | _SHIFTL(sR, 0, 8)	\
-}}
+}
 
 #define	gDPSetKeyGB(pkt, cG, sG, wG, cB, sB, wB)			\
 {									\
@@ -4395,12 +4395,12 @@ typedef union {
 }
 
 #define	gsDPSetKeyGB(cG, sG, wG, cB, sB, wB)				\
-{{									\
+{									\
 	(_SHIFTL(G_SETKEYGB, 24, 8) | _SHIFTL(wG, 12, 12) |		\
 	 _SHIFTL(wB, 0, 12)),						\
 	(_SHIFTL(cG, 24, 8) | _SHIFTL(sG, 16, 8) | _SHIFTL(cB, 8, 8) |	\
 	 _SHIFTL(sB, 0, 8))						\
-}}
+}
 
 #define gDPNoParam(pkt, cmd)						\
 {									\
@@ -4411,9 +4411,9 @@ typedef union {
 }
 
 #define gsDPNoParam(cmd)						\
-{{									\
+{									\
 	_SHIFTL(cmd, 24, 8), 0						\
-}}
+}
 
 #define gDPParam(pkt, cmd, param)					\
 {									\
@@ -4424,9 +4424,9 @@ typedef union {
 }
 
 #define gsDPParam(cmd, param)						\
-{{									\
+{									\
 	_SHIFTL(cmd, 24, 8), (param)					\
-}}
+}
 
 /* Notice that textured rectangles are 128-bit commands, therefore
  * gsDPTextureRectangle() should not be used in display lists 
@@ -4434,15 +4434,15 @@ typedef union {
  * That is also why there is no gDPTextureRectangle() macros.
  */
 #define gsDPTextureRectangle(xl, yl, xh, yh, tile, s, t, dsdx, dtdy)	\
-{{									\
+{									\
     (_SHIFTL(G_TEXRECT, 24, 8) | _SHIFTL(xh, 12, 12) | 			\
      _SHIFTL(yh, 0, 12)),						\
     (_SHIFTL(tile, 24, 3) | _SHIFTL(xl, 12, 12) | _SHIFTL(yl, 0, 12)),	\
-}},									\
-{{									\
+},									\
+{									\
     _SHIFTL(s, 16, 16) | _SHIFTL(t, 0, 16),				\
     _SHIFTL(dsdx, 16, 16) | _SHIFTL(dtdy, 0, 16)			\
-}}
+}
 
 #define gDPTextureRectangle(pkt, xl, yl, xh, yh, tile, s, t, dsdx, dtdy)\
 {									\
@@ -4458,15 +4458,15 @@ typedef union {
 }
 
 #define gsDPTextureRectangleFlip(xl, yl, xh, yh, tile, s, t, dsdx, dtdy) \
-{{									\
+{									\
     (_SHIFTL(G_TEXRECTFLIP, 24, 8) | _SHIFTL(xh, 12, 12) |		\
      _SHIFTL(yh, 0, 12)),						\
     (_SHIFTL(tile, 24, 3) | _SHIFTL(xl, 12, 12) | _SHIFTL(yl, 0, 12)),	\
-}},									\
-{{									\
+},									\
+{									\
     _SHIFTL(s, 16, 16) | _SHIFTL(t, 0, 16),				\
     _SHIFTL(dsdx, 16, 16) | _SHIFTL(dtdy, 0, 16)			\
-}}
+}
 
 #define gDPTextureRectangleFlip(pkt, xl, yl, xh, yh, tile, s, t, dsdx, dtdy)\
 {									\
@@ -4482,8 +4482,8 @@ typedef union {
 }
 
 #define gsSPTextureRectangle(xl, yl, xh, yh, tile, s, t, dsdx, dtdy)	\
-    {{(_SHIFTL(G_TEXRECT, 24, 8) | _SHIFTL(xh, 12, 12) | _SHIFTL(yh, 0, 12)),\
-    (_SHIFTL(tile, 24, 3) | _SHIFTL(xl, 12, 12) | _SHIFTL(yl, 0, 12))}},	\
+    (_SHIFTL(G_TEXRECT, 24, 8) | _SHIFTL(xh, 12, 12) | _SHIFTL(yh, 0, 12)),\
+    (_SHIFTL(tile, 24, 3) | _SHIFTL(xl, 12, 12) | _SHIFTL(yl, 0, 12)),	\
     gsImmp1(G_RDPHALF_1, (_SHIFTL(s, 16, 16) | _SHIFTL(t, 0, 16))),	\
     gsImmp1(G_RDPHALF_2, (_SHIFTL(dsdx, 16, 16) | _SHIFTL(dtdy, 0, 16)))
 
@@ -4528,9 +4528,9 @@ typedef union {
 }
 
 #define gsSPTextureRectangleFlip(xl, yl, xh, yh, tile, s, t, dsdx, dtdy) \
-    {{(_SHIFTL(G_TEXRECTFLIP, 24, 8) | _SHIFTL(xh, 12, 12) |		\
+    (_SHIFTL(G_TEXRECTFLIP, 24, 8) | _SHIFTL(xh, 12, 12) |		\
      _SHIFTL(yh, 0, 12)),						\
-    (_SHIFTL(tile, 24, 3) | _SHIFTL(xl, 12, 12) | _SHIFTL(yl, 0, 12))}},	\
+    (_SHIFTL(tile, 24, 3) | _SHIFTL(xl, 12, 12) | _SHIFTL(yl, 0, 12)),	\
     gsImmp1(G_RDPHALF_1, (_SHIFTL(s, 16, 16) | _SHIFTL(t, 0, 16))),	\
     gsImmp1(G_RDPHALF_2, (_SHIFTL(dsdx, 16, 16) | _SHIFTL(dtdy, 0, 16)))
 

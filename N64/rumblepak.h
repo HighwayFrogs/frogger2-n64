@@ -29,7 +29,7 @@ typedef struct
 
 void InitRumble();
 void UpdateRumble();
-void StartRumble(float freq,float inertia,short life,short num,char *string);
+void StartRumble(float freq,float inertia,short life,short num);
 void StopAllRumbles();
 void StartDelayedRumble(float freq,float inertia,short life,short num,char* string,short delay);
 

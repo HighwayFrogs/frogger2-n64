@@ -217,10 +217,10 @@ void InitInGameTextOverlays(unsigned long worldID,unsigned long levelID)
 	clock->draw = 0;
 
 	spawn = CreateAndAddSpriteOverlay(50,120,"spa01.bmp",32,32,192,ANIMATION_FORWARDS | ANIMATION_CYCLE );
-	AddFrameToSpriteOverlay(spawn,"spa02.bmp");
-	AddFrameToSpriteOverlay(spawn,"spa03.bmp");
-	AddFrameToSpriteOverlay(spawn,"spa04.bmp");
-	SetSpriteOverlayAnimSpeed(spawn,0.5F);
+	//AddFrameToSpriteOverlay(spawn,"spa02.bmp");
+	//AddFrameToSpriteOverlay(spawn,"spa03.bmp");
+	//AddFrameToSpriteOverlay(spawn,"spa04.bmp");
+	//SetSpriteOverlayAnimSpeed(spawn,0.5F);
 	spawn->draw = 0;
 		  
 

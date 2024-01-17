@@ -237,7 +237,7 @@ void GameProcessController(long pl)
 			// To enable endless double jumping
 			//player[pl].hasDoubleJumped = 0;
 #ifdef N64_VERSION
-			//StartRumble(100,1,3,ActiveController);
+			StartRumble(100,1,3,ActiveController);
 #endif
 		}
 		else if(!(player[pl].isSuperHopping) && !(player[pl].inputPause))
@@ -550,182 +550,6 @@ GAMETILE *credTile;
 
 void RunCredits()
 {
-	unsigned long cn;
-
-	if (creditsActive==0)
-		return;
-
-	if (actFrameCount>cFrame)
-	{
-		if (creditsActive==2)
-		{
-			creditsActive=3;
-			return;
-		}
-
-		cFrame = actFrameCount + CRED_SPEED;
-		cNumber+= 4;
-
-		if (credits[cNumber] == 0)
-			cNumber = 0;
-	
-		Modify3DText(cText[0], credits[cNumber],220);
-		Modify3DText(cText[1], credits[cNumber+1],220);
-		Modify3DText(cText[2], credits[cNumber+2],220);
-		Modify3DText(cText[3], credits[cNumber+3],220);
-
-		Modify3DText(rText[1], credits[cNumber+1],220);
-		Modify3DText(rText[2], credits[cNumber+2],220);
-
-	}
-
-	for (cn=0; cn<4; cn++)
-		cText[cn]->angle = 90+360*2;
-
-	
-	if (actFrameCount<(cFrame-CRED_SPEED+CRED_BORDERIN))
-	{
-		unsigned long amt;
-		amt = 0xff - ((((cFrame-CRED_SPEED+CRED_BORDERIN)-actFrameCount) * 255) / CRED_BORDEROUT);
-		for (cn=0; cn<4; cn++)
-			if ((credits[cNumber+cn]) && (credits[cNumber+cn][0]!=1))
-			{
-				cText[cn]->vA = amt; 
-				//cText[cn]->angle = 90+ ((amt * 360 * 2) / 0xff);
-				//cText[cn]->yScale = 3-(amt/128.0);
-				cText[cn]->sinA = 6-(amt/(256.0/6));
-			}
-		
-	}
-
-	if (actFrameCount>(cFrame-CRED_BORDEROUT))
-	{
-		unsigned long amt;
-		amt = 0xff - (((actFrameCount-(cFrame-CRED_BORDEROUT)) * 255) / CRED_BORDEROUT);
-		for (cn=0; cn<4; cn++)
-			if ((creditsActive == 2) || ((credits[cNumber+cn+4]) && (credits[cNumber+cn+4][0]!=1)))
-			{
-				cText[cn]->vA = amt; 
-				//cText[cn]->angle = 90+ ((amt * 360 * 2) / 0xff);
-				//cText[cn]->yScale = 3-(amt/128.0);
-				cText[cn]->sinA = 6-(amt/(256.0/6));
-			}
-	}
-
-	for (cn=1; cn<3; cn++)
-	{
-		rText[cn]->angle = (360*8) - (cText[cn]->angle);
-		rText[cn]->vA = ((unsigned char) cText[cn]->vA) / (6-(cn*2));
-		//rText[cn]->yScale = cText[cn]->yScale;
-	}
-}
-
-void DeactivateCredits(void)
-{
-	unsigned long cn;
-	if (creditsActive)
-	{
-		if (creditsActive == 1)
-		{
-			creditsActive = 2;
-			cFrame = actFrameCount + CRED_BORDEROUT;
-		}
-
-		if (creditsActive == 3)
-		{
-			for (cn=0; cn<4; cn++)
-				cText[cn]->motion &= ~T3D_CREATED;
-			for (cn=1; cn<3; cn++)
-				rText[cn]->motion &= ~T3D_CREATED;
-			creditsActive = 0;
-			
-		}
-	}
-}
-
-void ActivateCredits(void)
-{
-	unsigned long cn;
-
-	if (creditsActive == 0)
-	{
-		for (cn=0; cn<4; cn++)
-			cText[cn]->motion |= T3D_CREATED;
-		for (cn=1; cn<3; cn++)
-			rText[cn]->motion |= T3D_CREATED;
-		creditsActive = 1;
-
-		cFrame = actFrameCount + CRED_SPEED;
-		cNumber = 0;
-
-		Modify3DText(cText[0], credits[cNumber],220);
-		Modify3DText(cText[1], credits[cNumber+1],220);
-		Modify3DText(cText[2], credits[cNumber+2],220);
-		Modify3DText(cText[3], credits[cNumber+3],220);
-
-		Modify3DText(rText[1], credits[cNumber+1],220);
-		Modify3DText(rText[2], credits[cNumber+2],220);
-
-	}
-}
-
-void InitCredits(void)
-{
-	cText[0] = CreateAndAdd3DText( credits[cNumber], 180,
-		255,30,0,220,
-		T3D_HORIZONTAL,
-		T3D_MOVE_MODGE | T3D_MOVE_SPIN | T3D_ALIGN_CENTRE,
-		&zero,
-		0,0,
-		-30,120,-440,
-		0, 0.2, 0.0 );
-	
-	
-	cText[1] = CreateAndAdd3DText( credits[cNumber+1], 180,
-		255,30,0,220,
-		T3D_HORIZONTAL,
-		T3D_MOVE_MODGE | T3D_MOVE_SPIN | T3D_ALIGN_CENTRE,
-		&zero,
-		0,0,
-		-30,90,-440,
-		0, 0.3, 0.0 );
-
-	cText[2] = CreateAndAdd3DText(credits[cNumber+2], 250,
-		255,220,30,220,
-		T3D_HORIZONTAL,
-		T3D_MOVE_MODGE | T3D_MOVE_SPIN | T3D_ALIGN_CENTRE,
-		&zero,
-		0,0,
-		-30,60,-440,
-		0, 0.25, 0.0 );
-
-	cText[3] = CreateAndAdd3DText( credits[cNumber+3], 250,
-		255,220,30,220,
-		T3D_HORIZONTAL,
-		T3D_MOVE_MODGE | T3D_MOVE_SPIN | T3D_ALIGN_CENTRE,
-		&zero,
-		0,0,
-		-30,30,-440,
-		0, 0.28, 0.0 );
-			
-				
-	rText[1] = CreateAndAdd3DText( credits[cNumber+1], 180,
-		255,30,130,220,
-		T3D_HORIZONTAL,
-		T3D_MOVE_MODGE | T3D_MOVE_SPIN | T3D_ALIGN_CENTRE,
-		&zero,
-		0,0,
-		-30,-90-30,-440,
-		3, 0.3, 0.0 );
-
-	rText[2] = CreateAndAdd3DText(credits[cNumber+2], 250,
-		255,220,130,220,
-		T3D_HORIZONTAL,
-		T3D_MOVE_MODGE | T3D_MOVE_SPIN | T3D_ALIGN_CENTRE,
-		&zero,
-		0,0,
-		-30,-60-30,-440,
-		3, 0.25, 0.0 );
 }
 
 ///////////////////////////////////////////////////////
@@ -757,12 +581,12 @@ void RunGameLoop (void)
 		{
 			if (player[0].levelNum == LEVELID_FRONTEND1)
 			{
+#ifdef PC_VERSION
 				InitCredits();			
 				creditsActive = 3;
 				DeactivateCredits();
 			
 				DisableTextOverlay(scoreTextOver);
-#ifdef PC_VERSION
 				frogFacing[0] = 3;
 				atari = CreateAndAddSpriteOverlay(270,195,"atari.bmp",32,32,255,0);
 				konami = CreateAndAddSpriteOverlay(18,195,"konami.bmp",32,32,255,0);
@@ -777,43 +601,10 @@ void RunGameLoop (void)
 				flogo[i++] = CreateAndAddSpriteOverlay(194,168,"flogo08.bmp",32,32,255,0);
 				flogo[i++] = CreateAndAddSpriteOverlay(162,200,"flogo09.bmp",32,32,255,0);
 				flogo[i++] = CreateAndAddSpriteOverlay(194,200,"flogo10.bmp",32,32,255,0);
-#endif
 				fadingLogos = 0;
+#endif
 			}
 		}
-
-		bronzeCup[0] = CreateAndAddSpriteOverlay(230,20,"bronz001.bmp",32,32,255,0);
-		bronzeCup[1] = CreateAndAddSpriteOverlay(262,20,"bronz002.bmp",32,32,255,0);
-		bronzeCup[2] = CreateAndAddSpriteOverlay(230,52,"bronz003.bmp",32,32,255,0);
-		bronzeCup[3] = CreateAndAddSpriteOverlay(262,52,"bronz004.bmp",32,32,255,0);
-		bronzeCup[4] = CreateAndAddSpriteOverlay(20,20,"bronz001.bmp",32,32,255,0);
-		bronzeCup[5] = CreateAndAddSpriteOverlay(52,20,"bronz002.bmp",32,32,255,0);
-		bronzeCup[6] = CreateAndAddSpriteOverlay(20,52,"bronz003.bmp",32,32,255,0);
-		bronzeCup[7] = CreateAndAddSpriteOverlay(52,52,"bronz004.bmp",32,32,255,0);
-		for(i=0; i<8; i++)
-			DisableSpriteOverlay(bronzeCup[i]);
-		
-		silverCup[0] = CreateAndAddSpriteOverlay(230,20,"silv001.bmp",32,32,255,0);
-		silverCup[1] = CreateAndAddSpriteOverlay(262,20,"silv002.bmp",32,32,255,0);
-		silverCup[2] = CreateAndAddSpriteOverlay(230,52,"silv003.bmp",32,32,255,0);
-		silverCup[3] = CreateAndAddSpriteOverlay(262,52,"silv004.bmp",32,32,255,0);
-		silverCup[4] = CreateAndAddSpriteOverlay(20,20,"silv001.bmp",32,32,255,0);
-		silverCup[5] = CreateAndAddSpriteOverlay(52,20,"silv002.bmp",32,32,255,0);
-		silverCup[6] = CreateAndAddSpriteOverlay(20,52,"silv003.bmp",32,32,255,0);
-		silverCup[7] = CreateAndAddSpriteOverlay(52,52,"silv004.bmp",32,32,255,0);
-		for(i=0; i<8; i++)
-			DisableSpriteOverlay(silverCup[i]);
-
-		goldCup[0] = CreateAndAddSpriteOverlay(230,20,"gold001.bmp",32,32,255,0);
-		goldCup[1] = CreateAndAddSpriteOverlay(262,20,"gold002.bmp",32,32,255,0);
-		goldCup[2] = CreateAndAddSpriteOverlay(230,52,"gold003.bmp",32,32,255,0);
-		goldCup[3] = CreateAndAddSpriteOverlay(262,52,"gold004.bmp",32,32,255,0);
-		goldCup[4] = CreateAndAddSpriteOverlay(20,20,"gold001.bmp",32,32,255,0);
-		goldCup[5] = CreateAndAddSpriteOverlay(52,20,"gold002.bmp",32,32,255,0);
-		goldCup[6] = CreateAndAddSpriteOverlay(20,52,"gold003.bmp",32,32,255,0);
-		goldCup[7] = CreateAndAddSpriteOverlay(52,52,"gold004.bmp",32,32,255,0);
-		for(i=0; i<8; i++)
-			DisableSpriteOverlay(goldCup[i]);
 
 		if (player[0].worldNum==9)
 		{
@@ -839,14 +630,6 @@ void RunGameLoop (void)
 	if (player[0].worldNum == WORLDID_FRONTEND)
 			if (player[0].levelNum == LEVELID_FRONTEND1)
 			{
-				if ((currTile[0] == &(firstTile[22])))
-				{
-					if (creditsActive==0)
-						ActivateCredits();
-				}
-				else
-					DeactivateCredits();
-				
 				RunCredits();
 			}
 	
@@ -968,7 +751,6 @@ void RunGameLoop (void)
 			camDist.v[X]	= 0;
 			camDist.v[Y]	= 680;
 			camDist.v[Z]	= 192;
-			UpdateCompletedLevel(player[0].worldNum,player[0].levelNum);
 			GTInit( &levelIsOver, 15 );
 		}
 		else
@@ -1174,22 +956,6 @@ void RunLevelCompleteSequence()
 		babyIcons[i]->xPos -= ((float)babyIcons[i]->xPos - ((20.0F*i)+115.0F)) / 16.0F;
 		babyIcons[i]->yPos -= ((float)babyIcons[i]->yPos - (65.0F)) / 16.0F;
 		babyIcons[i]->animSpeed = 1.5F;
-	}
-							
-	switch(award)
-	{
-		case 0:
-			for(i=0; i<8; i++)
-				EnableSpriteOverlay(goldCup[i]);
-			break;
-		case 1:
-			for(i=0; i<8; i++)
-				EnableSpriteOverlay(silverCup[i]);
-			break;
-		case 2:
-			for(i=0; i<8; i++)
-				EnableSpriteOverlay(bronzeCup[i]);
-			break;
 	}
 }
 

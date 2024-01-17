@@ -24,11 +24,10 @@ _codeSegmentEnd         alias   _code_objend
         section.64      code.bss,codebss
 
 
-;		inclib	"tonylib2.lib",code
-		inclib	"../../SDK/lib/libultra.lib",code
+		inclib	"../../SDK/lib/tonylib2.lib",code
 		inclib	"../../SDK/lib/libsn.lib",code
 ;		inclib	"lib211b.lib", code
-;		inclib	"lib314.lib", code
+		inclib	"../../SDK/lib/lib314.lib", code
         include "../../SDK/lib/PR/rspboot.obj",code
 
         include "snmain.obj",code

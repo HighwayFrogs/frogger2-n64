@@ -872,7 +872,7 @@ void CheckForFroggerLanding(long pl)
 	player[pl].jumpTime = -1;
 
 	// Assume for now that if we've landed after being on another frogs head then we're no longer on it.
-	if( frog[pl]->action.frogon != -1 )
+	if( frog[pl]->action.frogon != (char)-1 )
 	{
 		int f = frog[pl]->action.frogon;
 
@@ -882,7 +882,7 @@ void CheckForFroggerLanding(long pl)
 
 		player[pl].idleEnable = 1;
 
-		if( frog[f]->action.frogon == -1 )
+		if( frog[f]->action.frogon == (char)-1 )
 		{
 			player[f].idleEnable = 1;
 			AnimateActor( frog[f]->actor, FROG_ANIM_BREATHE, YES, NO, 0.6, 0,0 );
@@ -1069,7 +1069,7 @@ void CheckForFroggerLanding(long pl)
 				SetQuaternion( &frog[i]->actor->qRot, &frog[pl]->actor->qRot );
 				SitAndFace( frog[i], currTile[i], frogFacing[i] );
 
-				if( frog[i]->action.frogunder != -1 ) continue;
+				if( frog[i]->action.frogunder != (char)-1 ) continue;
 
 				player[i].canJump = 0;
 
@@ -1081,7 +1081,7 @@ void CheckForFroggerLanding(long pl)
 
 				StartAnimateActor( frog[pl]->actor, FROG_ANIM_PINLOOP, YES, NO, 0.5, 0,0 );
 
-				if( frog[i]->action.frogon != -1 )
+				if( frog[i]->action.frogon != (char)-1 )
 				{
 					VECTOR up;
 					SetVector( &up, &currTile[i]->normal );

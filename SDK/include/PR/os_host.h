@@ -23,8 +23,8 @@
         Copyright (C) 1998 Nintendo. (Originated by SGI)
         
         $RCSfile: os_host.h,v $
-        $Revision: 1.3 $
-        $Date: 1999/06/24 09:23:06 $
+        $Revision: 1.1 $
+        $Date: 1998/10/09 08:01:08 $
  *---------------------------------------------------------------------*/
 
 #ifndef _OS_HOST_H_
@@ -62,69 +62,12 @@ extern "C" {
  *
  */
 
-extern void __osInitialize_common(void);
-
-#if defined(_FINALROM)
-
-#define osInitialize() __osInitialize_common()
-
-#else
-
 /* PARTNER-N64 */
-#if defined(PTN64)
-extern void __osInitialize_kmc(void);
+#ifdef PTN64
 #define osReadHost osReadHost_pt
 #define osWriteHost osWriteHost_pt
-#define osInitialize()       \
-{                            \
-    __osInitialize_common();  \
-    __osInitialize_kmc();    \
-}
-
-/* MONEGI SMART PACK A */
-#elif defined(MWN64)
-extern void __osInitialize_msp(void);
-#define osReadHost osReadHost_pt
-#define osWriteHost osWriteHost_pt
-#define osInitialize()       \
-{                            \
-    __osInitialize_common(); \
-    __osInitialize_msp();    \
-}
-
-/* IS-Viewer(for Debugger) */
-#elif defined(ISV64)
-extern void __osInitialize_isv(void);
-#define osInitialize()       \
-{                            \
-    __osInitialize_common(); \
-    __osInitialize_isv();    \
-}
-
-/* Emulation board for INDY */
-#elif defined(EMU64)
-extern void __osInitialize_emu(void);
-#define osInitialize()       \
-{                            \
-    __osInitialize_common(); \
-    __osInitialize_emu();    \
-}
-
-#else
-/* Default (auto detect) */
-extern void __osInitialize_autodetect(void);
-extern void __osInitialize_msp(void);
-extern void __osInitialize_kmc(void);
-extern void __osInitialize_isv(void);
-extern void __osInitialize_emu(void);
-#define osInitialize()           \
-{                                \
-    __osInitialize_common();     \
-    __osInitialize_autodetect(); \
-}
 #endif
 
-#endif  /* _FINAL_ROM */
 
 /**************************************************************************
  *

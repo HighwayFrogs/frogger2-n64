@@ -23,8 +23,8 @@
         Copyright (C) 1998 Nintendo. (Originated by SGI)
         
         $RCSfile: os_libc.h,v $
-        $Revision: 1.3 $
-        $Date: 1999/07/13 01:43:47 $
+        $Revision: 1.1 $
+        $Date: 1998/10/09 08:01:14 $
  *---------------------------------------------------------------------*/
 
 #ifndef _OS_LIBC_H_
@@ -79,7 +79,6 @@ extern "C" {
  */
 
 /* byte string operations */
-
 
 extern void     bcopy(const void *, void *, int);
 extern int      bcmp(const void *, const void *, int);

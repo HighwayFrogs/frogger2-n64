@@ -151,7 +151,7 @@ void UpdateWaterN64(ACTOR2 *wAct)
 		{
 			if(wAct->flags & ACTOR_SLIDYTEX)
 			{
-				in->v.tc[1] -= (gameSpeed * slideSpeed * 1024);
+				in->v.tc[1] -= slideSpeed;
 				in->v.cn[3] = modc2;
 			}
 			else
@@ -265,7 +265,7 @@ void FreeN64WaterResources()
 
 
 //***** FOR MODGY (NON-WATER) OBJECTS ************************************************************
-
+float andyMod = 0.05;
 
 /*	--------------------------------------------------------------------------------
 	Function		: UpdateModgyTexN64
@@ -290,8 +290,8 @@ void UpdateModgyTexN64(ACTOR2 *mAct)
 		while(i--)
 		{
 			// modge vertices
-			xval = in->v.ob[X] * 0.05;
-			zval = in->v.ob[Z] * 0.05;
+			xval = in->v.ob[X] * andyMod;
+			zval = in->v.ob[Z] * andyMod;
 
 			t2 = sinf(t + xval * zval * 0.5) - cosf(t + xval * 0.3 * zval);
 

@@ -18,8 +18,8 @@
  *  File: rcp.h
  *
  *  This file contains register and bit definitions for RCP memory map.
- *  $Revision: 1.22 $
- *  $Date: 1999/05/20 03:01:49 $
+ *  $Revision: 1.21 $
+ *  $Date: 1998/07/31 11:08:29 $
  *  $Source: /hosts/gate3/exdisk2/cvs/N64OS/Master/cvsmdev2/PR/include/rcp.h,v $
  *
  **************************************************************************/
@@ -163,7 +163,6 @@ The Indy development board use cartridge domain 1:
 #define DEVICE_TYPE_SRAM	3	/* SRAM */
 /* 4-6 are reserved */
 #define DEVICE_TYPE_INIT	7	/* initial value */
-/* 8-14 are reserved */
 
 /*************************************************************************
  * SP Memory

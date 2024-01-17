@@ -3,8 +3,8 @@
         Copyright (C) 1998 Nintendo.
         
         $RCSfile: os_voice.h,v $
-        $Revision: 1.2 $
-        $Date: 1999/07/13 08:36:42 $
+        $Revision: 1.1 $
+        $Date: 1998/10/09 08:01:21 $
  *---------------------------------------------------------------------*/
 
 #ifndef _OS_VOICE_H_
@@ -33,7 +33,7 @@ typedef struct {		/* Voice Recognition System */
 
 typedef struct {		/* Voice Recognition System */
   u16	warning;
-  u16	answer_num;		/* 0...5 */
+  u16	answer_num;		/* 0Å`5 */
   u16	voice_level;
   u16	voice_sn;
   u16	voice_time;

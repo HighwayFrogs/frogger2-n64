@@ -16,7 +16,7 @@
 #include "incs.h"
 
 REACTIVEANIM reactiveAnims[] = {
-//#include "reactive.txt"
+#include "reactive.txt"
 };
 
 ENEMYLIST enemyList;						// the enemy linked list

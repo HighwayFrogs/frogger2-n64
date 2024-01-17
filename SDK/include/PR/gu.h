@@ -15,8 +15,8 @@
 
 /**************************************************************************
  *
- *  $Revision: 1.48 $
- *  $Date: 1999/07/13 08:00:20 $
+ *  $Revision: 1.46 $
+ *  $Date: 1997/11/26 00:30:53 $
  *  $Source: /hosts/gate3/exdisk2/cvs/N64OS/Master/cvsmdev2/PR/include/gu.h,v $
  *
  **************************************************************************/
@@ -192,9 +192,6 @@ extern float cosf(float angle);
 extern signed short sins (unsigned short angle);
 extern signed short coss (unsigned short angle);
 extern float sqrtf(float value);
-#ifdef __sgi
-#pragma intrinsic(sqrtf);
-#endif
 
 /*
  *  Dump routines for low-level display lists

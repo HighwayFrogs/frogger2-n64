@@ -139,7 +139,7 @@ void PrepareSong(char num,char slot)
 
 	MusHandleSetVolume(audioCtrl.musicHandle[slot],80);
 
-	if((num == INTRO_TRACK) && (osTvType == 0))
+	if(osTvType == 0)
 	{
 		MusHandleSetTempo(audioCtrl.musicHandle[slot], 0x6a);
 	}
@@ -641,10 +641,57 @@ int PlayActorBasedSample(short num,ACTOR *act,short tempVol,short pitch)
 */
 void PrepareSongForLevel(short worldID,short levelID)
 {
-	int theToon = TEST4_TRACK;
+	int theToon = 0;
 
-	// just play the first track for now !!!!
+	switch(worldID)
+	{
+		case WORLDID_FRONTEND:
+			theToon = TRACK_HUB;
+			break;
+
+		case WORLDID_GARDEN:
+			theToon = TRACK_GARDEN;
+			break;
+
+		case WORLDID_ANCIENT:
+			theToon = TRACK_TOYSHOP;
+			break;
+
+		case WORLDID_SPACE:
+			theToon = TRACK_HALLOWEEN;	//TRACK_SPACE;
+			break;
+
+		case WORLDID_CITY:
+			theToon = TRACK_CITY;
+			break;
+
+		case WORLDID_SUBTERRANEAN:
+			theToon = TRACK_TOYSHOP;
+			break;
+
+		case WORLDID_LABORATORY:
+			theToon = TRACK_LAB;
+			break;
+
+		case WORLDID_TOYSHOP:
+			theToon = TRACK_TOYSHOP;
+			break;
+
+		case WORLDID_HALLOWEEN:
+			theToon = TRACK_HALLOWEEN;
+			break;
+
+		case WORLDID_SUPERRETRO:
+			theToon = TRACK_TOYSHOP;
+			break;
+
+		default:
+			theToon = TRACK_TOYSHOP;
+	}
+
+	// set volume levels
 	MusSetMasterVolume(MUSFLAG_SONGS,32000);
+	MusSetMasterVolume(MUSFLAG_EFFECTS,32767);
 
 	PrepareSong(theToon,0);
 }

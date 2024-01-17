@@ -23,8 +23,8 @@
         Copyright (C) 1998 Nintendo. (Originated by SGI)
         
         $RCSfile: os_thread.h,v $
-        $Revision: 1.3 $
-        $Date: 1999/06/15 12:39:40 $
+        $Revision: 1.1 $
+        $Date: 1998/10/09 08:01:19 $
  *---------------------------------------------------------------------*/
 
 #ifndef _OS_THREAD_H_
@@ -60,12 +60,6 @@ typedef struct {
 	__OSfp	fp16, fp18, fp20, fp22, fp24, fp26, fp28, fp30;
 } __OSThreadContext;
 
-typedef struct {
-    u32 flag;
-    u32 count;
-    u64 time;
-} __OSThreadprofile_s;
-
 typedef struct OSThread_s {
 	struct OSThread_s	*next;		/* run/mesg queue link */
 	OSPri			priority;	/* run/mesg queue priority */
@@ -75,7 +69,6 @@ typedef struct OSThread_s {
 	u16			flags;		/* flags for rmon */
 	OSId			id;		/* id for debugging */
 	int			fp;		/* thread has used fp unit */
-	__OSThreadprofile_s     *thprof;        /* workarea for thread profiler */
 	__OSThreadContext	context;	/* register/interrupt mask */
 } OSThread;
 
@@ -106,9 +99,6 @@ typedef struct OSThread_s {
 #define	OS_PRIORITY_APPMAX	127
 #define OS_PRIORITY_IDLE	  0	/* Must be 0 */
 
-/* for thread profiler */
-#define THPROF_IDMAX            64
-#define THPROF_STACKSIZE        256
 
 #if defined(_LANGUAGE_C) || defined(_LANGUAGE_C_PLUS_PLUS)
 

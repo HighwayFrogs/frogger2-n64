@@ -40,65 +40,66 @@ extern "C" {
 
 /* Non scalable background plane */
 typedef	struct	{
-  u16   imageX;		/* x-coordinate of upper-left position of texture (u10.5) */ 
-  u16	imageW;		/* width of the texture (u10.2) */
-  s16	frameX;		/* upper-left position of transferred frame (s10.2) */
-  u16	frameW;		/* width of transferred frame (u10.2) */
+  u16   imageX;		/* テクスチャの左上位置 X 座標 (u10.5)        */ 
+  u16	imageW;		/* テクスチャの幅              (u10.2)        */
+  s16	frameX;		/* 転送されるフレームの左上位置(s10.2)        */
+  u16	frameW;		/* 転送されるフレームの幅      (u10.2)        */
 
-  u16   imageY; 	/* y-coordinate of upper-left position of texture (u10.5) */ 
-  u16	imageH;		/* height of the texture (u10.2) */
-  s16	frameY;		/* upper-left position of transferred frame (s10.2) */
-  u16	frameH;		/* height of transferred frame (u10.2) */
+  u16   imageY; 	/* テクスチャの左上位置 Y 座標 (u10.5)        */ 
+  u16	imageH;		/* テクスチャの高さ            (u10.2)        */
+  s16	frameY;		/* 転送されるフレームの左上位置(s10.2)        */
+  u16	frameH;		/* 転送されるフレームの高さ    (u10.2)        */
 
-  u64  *imagePtr;	/* texture source address on DRAM */
-  u16	imageLoad;	/* which to use, LoadBlock or  LoadTile */
-  u8	imageFmt;	/* format of texel - G_IM_FMT_*  */
-  u8	imageSiz;	/* size of texel - G_IM_SIZ_*   */
-  u16   imagePal; 	/* pallet number  */
-  u16	imageFlip;	/* right & left image inversion (Inverted by G_BG_FLAG_FLIPS) */
+  u64  *imagePtr;	/* DRAM 上のテクスチャソースアドレス          */
+  u16	imageLoad;	/* LoadBlock, LoadTile のどちらを使用するか   */
+  u8	imageFmt;	/* テクセルのフォーマット G_IM_FMT_*          */
+  u8	imageSiz;	/* テクセルのサイズ       G_IM_SIZ_*          */
+  u16   imagePal; 	/* パレット番号                               */
+  u16	imageFlip;	/* イメージの左右反転  G_BG_FLAG_FLIPS で反転 */
 
-  /* The following is set in the initialization routine guS2DInitBg(). There is no need for the user to set it. */
-  u16	tmemW;		/* TMEM width and Word size of frame 1 line. 
-                           At LoadBlock, GS_PIX2TMEM(imageW/4,imageSiz)
-                           At LoadTile  GS_PIX2TMEM(frameW/4,imageSiz)+1 */
-  u16	tmemH;		/* height of TMEM loadable at a time (s13.2) 4 times value
-			   When the normal texture, 512/tmemW*4
-			   When the CI texture, 256/tmemW*4 */
-  u16	tmemLoadSH;	/* SH value
-			   At LoadBlock, tmemSize/2-1
-			   At LoadTile, tmemW*16-1 */
-  u16	tmemLoadTH;	/* TH value or Stride value 
-			   At LoadBlock, GS_CALC_DXT(tmemW)
-			   At LoadTile, tmemH-1 */
-  u16	tmemSizeW;	/* skip value of imagePtr for image 1-line 
-			   At LoadBlock, tmemW*2
-                           At LoadTile, GS_PIX2TMEM(imageW/4,imageSiz)*2 */
-  u16	tmemSize;	/* skip value of imagePtr for 1-loading  
+  /* 以下は初期化ルーチン guS2DInitBg() 内で設定されるのでユーザが設
+     定する必要はない */
+  u16	tmemW;		/* frame 1 ラインの TMEM 幅 Word サイズ
+                           LoadBlock の時 GS_PIX2TMEM(imageW/4,imageSiz)
+                           LoadTile  の時 GS_PIX2TMEM(frameW/4,imageSiz)+1 */
+  u16	tmemH;		/* 一度にロードできる TMEM 高さ (s13.2) 4倍値
+			   通常テクスチャの時   512/tmemW*4
+			   CI  テクスチャの時   256/tmemW*4           */
+  u16	tmemLoadSH;	/* SH 値
+			   LoadBlock の時 tmemSize/2-1
+			   LoadTile  の時 tmemW*16-1                  */
+  u16	tmemLoadTH;	/* TH 値 or Stride 値
+			   LoadBlock の時 GS_CALC_DXT(tmemW)
+			   LoadTile  の時 tmemH-1                     */
+  u16	tmemSizeW;	/* image 1 ライン分の imagePtr のスキップ値 
+			   LoadBlock の時 tmemW*2
+                           LoadTile  の時 GS_PIX2TMEM(imageW/4,imageSiz)*2 */
+  u16	tmemSize;	/* ロード一回分の imagePtr のスキップ値 
 			   = tmemSizeW*tmemH                          */
 } uObjBg_t;		/* 40 bytes */
 
 /* Scalable background plane */
 typedef	struct	{
-  u16   imageX;		/* x-coordinate of upper-left position of texture (u10.5) */ 
-  u16	imageW;		/* width of texture (u10.2) */
-  s16	frameX;		/* upper-left position of transferred frame (s10.2) */
-  u16	frameW;		/* width of transferred frame (u10.2) */
+  u16   imageX;		/* テクスチャの左上位置 X 座標 (u10.5)        */ 
+  u16	imageW;		/* テクスチャの幅              (u10.2)        */
+  s16	frameX;		/* 転送されるフレームの左上位置(s10.2)        */
+  u16	frameW;		/* 転送されるフレームの幅      (u10.2)        */
 
-  u16   imageY; 	/* y-coordinate of upper-left position of texture (u10.5) */ 
-  u16	imageH;		/* height of texture (u10.2) */
-  s16	frameY;		/* upper-left position of transferred frame (s10.2) */
-  u16	frameH;		/* height of transferred frame (u10.2) */
+  u16   imageY; 	/* テクスチャの左上位置 Y 座標 (u10.5)        */ 
+  u16	imageH;		/* テクスチャの高さ            (u10.2)        */
+  s16	frameY;		/* 転送されるフレームの左上位置(s10.2)        */
+  u16	frameH;		/* 転送されるフレームの高さ    (u10.2)        */
 
-  u64  *imagePtr;	/* texture source address on DRAM */
-  u16	imageLoad;	/* Which to use, LoadBlock or LoadTile? */
-  u8	imageFmt;	/* format of texel - G_IM_FMT_*  */
-  u8	imageSiz;	/* size of texel - G_IM_SIZ_*  */
-  u16   imagePal; 	/* pallet number */
-  u16	imageFlip;	/* right & left image inversion (Inverted by G_BG_FLAG_FLIPS) */
+  u64  *imagePtr;	/* DRAM 上のテクスチャソースアドレス          */
+  u16	imageLoad;	/* LoadBlock, LoadTile のどちらを使用するか   */
+  u8	imageFmt;	/* テクセルのフォーマット G_IM_FMT_*          */
+  u8	imageSiz;	/* テクセルのサイズ       G_IM_SIZ_*          */
+  u16   imagePal; 	/* パレット番号                               */
+  u16	imageFlip;	/* イメージの左右反転  G_BG_FLAG_FLIPS で反転 */
 
-  u16	scaleW;		/* scale value of X-direction (u5.10) */
-  u16	scaleH;		/* scale value of Y-direction (u5.10) */
-  s32	imageYorig;	/* start point of drawing on image (s20.5) */
+  u16	scaleW;		/* X 方向スケール値               (u5.10)     */
+  u16	scaleH;		/* Y 方向スケール値               (u5.10)     */
+  s32	imageYorig;	/* image における描画始点         (s20.5)     */
   
   u8	padding[4];
   
@@ -113,24 +114,24 @@ typedef union {
 /*---------------------------------------------------------------------------*
  *	2D Objects
  *---------------------------------------------------------------------------*/
-#define	G_OBJ_FLAG_FLIPS	1<<0		/* inversion to S-direction */
-#define	G_OBJ_FLAG_FLIPT	1<<4		/* nversion to T-direction */
+#define	G_OBJ_FLAG_FLIPS	1<<0		/* S 方向反転 */
+#define	G_OBJ_FLAG_FLIPT	1<<4		/* T 方向反転 */
 
 typedef struct {
-  s16  objX;		/* s10.2 OBJ x-coordinate of upper-left end */
-  u16  scaleW;		/* u5.10 Scaling of u5.10 width direction   */
-  u16  imageW;		/* u10.5 width of u10.5 texture (length of S-direction) */
-  u16  paddingX;	/* Unused - Always 0 */
-  s16  objY;		/* s10.2 OBJ y-coordinate of s10.2 OBJ upper-left end */
-  u16  scaleH;		/* u5.10 Scaling of u5.10 height direction */
-  u16  imageH;		/* u10.5 height of u10.5 texture (length of T-direction) */
-  u16  paddingY;	/* Unused - Always 0 */
-  u16  imageStride;	/* folding width of texel (In units of 64bit word) */
-  u16  imageAdrs;	/* texture header position in TMEM (In units of 64bit word) */  
-  u8   imageFmt;	/* format of texel - G_IM_FMT_* */
-  u8   imageSiz;	/* size of texel - G_IM_SIZ_* */
-  u8   imagePal;	/* pallet number (0-7) */
-  u8   imageFlags;	/* The display flag - G_OBJ_FLAG_FLIP* */
+  s16  objX;		/* s10.2 OBJ 左上端 X 座標                 */
+  u16  scaleW;		/* u5.10 幅方向スケーリング                */
+  u16  imageW;		/* u10.5 テクスチャの幅   (S 方向の長さ)   */
+  u16  paddingX;	/* 未使用 常に 0                           */
+  s16  objY;		/* s10.2 OBJ 左上端 Y 座標                 */
+  u16  scaleH;		/* u5.10 高さ方向スケーリング              */
+  u16  imageH;		/* u10.5 テクスチャの高さ (T 方向の長さ)   */
+  u16  paddingY;	/* 未使用 常に 0                           */
+  u16  imageStride;	/* テクセルの折り返し幅        (64bit word 単位) */
+  u16  imageAdrs;	/* TMEM 内のテクスチャ先頭位置 (64bit word 単位) */  
+  u8   imageFmt;	/* テクセルのフォーマット G_IM_FMT_*       */
+  u8   imageSiz;	/* テクセルのサイズ       G_IM_SIZ_*       */
+  u8   imagePal;	/* パレット番号 0-7                        */
+  u8   imageFlags;	/* 表示フラグ  G_OBJ_FLAG_FLIP*            */
 } uObjSprite_t;		/* 24 bytes */
 
 typedef union {
@@ -175,12 +176,12 @@ typedef union {
 #define	GS_TB_TLINE(pix,siz)	(GS_CALC_DXT(GS_PIX2TMEM((pix),(siz))))
 
 typedef	struct	{
-  u32	type;		/* G_OBJLT_TXTRBLOCK divided into types */
-  u64	*image;		/* texture source address on DRAM */
-  u16	tmem;		/* loaded TMEM word address (8byteWORD) */
-  u16	tsize;		/* Texture size, Specified by macro GS_TB_TSIZE() */
-  u16	tline;		/* width of Texture 1-line, Specified by macro GS_TB_TLINE() */
-  u16	sid;		/* STATE ID Multipled by 4 (Either one of  0, 4, 8 and 12) */
+  u32	type;		/* Type 種別 G_OBJLT_TXTRBLOCK                    */
+  u64	*image;		/* DRAM 上のテクスチャソースアドレス              */
+  u16	tmem;		/* ロード先の TMEM ワードアドレス (8byteWORD)     */
+  u16	tsize;		/* Texture サイズ     マクロ GS_TB_TSIZE() で指定 */
+  u16	tline;		/* Texture 1 ライン幅 マクロ GS_TB_TLINE() で指定 */
+  u16	sid;		/* STATE ID  4 の倍数で 0,4,8,12 のどれか         */
   u32	flag;		/* STATE flag  */
   u32	mask;		/* STATE mask  */
 } uObjTxtrBlock_t;		/* 24 bytes */
@@ -189,12 +190,12 @@ typedef	struct	{
 #define	GS_TT_THEIGHT(pix,siz)	(((pix)<<2)-1)
 
 typedef	struct	{
-  u32	type;		/* G_OBJLT_TXTRTILE divided into types */
-  u64	*image;		/* texture source address on DRAM */
-  u16	tmem;		/* loaded TMEM word address (8byteWORD)*/
-  u16	twidth;		/* width of Texture (Specified by macro GS_TT_TWIDTH()) */
-  u16	theight;	/* height of Texture (Specified by macro GS_TT_THEIGHT()) */
-  u16	sid;		/* STATE ID Multipled by 4 (Either one of  0, 4, 8 and 12) */
+  u32	type;		/* Type 種別 G_OBJLT_TXTRTILE                     */
+  u64	*image;		/* DRAM 上のテクスチャソースアドレス              */
+  u16	tmem;		/* ロード先の TMEM ワードアドレス (8byteWORD)     */
+  u16	twidth;		/* Texture 幅      マクロ GS_TT_TWIDTH()  で指定  */
+  u16	theight;	/* Texture 高さ    マクロ GS_TT_THEIGHT() で指定  */
+  u16	sid;		/* STATE ID  4 の倍数で 0,4,8,12 のどれか         */
   u32	flag;		/* STATE flag  */
   u32	mask;		/* STATE mask  */
 } uObjTxtrTile_t;		/* 24 bytes */
@@ -203,12 +204,12 @@ typedef	struct	{
 #define	GS_PAL_NUM(num)		((num)-1)
 
 typedef	struct	{
-  u32	type;		/* G_OBJLT_TLUT divided into types */
-  u64	*image;		/* texture source address on DRAM */
-  u16	phead;		/* pallet number of load header (Between 256 and 511) */
-  u16	pnum;		/* loading pallet number -1 */
-  u16   zero;		/* Assign 0 all the time */
-  u16	sid;		/* STATE ID Multipled by 4 (Either one of  0, 4, 8 and 12)*/
+  u32	type;		/* Type 種別 G_OBJLT_TLUT                         */
+  u64	*image;		/* DRAM 上のテクスチャソースアドレス              */
+  u16	phead;		/* ロード先頭のパレット番号 256 以上 511 以下     */
+  u16	pnum;		/* ロードするパレット数 - 1                       */
+  u16   zero;		/* 常に 0 を代入する                              */
+  u16	sid;		/* STATE ID  4 の倍数で 0,4,8,12 のどれか         */
   u32	flag;		/* STATE flag  */
   u32	mask;		/* STATE mask  */
 } uObjTxtrTLUT_t;		/* 24 bytes */
@@ -321,7 +322,7 @@ typedef	struct	{
 /*---------------------------------------------------------------------------*
  *	Set general status
  *---------------------------------------------------------------------------*/
-#define	G_MW_GENSTAT	0x08	/* Note that it is the same value of G_MW_FOG */
+#define	G_MW_GENSTAT	0x08	/* G_MW_FOG と同じ値なので注意 */
 
 #define	gSPSetStatus(pkt, sid, val)	\
 	gMoveWd((pkt), G_MW_GENSTAT, (sid), (val))

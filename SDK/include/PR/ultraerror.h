@@ -20,8 +20,8 @@
 
 /**************************************************************************
  *
- *  $Revision: 1.27 $
- *  $Date: 1999/07/14 02:44:00 $
+ *  $Revision: 1.24 $
+ *  $Date: 1998/01/27 23:52:11 $
  *  $Source: /hosts/gate3/exdisk2/cvs/N64OS/Master/cvsmdev2/PR/include/ultraerror.h,v $
  *
  **************************************************************************/
@@ -153,18 +153,6 @@ extern "C" {
 #define ERR_ALMODDELAYOVERFLOW		133
 #define ERR_OSVIEXTENDVSTART_VIMGR	134
 #define ERR_OSVIEXTENDVSTART_VALUE	135
-#define ERR_OSTHPROFILESTART_FLAG       136
-#define ERR_OSTHPROFILESTART_START      137
-#define ERR_OSTHPROFILESTOP_FLAG        138
-#define ERR_OSTHPROFILEREADCOUNT_FLAG   139
-#define ERR_OSTHPROFILEREADTIME_FLAG    140
-#define ERR_OSTHPROFILEREADCOUNTTH_FLAG 141
-#define ERR_OSTHPROFILEREADTIMETH_FLAG  142
-#define ERR_OSTHPROFILEREADCOUNT_LAR    143
-#define ERR_OSTHPROFILEREADTIME_LAR     144
-#define ERR_OSTHPROFILEREADCOUNTTH_LAR  145
-#define ERR_OSTHPROFILEREADTIMETH_LAR   146
-#define ERR_OSTHPROFILESTOP_LAR         147
 
 #if defined(_LANGUAGE_C) || defined(_LANGUAGE_C_PLUS_PLUS)
 typedef	void (*OSErrorHandler)(s16, s16, ...);

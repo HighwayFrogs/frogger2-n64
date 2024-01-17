@@ -23,8 +23,8 @@
         Copyright (C) 1998 Nintendo. (Originated by SGI)
         
         $RCSfile: os_debug.h,v $
-        $Revision: 1.4 $
-        $Date: 1999/06/30 03:04:08 $
+        $Revision: 1.1 $
+        $Date: 1998/10/09 08:01:06 $
  *---------------------------------------------------------------------*/
 
 #ifndef _OS_DEBUG_H_
@@ -98,15 +98,6 @@ extern void		osProfileStart(u32);
 extern void		osProfileFlush(void);
 extern void		osProfileStop(void);
 
-/* Thread Profiler Interface */
-extern void             osThreadProfileClear(OSId);
-extern void             osThreadProfileInit(void);
-extern void             osThreadProfileStart(void);
-extern void             osThreadProfileStop(void);
-extern u32              osThreadProfileReadCount(OSId);
-extern u32              osThreadProfileReadCountTh(OSThread*);
-extern OSTime           osThreadProfileReadTime(OSId);
-extern OSTime           osThreadProfileReadTimeTh(OSThread*);
 
 #endif  /* defined(_LANGUAGE_C) || defined(_LANGUAGE_C_PLUS_PLUS) */
 

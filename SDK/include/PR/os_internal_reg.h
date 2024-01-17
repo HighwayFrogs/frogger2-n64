@@ -14,8 +14,8 @@
         Copyright (C) 1998 Nintendo. (Originated by SGI)
         
         $RCSfile: os_internal_reg.h,v $
-        $Revision: 1.2 $
-        $Date: 1999/03/10 12:19:14 $
+        $Revision: 1.1 $
+        $Date: 1998/10/09 08:01:12 $
  *---------------------------------------------------------------------*/
 
 #ifndef _OS_INTERNAL_REG_H_
@@ -42,8 +42,6 @@ extern u32		__osGetSR(void);
 extern void		__osSetSR(u32);
 extern u32		__osDisableInt(void);
 extern void		__osRestoreInt(u32);
-extern u32		__osGetWatchLo(void);
-extern void		__osSetWatchLo(u32);
 
 /* Routines to get/set floating-point control and status register */
 extern u32              __osSetFpcCsr(u32);

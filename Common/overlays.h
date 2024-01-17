@@ -49,10 +49,6 @@ typedef struct TAGSPRITEOVERLAYLIST
 
 extern SPRITEOVERLAYLIST spriteOverlayList;
 
-extern SPRITEOVERLAY *bronzeCup[8];
-extern SPRITEOVERLAY *silverCup[8];
-extern SPRITEOVERLAY *goldCup[8];
-
 //----- [ FUNCTION PROTOTYPES ] ----------------------------------------------------------------//
 
 extern SPRITEOVERLAY *CreateAndAddSpriteOverlay(float x,float y,char *txtrName,short width,short height,unsigned char alpha,short flags);

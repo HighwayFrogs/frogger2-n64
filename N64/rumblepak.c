@@ -31,19 +31,17 @@ RUMBLE delayRumble[4];
 
 void InitRumble()
 {
-	/*
 	int i;
 	for(i=0; i<4; i++)
 	{
 		rumble[i].stopCount= 0;
 		rumble[i].freq = -1.0;
 		rumble[i].rumbleCount = 0;
-		if(pad[i].rumblePresent)
+		if(rumblePresent[i])
 		{
 			anyRumblePresent = YES;
 		}
 	}
-	*/
 }
 
 
@@ -56,16 +54,15 @@ void InitRumble()
 */
 void UpdateRumble()
 {
-	/*
 	int i, res;
 
-	for(i=0; i<numPlayers; i++)
+	for(i=0; i<NUM_FROGS; i++)
 	{
-		if(pad[i].rumblePresent)
+		if(rumblePresent[i])
 		{
 			if(delayRumble[i].lifetime && delayRumble[i].delay-- == 0)
 			{
-				StartRumble(delayRumble[i].freq, delayRumble[i].inertia, delayRumble[i].lifetime, i, "delayed");
+				StartRumble(delayRumble[i].freq, delayRumble[i].inertia, delayRumble[i].lifetime, i);
 				delayRumble[i].lifetime=0;
 			}
 			if(rumble[i].lifetime > 0)
@@ -81,9 +78,9 @@ void UpdateRumble()
 					if(!rumble[i].rumbleOn) // probably remove this if osMotorStart is cool if motor is already on
 					{
 						// try at most twice to start motor
-  						if(res=osMotorStart(&pad[i].rumble))
+  						if(res=osMotorStart(&pfsRumble[i]))
   						{
-  							res=osMotorStart(&pad[i].rumble);
+  							res=osMotorStart(&pfsRumble[i]);
   						}
   
   						rumble[i].rumbleOn = (res == NULL);
@@ -95,8 +92,8 @@ void UpdateRumble()
 					// stop rumble
 				  	if(rumble[i].rumbleOn)
 				  	{
-				 //		if(res = osMotorStop(&pad[i].rumble))
-							res = osMotorStop(&pad[i].rumble);
+				 //		if(res = osMotorStop(&pfsRumble[i]))
+							res = osMotorStop(&pfsRumble[i]);
 ///							dprintf"stopRumble1\n"));
 				  	}							
 					rumble[i].rumbleOn = (res != NULL);
@@ -107,7 +104,7 @@ void UpdateRumble()
 			{
 				// must stop at least 3 times on different frames to make sure.
 				// stop rumble
-				res = osMotorStop(&pad[i].rumble);
+				res = osMotorStop(&pfsRumble[i]);
 				rumble[i].rumbleOn = (res != NULL);
 ///				dprintf"stopRumble2\n"));
 
@@ -124,7 +121,6 @@ void UpdateRumble()
 			}
 		}				
 	}
-	*/
 }
 
 
@@ -136,10 +132,10 @@ void UpdateRumble()
 	Info 		:
 */
 //#define DEBUG_RUMBLE
-void StartRumble(float freq, float inertia, short life, short num, char* string)
+void StartRumble(float freq, float inertia, short life, short num)
 {
-/*
-	if(!pad[num].rumblePresent || rumble[num].lifetime>0)
+
+	if(!rumblePresent[num] || rumble[num].lifetime>0)
 		return;
 
 	#ifdef DEBUG_RUMBLE
@@ -152,7 +148,6 @@ void StartRumble(float freq, float inertia, short life, short num, char* string)
 	rumble[num].freq = freq; 
 		
 //	dprintf"rumbleCount=%f, lifetime=%i, freq=%f\n",rumble[num].rumbleCount	, rumble[num].lifetime, rumble[num].freq));
-	*/
 }
 
 
@@ -165,17 +160,15 @@ void StartRumble(float freq, float inertia, short life, short num, char* string)
 */
 void StopAllRumbles()
 {
-	/*
 	int i;
-	for(i=0; i<numPlayers; i++)
+	for(i=0; i<NUM_FROGS; i++)
 	{
-		if(pad[i].rumblePresent)
+		if(rumblePresent[i])
 		{
 			if(rumble[i].lifetime > 0)
 				rumble[i].lifetime = 0;	
 		}
 	}
-	*/
 }
 
 /*	--------------------------------------------------------------------------------
@@ -187,8 +180,8 @@ void StopAllRumbles()
 */
 void StartDelayedRumble(float freq, float inertia, short life, short num, char* string, short delay)
 {
-/*
-	if(!pad[num].rumblePresent || rumble[num].lifetime>0)
+
+	if(!rumblePresent[num] || rumble[num].lifetime>0)
 		return;
 
 	#ifdef DEBUG_RUMBLE
@@ -201,6 +194,5 @@ void StartDelayedRumble(float freq, float inertia, short life, short num, char* 
 	delayRumble[num].freq = freq; 
 	delayRumble[num].delay = delay;
 //	dprintf"rumbleCount=%f, lifetime=%i, freq=%f\n",rumble[num].rumbleCount	, rumble[num].lifetime, rumble[num].freq));
-*/
 }
 
