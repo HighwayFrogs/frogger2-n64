@@ -2,12 +2,12 @@
 
 :: Setup temp directory with copied code.
 if not exist build md build
+if not exist build\temp echo Creating temporary build directory...
 if not exist build\temp md build\temp
-del /s build\temp /Q
-copy .\Common build\temp
-copy .\N64 build\temp
-xcopy /e /v /y .\GameData build\temp
-copy build\temp\levbanks\levext.cc build\temp\levext.c
+robocopy /E /IS /NDL /NJH /NFL /NJS .\Common build\temp
+robocopy /E /IS /NDL /NJH /NFL /NJS .\N64 build\temp
+robocopy /E /IS /NDL /NJH /NFL /NJS .\GameData build\temp
+copy /Y build\temp\levbanks\levext.cc build\temp\levext.c
 
 :: Setup the path to include the SDK binaries.
 SET OLD_PATH=%PATH%

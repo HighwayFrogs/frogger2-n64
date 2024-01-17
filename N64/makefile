@@ -7,13 +7,8 @@ c_obj_files = $(patsubst %.c,%.obj,$(wildcard *.c)) $(patsubst %.c,%.obj,$(wildc
 compiler = ccn64
 assembler = asmn64
 
-;compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DNO_ENTITIES -I ../../SDK/include
-;compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -I ../../SDK/include
-
-;compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DUSE_AUDIO -DNO_SCRIPTS -DNO_ENTITIES -DUSE_MENUS -I ../../SDK/include
-;compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DUSE_AUDIO -DNO_SCRIPTS -DUSE_MENUS -I ../../SDK/include
+# Other arguments include: -DNO_SCRIPTS -DNO_ENTITIES
 compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DUSE_AUDIO -DUSE_MENUS -DNO_ATTACHEDEFFECTS -DROM_BUILD -I. -I ../../SDK/include -I ../../SDK/include/PR
-;compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DUSE_AUDIO -DUSE_MENUS -I ../../SDK/include
 assemble_opt = /l
 
 
