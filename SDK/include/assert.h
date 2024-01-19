@@ -1,6 +1,8 @@
 #ifndef __ASSERT_H__
 #define __ASSERT_H__
 
+#ident "$Revision: 1.17 $"
+
 #ifdef NDEBUG
 #undef assert
 #define assert(EX) ((void)0)

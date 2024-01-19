@@ -1,2 +1,19 @@
 build
 BUILD
+
+# Ignore certain Visual Studio files which don't belong in a git repository
+# Reference: https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
+sdk/src/*/*.user
+sdk/src/*/.vs/
+sdk/src/*/[Rr]elease/
+sdk/src/*/[Dd]ebug/
+sdk/src/*/x64/
+sdk/src/*/x86/
+sdk/src/*/[Oo]bj/
+sdk/src/*/[Ll]og/
+sdk/src/*/[Ll]ogs/
+sdk/src/*/[Ww]in32/
+sdk/src/*/[Aa][Rr][Mm]/
+sdk/src/*/[Aa][Rr][Mm]64/
+sdk/src/*/bld/
+sdk/src/*/[Bb]in/

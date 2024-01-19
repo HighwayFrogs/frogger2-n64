@@ -12,7 +12,7 @@
 #include "ultra64.h"
 #include "incs.h"
 #include "codes.h"
-//#include "stdio.h"
+#include <stdio.h>
 #include "script.h"
 #include "memload.h"
 

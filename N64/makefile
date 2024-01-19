@@ -8,7 +8,7 @@ compiler = ccn64
 assembler = asmn64
 
 # Other arguments include: -DNO_SCRIPTS -DNO_ENTITIES
-compile_opt = -g -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DUSE_AUDIO -DUSE_MENUS -DNO_ATTACHEDEFFECTS -DROM_BUILD -I. -I ../../SDK/include -I ../../SDK/include/PR
+compile_opt = -g1 -c -O0 -G0 -DN64_VERSION -DN64_VERSION_ONLY -DUSE_AUDIO -DUSE_MENUS -DNO_ATTACHEDEFFECTS -DROM_BUILD -I. -I ../../SDK/include -I ../../SDK/include/PR
 assemble_opt = /l
 
 
@@ -29,18 +29,13 @@ block.bin: $(textures) $(c_obj_files) $(objects) $(textures) snmain.obj block.ln
     $(linker) /s /p /c /m /g @block2.lnk,block.bin,block.sym,block.map
     setcsum block.bin 0x80100000
 	makemask block.bin
-
-link:
-	copy /B block.lnk+levbanks\append.lnk block2.lnk
-    $(linker) /s /p /c /m /g @block2.lnk,block.bin,block.sym,block.map
-    setcsum block.bin 0x80100000
-	makemask block.bin
+	header64 block.bin NGVE "Frogger2            " 1
 
 snmain.obj: snmain.s
 	$(assembler) $(assemble_opt) snmain,snmain
 
 %.fla: %.ntb
-        fpack textures\\$(patsubst textures%,%,$<)
+	fpack textures\\$(patsubst textures%,%,$<)
 
 %.nob: %.c2
 	copy $(patsubst objects/%,objects\\%,$<) $(patsubst objects/%.c2,objects\\%.c,$<)
