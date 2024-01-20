@@ -31,7 +31,7 @@ void InitRumble();
 void UpdateRumble();
 void StartRumble(float freq,float inertia,short life,short num);
 void StopAllRumbles();
-void StartDelayedRumble(float freq,float inertia,short life,short num,char* string,short delay);
+void StartDelayedRumble(float freq,float inertia,short life,short num,short delay);
 
 
 #endif

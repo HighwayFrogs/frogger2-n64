@@ -577,11 +577,11 @@ void RunGameLoop (void)
 		GTInit( &gameIsOver, 0 );
 		GTInit( &levelIsOver, 0 );
 		
+#ifdef PC_VERSION
 		if (player[0].worldNum == WORLDID_FRONTEND)
 		{
 			if (player[0].levelNum == LEVELID_FRONTEND1)
 			{
-#ifdef PC_VERSION
 				InitCredits();			
 				creditsActive = 3;
 				DeactivateCredits();
@@ -602,9 +602,9 @@ void RunGameLoop (void)
 				flogo[i++] = CreateAndAddSpriteOverlay(162,200,"flogo09.bmp",32,32,255,0);
 				flogo[i++] = CreateAndAddSpriteOverlay(194,200,"flogo10.bmp",32,32,255,0);
 				fadingLogos = 0;
-#endif
 			}
 		}
+#endif
 
 		if (player[0].worldNum==9)
 		{
@@ -923,7 +923,7 @@ void RunLevelCompleteSequence()
 			award = 0;
 	}
 
-	clock->draw = 1;
+	//clock->draw = 1;
 	spawn->draw = 1;
 	
 	spawnCollected->draw = 1;

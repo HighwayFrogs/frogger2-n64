@@ -16,7 +16,7 @@
 
 
 //----- [ GLOBALS ] ----------------------------------------------------------------------------//
-
+char matchRomPadding[62] __attribute__((used)); // Hash: 1
 TEXTOVERLAYLIST	textOverlayList;			// the text overlay linked list
 
 

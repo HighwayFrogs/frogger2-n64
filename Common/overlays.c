@@ -14,6 +14,7 @@
 
 #include "incs.h"
 
+char matchRomPadding2[28] __attribute__((used)); // Hash: 52
 SPRITEOVERLAYLIST spriteOverlayList;		// the sprite overlay list
 
 /*	--------------------------------------------------------------------------------

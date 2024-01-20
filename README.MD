@@ -9,9 +9,10 @@ However, the December 1st build is preferable because we have a ROM which we can
 ## Build Info  
 Targetting the December 1st build is a little tough, since there isn't a single commit representing the code used to build the prototype.  
 It seems that Andy Eder most likely had some files up to date in VSS and others not. This repository aims to recreate that build as close as possible, and has been done by manually analyzing the ROM to determine which code changes are included and which are not.  
-Unfortunately, even we were to perfectly recreate the game code, we cannot byte-match this ROM. This is because either the assembler or the linker used to originally compile the game didn't clear allocated memory.  
-So, the ROM contains uninitialized memory, making it near impossible to byte-match without using a decompilation toolchain. Using such a toolchain would require immense work for little benefit.  
-The short is that this repository is instead intended to be roughly equivalent when it comes to functionality, instead of byte-matching.  
+The original ROM also contains unallocated/garbage memory used as padding bytes between compiler objects.  
+It is not clear why this data is there, but likely was due to a buggy version of psylink.  
+If the garbage bytes are ignored, this repository builds a perfect match of that prototype ROM.  
+Target SHA1 Hash: `3895959f2a8c31481a29d42ab7b8e7eddce95df5`  
 
 ## How to compile and run?  
 Run `make.bat`.  

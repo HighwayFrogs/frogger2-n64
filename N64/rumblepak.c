@@ -31,8 +31,8 @@ RUMBLE delayRumble[4];
 
 void InitRumble()
 {
-	int i;
-	for(i=0; i<4; i++)
+	int i = 4;
+	while(i--)
 	{
 		rumble[i].stopCount= 0;
 		rumble[i].freq = -1.0;
@@ -56,7 +56,8 @@ void UpdateRumble()
 {
 	int i, res;
 
-	for(i=0; i<NUM_FROGS; i++)
+	i = NUM_FROGS;
+	while(i--)
 	{
 		if(rumblePresent[i])
 		{
@@ -160,8 +161,8 @@ void StartRumble(float freq, float inertia, short life, short num)
 */
 void StopAllRumbles()
 {
-	int i;
-	for(i=0; i<NUM_FROGS; i++)
+	int i = NUM_FROGS;
+	while(i--)
 	{
 		if(rumblePresent[i])
 		{
@@ -178,7 +179,7 @@ void StopAllRumbles()
     Returns 	: 
 	Info 		:
 */
-void StartDelayedRumble(float freq, float inertia, short life, short num, char* string, short delay)
+void StartDelayedRumble(float freq, float inertia, short life, short num, short delay)
 {
 
 	if(!rumblePresent[num] || rumble[num].lifetime>0)

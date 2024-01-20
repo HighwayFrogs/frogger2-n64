@@ -988,13 +988,11 @@ void LoadLevelEntities(short worldID,short levelID)
 					bankRomEnd		= (u32)&_levData_3_3_SegmentRomEnd;
 					sprintf(message, "SPC_ENT3");				
 				break;
-/*
 			case SPACEBOSSA_ENT:
 					bankRomStart	= (u32)&_levData_3_4_SegmentRomStart;
 					bankRomEnd		= (u32)&_levData_3_4_SegmentRomEnd;
 					sprintf(message, "SPC_BOSS");				
 				break;
-*/
 			default:
 				return;
 		}
